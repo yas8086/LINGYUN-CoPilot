@@ -1,0 +1,56 @@
+# 灵云01号飞艇伴飞参数配置
+# 参数依据飞控文档默认值，括号内为对应PX4参数名
+# airship_bridge 与 airship_safety_monitor 按节点名分组加载
+
+airship_bridge:
+  ros__parameters:
+    # 状态发布频率（Hz）
+    status_rate_hz: 20.0
+    # 设定值下发频率（Hz）
+    setpoint_rate_hz: 20.0
+    # 最大高度限制（m），对应 AS_ALT_MAX
+    alt_max_limit: 150.0
+    # 最小高度限制（m），对应 AS_ALT_MIN
+    alt_min_limit: 2.0
+
+offboard_controller:
+  ros__parameters:
+    # 控制循环频率（Hz）
+    control_rate_hz: 20.0
+    # 高度硬限位（m），对应 AS_ALT_MAX
+    alt_max_limit: 150.0
+    # 高度软限位（m），对应 AS_ALT_SOFT，进入此区间减速
+    alt_soft_limit: 140.0
+    # 高度下限（m），对应 AS_ALT_MIN
+    alt_min_limit: 2.0
+    # 偏航角速率限制（rad/s），对应 AS_YAW_RMAX
+    yaw_rate_limit: 0.524
+    # 最大水平速度（m/s），对应 AS_VEL_XY_MAX
+    max_horizontal_velocity: 15.0
+    # 最大垂直速度（m/s），对应 AS_ALT_VMAX
+    max_vertical_velocity: 2.0
+    # 控制模式: position / velocity / position_velocity
+    control_mode: position
+    # 偏航平滑(大角度转向时分段, 适配大惯量Izz)
+    enable_yaw_smoothing: true
+
+airship_safety_monitor:
+  ros__parameters:
+    # 硬性高度上限（m），超限触发紧急处置
+    alt_max_hard: 150.0
+    # 软性高度上限（m），超限触发告警
+    alt_max_soft: 140.0
+    # 最小高度（m），对应 AS_ALT_MIN
+    alt_min: 2.0
+    # 偏航角速率上限（rad/s），对应 AS_YAW_RMAX，约30deg/s
+    yaw_rate_limit: 0.524
+    # 俯仰角限制（rad），15度
+    pitch_limit: 0.2618
+    # 低电压阈值（V）
+    battery_low_voltage: 22.0
+    # 临界电压阈值（V）
+    battery_critical_voltage: 20.0
+    # 链路超时阈值（s）
+    link_timeout: 3.0
+    # 安全状态发布频率（Hz）
+    publish_rate_hz: 10.0
