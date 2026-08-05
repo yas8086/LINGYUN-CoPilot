@@ -7,30 +7,30 @@
 //   - MAVROS使用ENU坐标系, PX4内部使用NED, 本节点做 ENU<->NED 转换
 //   - 飞艇悬停时 landed=true 属正常(中性浮力, 推力=0)
 
-#include <rclcpp/rclcpp.hpp>
-#include <geometry_msgs/msg/pose_stamped.hpp>
-#include <geometry_msgs/msg/twist_stamped.hpp>
-#include <sensor_msgs/msg/imu.hpp>
-#include <sensor_msgs/msg/nav_sat_fix.hpp>
-#include <sensor_msgs/msg/battery_state.hpp>
-#include <std_msgs/msg/float64.hpp>
-#include <mavros_msgs/msg/state.hpp>
-#include <mavros_msgs/msg/extended_state.hpp>
-#include <mavros_msgs/srv/command_bool.hpp>
-#include <mavros_msgs/srv/set_mode.hpp>
-#include <mavros_msgs/srv/command_tol.hpp>
-#include <tf2/LinearMath/Quaternion.h>
-#include <tf2/LinearMath/Matrix3x3.h>
-
-#include "airship_msgs/msg/airship_status.hpp"
-#include "airship_msgs/msg/motor_status.hpp"
-#include "airship_msgs/msg/offboard_setpoint.hpp"
-#include "airship_msgs/msg/mode_command.hpp"
-
 #include <cmath>
 #include <memory>
 #include <string>
 #include <unordered_map>
+
+#include <geometry_msgs/msg/pose_stamped.hpp>
+#include <geometry_msgs/msg/twist_stamped.hpp>
+#include <mavros_msgs/msg/extended_state.hpp>
+#include <mavros_msgs/msg/state.hpp>
+#include <mavros_msgs/srv/command_bool.hpp>
+#include <mavros_msgs/srv/command_tol.hpp>
+#include <mavros_msgs/srv/set_mode.hpp>
+#include <rclcpp/rclcpp.hpp>
+#include <sensor_msgs/msg/battery_state.hpp>
+#include <sensor_msgs/msg/imu.hpp>
+#include <sensor_msgs/msg/nav_sat_fix.hpp>
+#include <std_msgs/msg/float64.hpp>
+#include <tf2/LinearMath/Matrix3x3.h>
+#include <tf2/LinearMath/Quaternion.h>
+
+#include "airship_msgs/msg/airship_status.hpp"
+#include "airship_msgs/msg/mode_command.hpp"
+#include "airship_msgs/msg/motor_status.hpp"
+#include "airship_msgs/msg/offboard_setpoint.hpp"
 
 using std::placeholders::_1;
 using namespace std::chrono_literals;
@@ -38,20 +38,27 @@ using namespace std::chrono_literals;
 // MAVLink PX4 custom_mode 与飞艇模式字符串的映射
 // 飞艇自定义模式: 0=Manual 1=Stable 2=Altitude 3=Position 4=Offboard 5=Takeoff 6=Land 7=Failsafe 8=Task
 static const std::unordered_map<std::string, uint8_t> kModeStrToId = {
-  {"MANUAL",      0},
-  {"STABILIZED",  1},  // 飞艇Stable
-  {"ALTCTL",      2},  // Altitude
-  {"POSCTL",      3},  // Position
-  {"OFFBOARD",    4},
-  {"AUTO.TAKEOFF",5},
-  {"AUTO.LAND",   6},
-  {"AUTO.RTL",    6},  // 返航也映射为Land
-  {"AUTO.MISSION",8},  // Task
+  {"MANUAL", 0},
+  {"STABILIZED", 1}, // 飞艇Stable
+  {"ALTCTL", 2},     // Altitude
+  {"POSCTL", 3},     // Position
+  {"OFFBOARD", 4},
+  {"AUTO.TAKEOFF", 5},
+  {"AUTO.LAND", 6},
+  {"AUTO.RTL", 6},     // 返航也映射为Land
+  {"AUTO.MISSION", 8}, // Task
 };
 
 static const std::unordered_map<uint8_t, std::string> kModeIdToName = {
-  {0, "Manual"}, {1, "Stable"}, {2, "Altitude"}, {3, "Position"},
-  {4, "Offboard"}, {5, "Takeoff"}, {6, "Land"}, {7, "Failsafe"}, {8, "Task"},
+  {0, "Manual"},
+  {1, "Stable"},
+  {2, "Altitude"},
+  {3, "Position"},
+  {4, "Offboard"},
+  {5, "Takeoff"},
+  {6, "Land"},
+  {7, "Failsafe"},
+  {8, "Task"},
 };
 
 class AirshipBridge : public rclcpp::Node
@@ -63,55 +70,65 @@ public:
     // ===== 参数 =====
     status_rate_ = this->declare_parameter("status_rate_hz", 20.0);
     setpoint_rate_ = this->declare_parameter("setpoint_rate_hz", 20.0);
-    alt_max_ = this->declare_parameter("alt_max_limit", 150.0);   // AS_ALT_MAX
-    alt_min_ = this->declare_parameter("alt_min_limit", 2.0);     // AS_ALT_MIN
+    alt_max_ = this->declare_parameter("alt_max_limit", 150.0); // AS_ALT_MAX
+    alt_min_ = this->declare_parameter("alt_min_limit", 2.0);   // AS_ALT_MIN
     fcu_url_ = this->declare_parameter("fcu_url", std::string(""));
 
     // ===== 订阅 MAVROS 遥测话题 =====
     state_sub_ = this->create_subscription<mavros_msgs::msg::State>(
-      "/mavros/state", rclcpp::QoS(10).best_effort(),
+      "/mavros/state",
+      rclcpp::QoS(10).best_effort(),
       std::bind(&AirshipBridge::on_state, this, _1));
 
     ext_state_sub_ = this->create_subscription<mavros_msgs::msg::ExtendedState>(
-      "/mavros/extended_state", rclcpp::QoS(10).best_effort(),
+      "/mavros/extended_state",
+      rclcpp::QoS(10).best_effort(),
       std::bind(&AirshipBridge::on_ext_state, this, _1));
 
     local_pos_sub_ = this->create_subscription<geometry_msgs::msg::PoseStamped>(
-      "/mavros/local_position/pose", rclcpp::QoS(10).best_effort(),
+      "/mavros/local_position/pose",
+      rclcpp::QoS(10).best_effort(),
       std::bind(&AirshipBridge::on_local_pose, this, _1));
 
     local_vel_sub_ = this->create_subscription<geometry_msgs::msg::TwistStamped>(
-      "/mavros/local_position/velocity_local", rclcpp::QoS(10).best_effort(),
+      "/mavros/local_position/velocity_local",
+      rclcpp::QoS(10).best_effort(),
       std::bind(&AirshipBridge::on_local_vel, this, _1));
 
-    imu_sub_ = this->create_subscription<sensor_msgs::msg::Imu>(
-      "/mavros/imu/data", rclcpp::QoS(50).best_effort(),
-      std::bind(&AirshipBridge::on_imu, this, _1));
+    imu_sub_ =
+      this->create_subscription<sensor_msgs::msg::Imu>("/mavros/imu/data",
+                                                       rclcpp::QoS(50).best_effort(),
+                                                       std::bind(&AirshipBridge::on_imu, this, _1));
 
     global_pos_sub_ = this->create_subscription<sensor_msgs::msg::NavSatFix>(
-      "/mavros/global_position/global", rclcpp::QoS(10).best_effort(),
+      "/mavros/global_position/global",
+      rclcpp::QoS(10).best_effort(),
       std::bind(&AirshipBridge::on_global_pos, this, _1));
 
     rel_alt_sub_ = this->create_subscription<std_msgs::msg::Float64>(
-      "/mavros/global_position/rel_alt", rclcpp::QoS(10).best_effort(),
+      "/mavros/global_position/rel_alt",
+      rclcpp::QoS(10).best_effort(),
       std::bind(&AirshipBridge::on_rel_alt, this, _1));
 
     battery_sub_ = this->create_subscription<sensor_msgs::msg::BatteryState>(
-      "/mavros/battery", rclcpp::QoS(10).best_effort(),
+      "/mavros/battery",
+      rclcpp::QoS(10).best_effort(),
       std::bind(&AirshipBridge::on_battery, this, _1));
 
     // ===== 订阅伴飞电脑命令 =====
     setpoint_sub_ = this->create_subscription<airship_msgs::msg::OffboardSetpoint>(
-      "/airship/offboard_setpoint", rclcpp::QoS(10),
+      "/airship/offboard_setpoint",
+      rclcpp::QoS(10),
       std::bind(&AirshipBridge::on_setpoint, this, _1));
 
     mode_cmd_sub_ = this->create_subscription<airship_msgs::msg::ModeCommand>(
-      "/airship/mode_command", rclcpp::QoS(10),
+      "/airship/mode_command",
+      rclcpp::QoS(10),
       std::bind(&AirshipBridge::on_mode_command, this, _1));
 
     // ===== 发布 =====
-    status_pub_ = this->create_publisher<airship_msgs::msg::AirshipStatus>(
-      "/airship/status", rclcpp::QoS(10));
+    status_pub_ =
+      this->create_publisher<airship_msgs::msg::AirshipStatus>("/airship/status", rclcpp::QoS(10));
 
     // ===== 发布到 MAVROS 的设定值话题 =====
     sp_position_pub_ = this->create_publisher<geometry_msgs::msg::PoseStamped>(
@@ -131,14 +148,14 @@ public:
 
     // ===== 定时器 =====
     auto status_period = std::chrono::duration<double>(1.0 / status_rate_);
-    status_timer_ = this->create_wall_timer(
-      std::chrono::duration_cast<std::chrono::nanoseconds>(status_period),
-      std::bind(&AirshipBridge::timer_status, this));
+    status_timer_ =
+      this->create_wall_timer(std::chrono::duration_cast<std::chrono::nanoseconds>(status_period),
+                              std::bind(&AirshipBridge::timer_status, this));
 
     auto sp_period = std::chrono::duration<double>(1.0 / setpoint_rate_);
-    setpoint_timer_ = this->create_wall_timer(
-      std::chrono::duration_cast<std::chrono::nanoseconds>(sp_period),
-      std::bind(&AirshipBridge::timer_setpoint, this));
+    setpoint_timer_ =
+      this->create_wall_timer(std::chrono::duration_cast<std::chrono::nanoseconds>(sp_period),
+                              std::bind(&AirshipBridge::timer_setpoint, this));
 
     // 初始化状态
     status_.quaternion = {1.0f, 0.0f, 0.0f, 0.0f};
@@ -147,8 +164,11 @@ public:
     last_data_time_ = this->now();
 
     RCLCPP_INFO(this->get_logger(),
-      "AirshipBridge 启动完成. status=%.1fHz sp=%.1fHz alt[%.1f,%.1f]",
-      status_rate_, setpoint_rate_, alt_min_, alt_max_);
+                "AirshipBridge 启动完成. status=%.1fHz sp=%.1fHz alt[%.1f,%.1f]",
+                status_rate_,
+                setpoint_rate_,
+                alt_min_,
+                alt_max_);
   }
 
 private:
@@ -185,18 +205,18 @@ private:
   {
     // MAVROS发布ENU: x=East, y=North, z=Up
     // 转NED: x=North=y, y=East=x, z=Down=-z
-    status_.x = static_cast<float>(msg->pose.position.y);   // North
-    status_.y = static_cast<float>(msg->pose.position.x);   // East
-    status_.z = static_cast<float>(-msg->pose.position.z);  // Down
+    status_.x = static_cast<float>(msg->pose.position.y);  // North
+    status_.y = static_cast<float>(msg->pose.position.x);  // East
+    status_.z = static_cast<float>(-msg->pose.position.z); // Down
     last_data_time_ = this->now();
   }
 
   void on_local_vel(const geometry_msgs::msg::TwistStamped::SharedPtr msg)
   {
     // ENU -> NED
-    status_.vx = static_cast<float>(msg->twist.linear.y);   // North
-    status_.vy = static_cast<float>(msg->twist.linear.x);   // East
-    status_.vz = static_cast<float>(-msg->twist.linear.z);  // Down
+    status_.vx = static_cast<float>(msg->twist.linear.y);  // North
+    status_.vy = static_cast<float>(msg->twist.linear.x);  // East
+    status_.vz = static_cast<float>(-msg->twist.linear.z); // Down
   }
 
   void on_imu(const sensor_msgs::msg::Imu::SharedPtr msg)
@@ -205,8 +225,7 @@ private:
     // ENU->NED 旋转: q_ned = q_rot * q_enu, 其中 q_rot = (0, sqrt(2)/2, 0, sqrt(2)/2) (绕Y 90度)
     // 简化: 直接从ENU四元数提取欧拉角后转换
     tf2::Quaternion q_enu(
-      msg->orientation.x, msg->orientation.y,
-      msg->orientation.z, msg->orientation.w);
+      msg->orientation.x, msg->orientation.y, msg->orientation.z, msg->orientation.w);
 
     // 转NED: 旋转180°绕Z(Down)后, 再旋转-90°绕新Y(East)
     // 等价于 q_ned = q_z(180) * q_y(-90) * q_enu ? 实际上使用tf2变换更清晰
@@ -220,20 +239,22 @@ private:
     status_.pitch = static_cast<float>(pitch);
     double yaw_ned = M_PI_2 - yaw_enu;
     // 归一化到 [-pi, pi]
-    while (yaw_ned > M_PI) yaw_ned -= 2.0 * M_PI;
-    while (yaw_ned < -M_PI) yaw_ned += 2.0 * M_PI;
+    while (yaw_ned > M_PI) {
+      yaw_ned -= 2.0 * M_PI;
+    }
+    while (yaw_ned < -M_PI) {
+      yaw_ned += 2.0 * M_PI;
+    }
     status_.yaw = static_cast<float>(yaw_ned);
     status_.heading = status_.yaw;
 
     // 四元数存储NED
     tf2::Quaternion q_ned;
     q_ned.setRPY(status_.roll, status_.pitch, status_.yaw);
-    status_.quaternion = {
-      static_cast<float>(q_ned.w()),
+    status_.quaternion = {static_cast<float>(q_ned.w()),
       static_cast<float>(q_ned.x()),
       static_cast<float>(q_ned.y()),
-      static_cast<float>(q_ned.z())
-    };
+      static_cast<float>(q_ned.z())};
 
     // 角速度 ENU->NED
     // body rates: p_ned = p_enu, q_ned = q_enu, r_ned = -r_enu (近似, 简单镜像)
@@ -253,7 +274,7 @@ private:
   void on_rel_alt(const std_msgs::msg::Float64::SharedPtr msg)
   {
     status_.altitude_relative = static_cast<float>(msg->data);
-    status_.altitude_agl = status_.altitude_relative;  // 伴飞电脑无独立测距仪时近似
+    status_.altitude_agl = status_.altitude_relative; // 伴飞电脑无独立测距仪时近似
     // 高度限位检查
     status_.alt_limit_exceeded =
       (status_.altitude_relative > alt_max_) || (status_.altitude_relative < alt_min_);
@@ -289,7 +310,7 @@ private:
       call_land();
     }
     if (msg->return_to_launch) {
-      call_set_mode(6);  // 映射为Land
+      call_set_mode(6); // 映射为Land
     }
   }
 
@@ -315,9 +336,9 @@ private:
       pose.header.stamp = this->now();
       pose.header.frame_id = "map";
       // NED(x=N,y=E,z=D) -> ENU(x=E,y=N,z=U)
-      pose.pose.position.x = sp.position[1];   // East
-      pose.pose.position.y = sp.position[0];   // North
-      pose.pose.position.z = -sp.position[2];  // Up
+      pose.pose.position.x = sp.position[1];  // East
+      pose.pose.position.y = sp.position[0];  // North
+      pose.pose.position.z = -sp.position[2]; // Up
       // 偏航: NED yaw -> ENU yaw = pi/2 - yaw_ned
       double yaw_enu = M_PI_2 - sp.yaw;
       tf2::Quaternion q;
@@ -334,9 +355,9 @@ private:
       geometry_msgs::msg::TwistStamped twist;
       twist.header.stamp = this->now();
       twist.header.frame_id = "map";
-      twist.twist.linear.x = sp.velocity[1];   // East
-      twist.twist.linear.y = sp.velocity[0];   // North
-      twist.twist.linear.z = -sp.velocity[2];  // Up
+      twist.twist.linear.x = sp.velocity[1];  // East
+      twist.twist.linear.y = sp.velocity[0];  // North
+      twist.twist.linear.z = -sp.velocity[2]; // Up
       // 偏航角速度: NED与ENU符号相反
       twist.twist.angular.z = -sp.yawspeed;
       sp_velocity_pub_->publish(twist);
@@ -386,8 +407,14 @@ private:
     req->base_mode = 0;
     // 飞艇模式字符串(与kModeStrToId反向)
     static const std::unordered_map<uint8_t, std::string> kIdToModeStr = {
-      {0, "MANUAL"}, {1, "STABILIZED"}, {2, "ALTCTL"}, {3, "POSCTL"},
-      {4, "OFFBOARD"}, {5, "AUTO.TAKEOFF"}, {6, "AUTO.LAND"}, {8, "AUTO.MISSION"},
+      {0, "MANUAL"},
+      {1, "STABILIZED"},
+      {2, "ALTCTL"},
+      {3, "POSCTL"},
+      {4, "OFFBOARD"},
+      {5, "AUTO.TAKEOFF"},
+      {6, "AUTO.LAND"},
+      {8, "AUTO.MISSION"},
     };
     auto it = kIdToModeStr.find(mode);
     if (it != kIdToModeStr.end()) {
@@ -410,7 +437,7 @@ private:
     req->yaw = 0.0f;
     req->latitude = 0.0f;
     req->longitude = 0.0f;
-    req->altitude = (alt > 0.0f) ? alt : 20.0f;  // 默认AS_TAKEOFF_ALT=20m
+    req->altitude = (alt > 0.0f) ? alt : 20.0f; // 默认AS_TAKEOFF_ALT=20m
     takeoff_client_->async_send_request(req);
     RCLCPP_INFO(this->get_logger(), "请求起飞到 %.1fm", req->altitude);
   }

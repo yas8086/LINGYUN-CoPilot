@@ -1,0 +1,97 @@
+# 灵云01号飞艇伴飞电脑 — GitHub Actions CI
+#
+# 作业:
+#   lint        快速静态检查(不编译、不装运行依赖)
+#   build-test  矩阵 [x86_64, arm64]:colcon build + colcon test
+#
+# arm64 runner 使用 ubuntu-24.04-arm(GitHub 2024 起提供免费 arm64 runner);
+# 若你的仓库不可用 arm64 runner,可将 matrix 中 arm64 项删除。
+# 闭源代码:不调用 ament_copyright(各包 CMakeLists 已跳过)。
+
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ==================== 快速静态检查 ====================
+  lint:
+    runs-on: ubuntu-24.04
+    container: osrf/ros:jazzy-ros-base
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ament linters
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends ros-jazzy-ament-lint-common
+
+      - name: Run linters
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          CPP=$(find src -type f \( -name '*.cpp' -o -name '*.hpp' -o -name '*.h' -o -name '*.cc' \))
+          PY=$(find src -type f -name '*.py')
+          CMAKE=$(find src -type f -name 'CMakeLists.txt')
+          XML=$(find src -type f -name 'package.xml')
+          echo '==> ament_uncrustify'
+          ament_uncrustify $CPP
+          echo '==> ament_cpplint'
+          ament_cpplint $CPP
+          echo '==> ament_lint_cmake'
+          ament_lint_cmake $CMAKE
+          echo '==> ament_xmllint'
+          ament_xmllint $XML
+          echo '==> ament_flake8 / ament_pep257'
+          ament_flake8 $PY
+          ament_pep257 $PY
+
+  # ==================== 编译 + 测试(矩阵)====================
+  build-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runs-on: ubuntu-24.04
+            arch: x86_64
+          - runs-on: ubuntu-24.04-arm   # GitHub arm64 runner
+            arch: arm64
+    # arm64 runner 使用 ubuntu-24.04-arm(GitHub 2024 起提供免费 arm64 runner)
+    runs-on: ${{ matrix.runs-on }}
+    container: osrf/ros:jazzy-ros-base
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends ros-jazzy-ament-lint-common
+          rosdep update -q
+          rosdep install --from-paths src --ignore-src -y --rosdistro jazzy
+
+      - name: Build
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -Wno-dev
+
+      - name: Test
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          colcon test --event-handlers console_cohesion+
+          colcon test-result --verbose
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.arch }}
+          path: |
+            build/**/Testing/**/Test.xml
+            build/**/test_results/**/*.xunit.xml

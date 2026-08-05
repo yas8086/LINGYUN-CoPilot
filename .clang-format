@@ -1,0 +1,107 @@
+# 灵云01号飞艇伴飞电脑 — C++ 代码风格(IDE 镜像配置)
+#
+# 注意:本项目 CI 强制使用的格式化器是 ament_uncrustify(ROS2 官方标准,
+# 见 ament_lint_common)。本 .clang-format 仅为 clangd / VS Code 的
+# "Format Document" 提供尽可能接近 uncrustify 的结果,方便开发时实时预览。
+# 因 clang-format 与 uncrustify 为不同引擎,无法 100% 对齐(如构造函数
+# 初始化列表换行、`Type & name` 两侧空格等),提交前请始终执行:
+#   ./tools/format.sh   (等价 ament_uncrustify --reformat)
+# 以 uncrustify 输出为最终权威。
+---
+BasedOnStyle: LLVM
+Language: Cpp
+Standard: c++17
+
+# 缩进
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+ContinuationIndentWidth: 2
+AccessModifierOffset: -2
+IndentAccessModifiers: false
+IndentPPDirectives: None
+NamespaceIndentation: None
+
+# 行宽
+ColumnLimit: 100
+ReflowComments: false
+
+# 大括号:ROS2 风格(类/函数/命名空间大括号换行,控制语句不换行)
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: Never
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterExternBlock: true
+  BeforeCatch: true
+  BeforeElse: false
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+
+# 对齐
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignConsecutiveMacros: true
+AlignEscapedNewlines: Left
+AlignOperands: true
+AlignTrailingComments: true
+
+# 参数/实参打包(ROS2 风格:每行尽量多放,超长才换行)
+BinPackArguments: false
+BinPackParameters: false
+AllowAllParametersOfDeclarationOnNextLine: true
+
+# 短语句
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: All
+AllowShortLoopsOnASingleLine: false
+
+# 模板/继承
+AlwaysBreakTemplateDeclarations: Yes
+BreakInheritanceList: BeforeColon
+
+# include 排序
+IncludeBlocks: Regroup
+SortIncludes: CaseSensitive
+IncludeCategories:
+  # C++ 标准库
+  - Regex: '^<[^/]+>$'
+    Priority: 1
+  # 第三方/ROS(include with path)
+  - Regex: '^<.*/.*>$'
+    Priority: 2
+  # 本地头文件
+  - Regex: '^".*"'
+    Priority: 3
+
+# 指针/引用(Middle = 两侧空格,镜像 ament_uncrustify 的 `Type * name` / `Type & name` 风格)
+DerivePointerAlignment: false
+PointerAlignment: Middle
+ReferenceAlignment: Middle
+
+# 杂项
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+BreakConstructorInitializers: BeforeColon
+PackConstructorInitializers: Never
+ConstructorInitializerIndentWidth: 2
+CompactNamespaces: false
+FixNamespaceComments: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+NamespaceMacros: []
+SpacesBeforeTrailingComments: 1
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpaceAfterCStyleCast: false
+SpaceAfterTemplateKeyword: false

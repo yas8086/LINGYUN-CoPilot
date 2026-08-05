@@ -1,0 +1,41 @@
+# ===== colcon 工作区构建产物 =====
+build/
+install/
+log/
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ===== colcon 元数据 =====
+.colcon/
+
+# ===== IDE / 编辑器 =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ===== clangd / 编译数据库 =====
+.cache/
+compile_commands.json
+
+# ===== 仿真/运行时临时产物 =====
+*.bag
+*.db3
+*.cdr
+rosbag2_*/
+
+# ===== 本地密钥/凭证(禁止入库)=====
+.env
+*.pem
+*.key
+secrets/

@@ -1,4 +1,5 @@
-"""SITL仿真启动文件。
+"""
+SITL仿真启动文件.
 
 启动节点：
   - mavros_node: 与PX4 SITL通过UDP通信，fcu_url=udp://:14540@localhost:14557

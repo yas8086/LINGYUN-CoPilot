@@ -1,0 +1,35 @@
+# 灵云01号飞艇伴飞电脑 — C++ 静态分析
+# 注意:.clang-tidy 不在 ament_lint_common 默认检查范围内(非 CI 阻塞项),
+# 供本地 IDE/clangd 使用。CI 默认不强制;如需启用见 .gitlab-ci.yml 的 clang-tidy job(默认 skip)。
+---
+Checks: >
+  -*,
+  bugprone-*,
+  performance-*,
+  readability-*,
+  modernize-*,
+  -bugprone-easily-swappable-parameters,
+  -modernize-use-trailing-return-type,
+  -readability-magic-numbers,
+  -readability-identifier-length,
+  -readability-function-cognitive-complexity,
+  -readability-else-after-return,
+  -modernize-use-nodiscard,
+  -readability-named-parameter
+
+WarningsAsErrors: ''
+HeaderFilterRegex: '^(?!.*(build|install|log)).*$'
+
+CheckOptions:
+  - key:   readability-identifier-naming.ClassCase
+    value: CamelCase
+  - key:   readability-identifier-naming.FunctionCase
+    value: camelBack
+  - key:   readability-identifier-naming.VariableCase
+    value: camelBack
+  - key:   readability-identifier-naming.PrivateMemberSuffix
+    value: '_'
+  - key:   readability-identifier-naming.ConstantCase
+    value: UPPER_CASE
+  - key:   readability-braces-around-statements.ShortStatementLines
+    value: '1'

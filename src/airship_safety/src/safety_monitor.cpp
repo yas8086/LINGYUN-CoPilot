@@ -9,15 +9,16 @@
 //   - 大惯量(Izz=145500): 偏航响应极慢, 偏航5度时气动力矩接近控制极限
 //   - 高度硬限位: AS_ALT_MAX=150m, AS_ALT_MIN=2m, AS_ALT_SOFT=140m
 
-#include <rclcpp/rclcpp.hpp>
-#include "airship_msgs/msg/airship_status.hpp"
-#include "airship_msgs/msg/safety_status.hpp"
-#include "airship_msgs/msg/mode_command.hpp"
-
 #include <algorithm>
 #include <cmath>
 #include <memory>
 #include <string>
+
+#include <rclcpp/rclcpp.hpp>
+
+#include "airship_msgs/msg/airship_status.hpp"
+#include "airship_msgs/msg/mode_command.hpp"
+#include "airship_msgs/msg/safety_status.hpp"
 
 using std::placeholders::_1;
 using namespace std::chrono_literals;
@@ -29,20 +30,19 @@ public:
   : rclcpp::Node("airship_safety_monitor")
   {
     // ===== 参数声明 (飞艇物理约束阈值) =====
-    alt_max_hard_ = this->declare_parameter("alt_max_hard", 150.0);       // 高度硬限位 AS_ALT_MAX
-    alt_max_soft_ = this->declare_parameter("alt_max_soft", 140.0);       // 高度软限位 AS_ALT_SOFT
-    alt_min_ = this->declare_parameter("alt_min", 2.0);                   // 高度下限 AS_ALT_MIN
-    yaw_rate_limit_ = this->declare_parameter("yaw_rate_limit", 0.524);   // AS_YAW_RMAX ~30deg/s
-    pitch_limit_ = this->declare_parameter("pitch_limit", 0.2618);        // 最大俯仰角 ±15度
+    alt_max_hard_ = this->declare_parameter("alt_max_hard", 150.0); // 高度硬限位 AS_ALT_MAX
+    alt_max_soft_ = this->declare_parameter("alt_max_soft", 140.0); // 高度软限位 AS_ALT_SOFT
+    alt_min_ = this->declare_parameter("alt_min", 2.0);             // 高度下限 AS_ALT_MIN
+    yaw_rate_limit_ = this->declare_parameter("yaw_rate_limit", 0.524); // AS_YAW_RMAX ~30deg/s
+    pitch_limit_ = this->declare_parameter("pitch_limit", 0.2618);      // 最大俯仰角 ±15度
     battery_low_voltage_ = this->declare_parameter("battery_low_voltage", 22.0);
     battery_critical_voltage_ = this->declare_parameter("battery_critical_voltage", 20.0);
-    link_timeout_ = this->declare_parameter("link_timeout", 3.0);         // 通信丢失阈值
-    publish_rate_hz_ = this->declare_parameter("publish_rate_hz", 10.0);  // 状态发布频率
+    link_timeout_ = this->declare_parameter("link_timeout", 3.0);        // 通信丢失阈值
+    publish_rate_hz_ = this->declare_parameter("publish_rate_hz", 10.0); // 状态发布频率
 
     // ===== 订阅飞艇综合状态 =====
     status_sub_ = this->create_subscription<airship_msgs::msg::AirshipStatus>(
-      "/airship/status", rclcpp::QoS(10),
-      std::bind(&AirshipSafetyMonitor::on_status, this, _1));
+      "/airship/status", rclcpp::QoS(10), std::bind(&AirshipSafetyMonitor::on_status, this, _1));
 
     // ===== 发布安全状态与覆盖命令 =====
     safety_status_pub_ = this->create_publisher<airship_msgs::msg::SafetyStatus>(
@@ -52,20 +52,26 @@ public:
 
     // ===== 定时器: 周期检查并发布 =====
     auto period = std::chrono::duration<double>(1.0 / publish_rate_hz_);
-    publish_timer_ = this->create_wall_timer(
-      std::chrono::duration_cast<std::chrono::nanoseconds>(period),
-      std::bind(&AirshipSafetyMonitor::timer_callback, this));
+    publish_timer_ =
+      this->create_wall_timer(std::chrono::duration_cast<std::chrono::nanoseconds>(period),
+                              std::bind(&AirshipSafetyMonitor::timer_callback, this));
 
     // 初始化: 节点启动时尚未收到任何状态
     last_status_time_ = this->now();
     has_status_ = false;
 
     RCLCPP_INFO(this->get_logger(),
-      "AirshipSafetyMonitor 启动. rate=%.1fHz alt[min=%.1f soft=%.1f hard=%.1f] "
-      "yaw_limit=%.3f pitch_limit=%.3f bat<%.1f/%.1f linkTO=%.1fs",
-      publish_rate_hz_, alt_min_, alt_max_soft_, alt_max_hard_,
-      yaw_rate_limit_, pitch_limit_,
-      battery_low_voltage_, battery_critical_voltage_, link_timeout_);
+                "AirshipSafetyMonitor 启动. rate=%.1fHz alt[min=%.1f soft=%.1f hard=%.1f] "
+                "yaw_limit=%.3f pitch_limit=%.3f bat<%.1f/%.1f linkTO=%.1fs",
+                publish_rate_hz_,
+                alt_min_,
+                alt_max_soft_,
+                alt_max_hard_,
+                yaw_rate_limit_,
+                pitch_limit_,
+                battery_low_voltage_,
+                battery_critical_voltage_,
+                link_timeout_);
   }
 
 private:
@@ -80,6 +86,11 @@ private:
   // ===== 定时回调: 安全检查 + 发布 =====
   void timer_callback()
   {
+    // 尚未收到任何有效遥测时, 不发布安全判断(避免用默认高度=0 误判"高度超下限")
+    if (!has_status_) {
+      return;
+    }
+
     airship_msgs::msg::SafetyStatus safety;
     const rclcpp::Time now = this->now();
     safety.header.stamp = now;
@@ -95,13 +106,11 @@ private:
     safety.alt_max = static_cast<float>(alt_max_hard_);
     safety.alt_min = static_cast<float>(alt_min_);
     // 距离最近硬限位的余量(正值=安全, 负值=已超限)
-    safety.alt_margin = std::min(
-      altitude - static_cast<float>(alt_min_),
-      static_cast<float>(alt_max_hard_) - altitude);
+    safety.alt_margin = std::min(altitude - static_cast<float>(alt_min_),
+                                 static_cast<float>(alt_max_hard_) - altitude);
     // 软限位检查: 超出软限位即视为违反
     safety.altitude_violation =
-      (altitude > static_cast<float>(alt_max_soft_)) ||
-      (altitude < static_cast<float>(alt_min_));
+      (altitude > static_cast<float>(alt_max_soft_)) || (altitude < static_cast<float>(alt_min_));
 
     // ===== 偏航安全 =====
     const float yaw_rate = latest_status_.yawspeed;
@@ -122,8 +131,7 @@ private:
 
     // ===== 综合判断 safe_to_control =====
     // 任一关键违反发生时禁止Offboard控制
-    safety.safe_to_control =
-      !(safety.altitude_violation || safety.link_lost || safety.battery_low);
+    safety.safe_to_control = !(safety.altitude_violation || safety.link_lost || safety.battery_low);
 
     // ===== 计算安全等级 0=正常 1=警告 2=危险 3=紧急 =====
     uint8_t level = 0;
@@ -138,8 +146,7 @@ private:
 
     // 高度安全: 超出硬限位 为危险
     const bool altitude_hard_violation =
-      (altitude > static_cast<float>(alt_max_hard_)) ||
-      (altitude < static_cast<float>(alt_min_));
+      (altitude > static_cast<float>(alt_max_hard_)) || (altitude < static_cast<float>(alt_min_));
     if (safety.altitude_violation) {
       level = std::max(level, static_cast<uint8_t>(1));
       if (altitude_hard_violation) {
@@ -209,9 +216,10 @@ private:
   }
 
   // 自动保护: 当危险/紧急且处于Offboard时发布模式切换或降落命令
-  void publish_safety_override(const airship_msgs::msg::SafetyStatus & s,
-                                bool altitude_hard_violation,
-                                const rclcpp::Time & now)
+  void publish_safety_override(
+    const airship_msgs::msg::SafetyStatus & s,
+    bool altitude_hard_violation,
+    const rclcpp::Time & now)
   {
     // 等级低于2: 不干预, 清除覆盖状态
     if (s.safety_level < 2) {
@@ -237,8 +245,7 @@ private:
       // 紧急: 发布降落命令 (中性浮力飞艇降落为缓慢下降)
       cmd.land = true;
       cmd.mode = airship_msgs::msg::ModeCommand::MODE_LAND;
-      RCLCPP_ERROR(this->get_logger(),
-        "紧急(level=3) 发布降落命令: %s", s.warning_message.c_str());
+      RCLCPP_ERROR(this->get_logger(), "紧急(level=3) 发布降落命令: %s", s.warning_message.c_str());
     } else {
       // 危险(level=2): 切换出Offboard到手动辅助模式
       cmd.set_mode = true;
@@ -250,9 +257,9 @@ private:
         cmd.mode = airship_msgs::msg::ModeCommand::MODE_POSITION;
       }
       RCLCPP_WARN(this->get_logger(),
-        "危险(level=2) 切换到%s模式: %s",
-        altitude_hard_violation ? "Altitude" : "Position",
-        s.warning_message.c_str());
+                  "危险(level=2) 切换到%s模式: %s",
+                  altitude_hard_violation ? "Altitude" : "Position",
+                  s.warning_message.c_str());
     }
 
     safety_override_pub_->publish(cmd);
@@ -272,8 +279,8 @@ private:
   double publish_rate_hz_;
 
   // 常量
-  static constexpr double kLinkCriticalTimeout = 10.0;  // 通信丢失超过10s 为紧急
-  static constexpr double kOverrideInterval = 1.0;      // 覆盖命令最小间隔(s)
+  static constexpr double kLinkCriticalTimeout = 10.0; // 通信丢失超过10s 为紧急
+  static constexpr double kOverrideInterval = 1.0;     // 覆盖命令最小间隔(s)
 
   // 状态
   airship_msgs::msg::AirshipStatus latest_status_;
