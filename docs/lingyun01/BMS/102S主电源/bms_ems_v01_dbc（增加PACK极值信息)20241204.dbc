@@ -1,0 +1,2553 @@
+VERSION ""
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: EMS BMS
+VAL_TABLE_ TMSrunState 7 "补水泵运行状态" 6 "报警状态" 5 "外风机运行状态" 4 "水泵运行状态" 3 "制热运行状态" 2 "制冷运行状态" 1 "自检状态" 0 "机组运行状态" ;
+VAL_TABLE_ TMScontrolMode 1 "进水温度控制模式" 0 "出水温度控制模式" ;
+VAL_TABLE_ TMSType 6 "60KW三相" 5 "50KW三相" 4 "40KW三相" 3 "20KW三相" 2 "8KW三相" 1 "8KW单相" ;
+VAL_TABLE_ Supplycode 1 "泰铂" ;
+VAL_TABLE_ EMS_TMSRunlMode 4 "发4，强控TMS待机" 3 "发1，强控TMS自循环" 2 "发1，强控TMS制热" 1 "发1，强控TMS制冷" 0 "发0按照程序中默认模式和阈值运行" ;
+VAL_TABLE_ EMS_TMSpowerOFF 1 "Request to power off" 0 "No request" ;
+VAL_TABLE_ EMS_TMSpowerOn 1 "Description for the value '0x1'" 0 "No request" ;
+VAL_TABLE_ LSS2_control 3 "无意义" 2 "强控断开" 1 "强控闭合" 0 "无请求" ;
+VAL_TABLE_ EMS_SHUNT_restart 1 "重启" 0 "无请求" ;
+VAL_TABLE_ EMS_ACCutOff_request 1 "BMS 切换交流侧断路器" 0 "无请求" ;
+VAL_TABLE_ EMS_BCURestart_request 1 "bms重启（正常下电流程）" 0 "无请求" ;
+VAL_TABLE_ Relay_status 1 "closed" 0 "opened" ;
+VAL_TABLE_ Warning_state 1 "warning" 0 "normal" ;
+VAL_TABLE_ Error_state 1 "故障" 0 "正常" ;
+VAL_TABLE_ IO_state 1 "normal" 0 "error" ;
+VAL_TABLE_ VT_BattBalancingMode 2 "Remote balancing" 1 "Local balancing" 0 "None" ;
+VAL_TABLE_ VT_RelayFaultStatus 3 "Circuit fault" 2 "Open fault" 1 "Stick fault" 0 "No fault" ;
+VAL_TABLE_ VT_BattChrgStatus 2 "Discharging" 1 "Charging" 0 "Idle" ;
+VAL_TABLE_ VT_BalancingSts 1 "In balancing" 0 "Not in balancing" ;
+VAL_TABLE_ VT_BmsSelfChkStatus 3 "reserved" 2 "Failed" 1 "Passed" 0 "Checking" ;
+VAL_TABLE_ VT_PrechargeStatus 3 "PrechargeFailed" 2 "Precharged" 1 "Precharging" 0 "None" ;
+VAL_TABLE_ VT_BcuConnectionStatus 4 "ConnectFailed" 3 "Connected" 2 "Connecting_2" 1 "Connecting_1" 0 "Disconnected" ;
+VAL_TABLE_ VT_BmsRunState 4 "Stopped" 3 "Standby" 2 "DischargeForbid" 1 "ChargeForbid" 0 "Normal" ;
+VAL_TABLE_ VT_PrechargeReq 1 "Request to precharge" 0 "No request" ;
+VAL_TABLE_ VT_InsDetectSw 1 "Insulation detect on" 0 "Insulation detect off" ;
+VAL_TABLE_ VT_UrgencyCutoffReq 1 "Request to cutoff" 0 "No request" ;
+VAL_TABLE_ VT_PowerOffReq 1 "Request to power off" 0 "No request" ;
+VAL_TABLE_ VT_PowerOnReq 1 "Request to power on" 0 "No request" ;
+
+
+BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
+ SG_ MaxSafeTempIndex : 0|12@0+ (1,0) [0|65535] "" Vector__XXX
+ SG_ MaxSafeTemp : 0|8@0+ (1,-50) [-50|205] "deg" Vector__XXX
+ SG_ MinSafeTempIndex : 0|12@0+ (1,0) [0|65535] "" Vector__XXX
+ SG_ MinSafeTemp : 0|8@0+ (1,-50) [-50|205] "deg" Vector__XXX
+
+BO_ 2147491872 PACKVTemp: 8 Vector__XXX
+ SG_ PackNTempNum : 47|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ minTempNo : 39|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ maxTempNo : 31|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ PACKNum : 7|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ MinCellTemp : 23|8@0+ (1,-50) [-50|205] "deg" Vector__XXX
+ SG_ MaxCellTemp : 15|8@0+ (1,-50) [-50|205] "deg" Vector__XXX
+
+BO_ 2147491856 PACKVolt: 8 Vector__XXX
+ SG_ PackNvoltNum : 63|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ voltnummax : 15|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ voltminnumindex : 55|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ voltminnum : 31|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ voltmaxnumindex : 47|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ PACKNum : 7|8@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2147493120 TMSInfo2: 8 BMS
+ SG_ SuctionTemp : 63|8@0+ (1,-50) [-50|205] ""  EMS
+ SG_ PlateTemp : 55|8@0+ (1,-50) [-50|205] ""  EMS
+ SG_ Condensing_temperature : 47|8@0+ (1,-50) [-50|205] ""  EMS
+ SG_ Highpressure : 31|16@0+ (0.1,0) [0|6553.5] "bar"  EMS
+ SG_ Lowpressure : 23|8@0+ (0.1,0) [0|25.5] "bar"  EMS
+ SG_ Electronic_expansion_valve : 15|8@0+ (2,0) [0|510] ""  EMS
+ SG_ TMSrunState : 7|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147492864 TMSInfo1: 8 BMS
+ SG_ TMSPowerVolt : 63|8@0+ (1,0) [0|255] "V"  EMS
+ SG_ TMSSpeed : 55|8@0+ (50,0) [0|12750] ""  EMS
+ SG_ waterDiff : 39|8@0+ (0.1,0) [0|25.5] "bar"  EMS
+ SG_ TMScontrolMode : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ Softversion : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ TMSType : 15|8@0+ (1,0) [0|255] ""  EMS
+ SG_ Supplycode : 7|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147492160 PduTemp4: 8 BMS
+ SG_ PDUPoleTempearture_T32 : 63|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T31 : 55|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T30 : 47|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T29 : 39|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T28 : 31|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T27 : 23|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T26 : 15|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T25 : 7|8@0+ (1,-50) [-50|205] "deg"  EMS
+
+BO_ 2147492144 PduTemp3: 8 BMS
+ SG_ PDUPoleTempearture_T24 : 63|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T23 : 55|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T22 : 47|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T21 : 39|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T20 : 31|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T19 : 23|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T18 : 15|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T17 : 7|8@0+ (1,-50) [-50|205] "deg"  EMS
+
+BO_ 2147492128 PduTemp2: 8 BMS
+ SG_ PDUPoleTempearture_T16 : 63|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T15 : 55|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T14 : 47|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T13 : 39|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T12 : 31|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T11 : 23|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T10 : 15|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T9 : 7|8@0+ (1,-50) [-50|205] "deg"  EMS
+
+BO_ 2147492112 PACKTemp: 8 EMS
+ SG_ PACKPoleTempearture_T8 : 63|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PACKPoleTempearture_T7 : 55|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PACKPoleTempearture_T6 : 47|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PACKPoleTempearture_T5 : 39|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PACKPoleTempearture_T4 : 31|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PACKPoleTempearture_T3 : 23|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PACKPoleTempearture_T2 : 15|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PACKPoleTempearture_T1 : 7|8@0+ (1,-50) [-50|205] "deg"  EMS
+
+BO_ 2147487776 EmsHvCtl3: 2 EMS
+ SG_ EMS_DehumEndTemp : 15|8@0+ (1,0) [0|255] "%"  BMS
+ SG_ EMS_DehumStartTemp : 7|8@0+ (1,0) [0|255] "%"  BMS
+
+BO_ 2147487760 EmsHvCtl2: 8 EMS
+ SG_ EMS_DiffTemp : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ EMS_HeatTemp : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ EMS_CoolTemp : 47|8@0+ (1,-50) [-50|205] ""  BMS
+ SG_ EMS_HeatEndTemp : 39|8@0+ (1,-50) [-50|205] ""  BMS
+ SG_ EMS_HeatStartTemp : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ EMS_CoolendTemp : 23|8@0+ (1,-50) [-50|205] ""  BMS
+ SG_ EMS_CoolStartTemp : 15|8@0+ (1,-50) [-50|205] ""  BMS
+ SG_ EMS_TMSRunlMode : 5|3@0+ (1,0) [0|7] ""  EMS
+ SG_ EMS_TMSpowerOFF : 1|1@0+ (1,0) [0|1] ""  BMS
+ SG_ EMS_TMSpowerOn : 0|1@0+ (1,0) [0|1] ""  BMS
+
+BO_ 2147501680 balancingset_08: 8 EMS
+ SG_ CellBalSet_457_460 : 19|4@0+ (1,0) [0|15] ""  EMS
+ SG_ CellBalSet_449_456 : 15|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_441_448 : 7|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501664 balancingset_07: 8 BMS
+ SG_ CellBalSet_433_440 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_425_432 : 55|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_417_424 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_409_416 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_401_408 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_393_400 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_385_392 : 15|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_377_384 : 7|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501648 balancingset_06: 8 BMS
+ SG_ CellBalSet_369_376 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_361_368 : 55|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_353_360 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_345_352 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_337_344 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_329_336 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_321_328 : 15|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_313_320 : 7|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501632 balancingset_05: 8 BMS
+ SG_ CellBalSet_305_312 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_297_304 : 55|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_289_296 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_281_288 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_273_280 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_265_272 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_257_264 : 15|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_249_256 : 7|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501616 balancingset_04: 8 BMS
+ SG_ CellBalSet_241_248 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_233_240 : 55|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_225_232 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_217_224 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_209_216 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_201_208 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_193_200 : 15|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_185_192 : 7|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501600 balancingset_03: 8 BMS
+ SG_ CellBalSet_177_184 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_169_176 : 55|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_161_168 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_153_160 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_145_152 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_137_144 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_129_136 : 15|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_121_128 : 7|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501584 balancingset_02: 8 BMS
+ SG_ CellBalSet_113_120 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_105_112 : 55|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_97_104 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_89_96 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_81_88 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_73_80 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_65_72 : 15|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_57_64 : 7|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501568 balancingset_01: 8 BMS
+ SG_ CellBalSet_49_56 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_41_48 : 55|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_33_40 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_25_32 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_17_24 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_9_16 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSet_1_8 : 15|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147536880 DODI_Info: 8 BMS
+ SG_ S8DL2 : 63|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S7DL2 : 62|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S6DL2 : 61|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S5DL2 : 60|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S4DL2 : 59|1@0+ (1,0) [0|1] "" Vector__XXX
+ SG_ S3DL2 : 58|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S2DL2 : 57|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S1DL2 : 56|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S8DL1 : 55|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S7DL1 : 54|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S6DL1 : 53|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S5DL1 : 52|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S4DL1 : 51|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S3DL1 : 50|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S2DL1 : 49|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S1DL1 : 48|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S8HSS2 : 47|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S7HSS2 : 46|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S6HSS2 : 45|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S5HSS2 : 44|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S4HSS2 : 43|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S3HSS2 : 42|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S2HSS2 : 41|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S1HSS2 : 40|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S8HSS1 : 39|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S7HSS1 : 38|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S6HSS1 : 37|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S5HSS1 : 36|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S4HSS1 : 35|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S3HSS1 : 34|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S2HSS1 : 33|1@0+ (1,0) [0|1] ""  EMS
+ SG_ S1HSS1 : 32|1@0+ (1,0) [0|1] ""  EMS
+ SG_ SW_IN3 : 31|1@0+ (1,0) [0|1] ""  EMS
+ SG_ SW_IN2 : 30|1@0+ (1,0) [0|1] ""  EMS
+ SG_ SW_IN1 : 29|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DIL5 : 28|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DIL4 : 27|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DIL3 : 26|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DIL2 : 25|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DIL1 : 24|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DIH8 : 23|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DIH7 : 22|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DIH6 : 21|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DIH5 : 20|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DIH4 : 19|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DIH3 : 18|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DIH2 : 17|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DIH1 : 16|1@0+ (1,0) [0|1] ""  EMS
+ SG_ SW_OUT4 : 15|1@0+ (1,0) [0|1] ""  EMS
+ SG_ SW_OUT3 : 14|1@0+ (1,0) [0|1] ""  EMS
+ SG_ SW_OUT2 : 13|1@0+ (1,0) [0|1] ""  EMS
+ SG_ SW_OUT1 : 12|1@0+ (1,0) [0|1] ""  EMS
+ SG_ LSS4 : 11|1@0+ (1,0) [0|1] ""  EMS
+ SG_ LSS3 : 10|1@0+ (1,0) [0|1] ""  EMS
+ SG_ LSS2 : 9|1@0+ (1,0) [0|1] ""  EMS
+ SG_ LSS1 : 8|1@0+ (1,0) [0|1] ""  EMS
+ SG_ HSS8 : 7|1@0+ (1,0) [0|1] ""  EMS
+ SG_ HSS7 : 6|1@0+ (1,0) [0|1] ""  EMS
+ SG_ HSS6 : 5|1@0+ (1,0) [0|1] ""  EMS
+ SG_ HSS5 : 4|1@0+ (1,0) [0|1] ""  EMS
+ SG_ HSS4 : 3|1@0+ (1,0) [0|1] ""  EMS
+ SG_ HSS3 : 2|1@0+ (1,0) [0|1] ""  EMS
+ SG_ HSS2 : 1|1@0+ (1,0) [0|1] ""  EMS
+ SG_ HSS1 : 0|1@0+ (1,0) [0|1] ""  EMS
+
+BO_ 2147532784 EquipError_Info: 8 BMS
+ SG_ MeterPower : 23|16@0+ (0.1,1000) [-1000|1000] ""  EMS
+ SG_ FireWireState : 57|2@0+ (1,0) [0|3] ""  EMS
+ SG_ LightningWireState : 55|2@0+ (1,0) [0|3] ""  EMS
+ SG_ SwitchWireState : 53|2@0+ (1,0) [0|3] ""  EMS
+ SG_ LiquidState : 51|2@0+ (1,0) [0|3] ""  EMS
+ SG_ FireErrorState : 49|2@0+ (1,0) [0|3] ""  EMS
+ SG_ SmokeWireState : 47|2@0+ (1,0) [0|3] ""  EMS
+ SG_ WaterWireState : 45|2@0+ (1,0) [0|3] ""  EMS
+ SG_ StopWireState : 43|2@0+ (1,0) [0|3] ""  EMS
+ SG_ DoorWireState : 41|2@0+ (1,0) [0|3] ""  EMS
+ SG_ TempState : 15|2@0+ (1,0) [0|3] ""  EMS
+ SG_ SmokeState : 13|2@0+ (1,0) [0|3] ""  EMS
+ SG_ WaterState : 11|2@0+ (1,0) [0|3] ""  EMS
+ SG_ FireState : 9|2@0+ (1,0) [0|3] ""  EMS
+ SG_ DehumState : 7|2@0+ (1,0) [0|3] ""  EMS
+ SG_ AirconState : 5|2@0+ (1,0) [0|3] ""  EMS
+ SG_ AmmeterState : 3|2@0+ (1,0) [0|3] ""  EMS
+ SG_ FANState : 1|2@0+ (1,0) [0|3] ""  EMS
+
+BO_ 2147528688 fire_Info: 8 BMS
+ SG_ VOCvalue : 55|16@0+ (1,0) [0|65535] ""  EMS
+ SG_ SomkeValue : 39|16@0+ (1,0) [0|65535] ""  EMS
+ SG_ H2Value : 23|16@0+ (1,0) [0|65535] ""  EMS
+ SG_ COValue : 7|16@0+ (1,0) [0|65535] ""  EMS
+
+BO_ 2147524592 cool_heat_Info: 8 BMS
+ SG_ EnvDehum : 47|8@0+ (0.1,0) [0|6553.5] "0.1%RH"  EMS
+ SG_ EnvTemp : 39|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ EndDehum : 31|8@0+ (0.1,0) [0|6553.5] "0.1%RH"  EMS
+ SG_ StartDehum : 23|8@0+ (0.1,0) [0|6553.5] "0.1%RH"  EMS
+ SG_ EndTemp : 15|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ StartTemp : 7|8@0+ (1,-50) [-50|205] "deg"  EMS
+
+BO_ 2147520496 AmmeterInfo2: 8 BMS
+ SG_ EndHeatTemp : 63|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ StartHeatTemp : 55|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ EndCoolTemp : 47|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ StartCoolTemp : 39|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ AmmeterNegToDayPower : 23|16@0+ (0.1,0) [0|6553.5] "kwh"  EMS
+ SG_ AmmeterPosToDayPower : 7|16@0+ (0.1,0) [0|6553.5] "kwh"  EMS
+
+BO_ 2147516400 AmmeterInfo: 8 BMS
+ SG_ AmmeterNegCumuPowerLow : 55|16@0+ (1,0) [0|255] "kwh"  EMS
+ SG_ AmmeterNegCumuPowerHigh : 39|16@0+ (1,0) [0|255] "kwh"  EMS
+ SG_ AmmeterPosCumuPowerLow : 23|16@0+ (1,0) [0|255] "kwh"  EMS
+ SG_ AmmeterPosCumuPowerHigh : 7|16@0+ (1,0) [0|255] "kwh"  EMS
+
+BO_ 2147493376 FanInfo: 8 BMS
+ SG_ Fan4Rev : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ FanTm4Temp : 55|8@0+ (1,-50) [-50|205] ""  EMS
+ SG_ Fan3Rev : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ FanTm3Temp : 39|8@0+ (1,-50) [-50|205] ""  EMS
+ SG_ Fan2Rev : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ FanTm2Temp : 23|8@0+ (1,-50) [-50|205] ""  EMS
+ SG_ Fan1Rev : 15|8@0+ (1,0) [0|255] ""  EMS
+ SG_ FanTm1Temp : 7|8@0+ (1,-50) [-50|205] ""  EMS
+
+BO_ 2147501936 BalancingInfo_08: 8 BMS
+ SG_ CellBalSts_441_448 : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ CellBalSts_457_460 : 19|4@0+ (1,0) [0|15] ""  EMS
+ SG_ CellBalSts_449_456 : 15|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501920 BalancingInfo_07: 8 BMS
+ SG_ CellBalSts_377_384 : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ CellBalSts_433_440 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_425_432 : 55|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_417_424 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_409_416 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_401_408 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_393_400 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_385_392 : 15|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501904 BalancingInfo_06: 8 BMS
+ SG_ CellBalSts_313_320 : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ CellBalSts_369_376 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_361_368 : 55|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_353_360 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_345_352 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_337_344 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_329_336 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_321_328 : 15|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501888 BalancingInfo_05: 8 BMS
+ SG_ CellBalSts_249_256 : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ CellBalSts_305_312 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_297_304 : 55|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_289_296 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_281_288 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_273_280 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_265_272 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_257_264 : 15|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501872 BalancingInfo_04: 8 BMS
+ SG_ CellBalSts_185_192 : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ CellBalSts_241_248 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_233_240 : 55|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_225_232 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_217_224 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_209_216 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_201_208 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_193_200 : 15|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501856 BalancingInfo_03: 8 BMS
+ SG_ CellBalSts_121_128 : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ CellBalSts_177_184 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_169_176 : 55|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_161_168 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_153_160 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_145_152 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_137_144 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_129_136 : 15|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501840 BalancingInfo_02: 8 BMS
+ SG_ CellBalSts_57_64 : 7|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ CellBalSts_97_104 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_89_96 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_81_88 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_73_80 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_65_72 : 15|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_113_120 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_105_112 : 55|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147501824 BalancingInfo_01: 8 BMS
+ SG_ CellBalSts_49_56 : 63|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_41_48 : 55|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_33_40 : 47|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_25_32 : 39|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_17_24 : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_1_8 : 15|8@0+ (1,0) [0|255] ""  EMS
+ SG_ CellBalSts_9_16 : 23|8@0+ (1,0) [0|255] ""  EMS
+ SG_ BattBalancingSts : 1|2@0+ (1,0) [0|3] ""  EMS
+
+BO_ 2147492608 TMSInfo: 8 BMS
+ SG_ TmsReturnPressure : 63|8@0+ (0.02,0) [0|0] "bar"  EMS
+ SG_ TmsSupplyPressure : 55|8@0+ (0.02,0) [0|0] "bar"  EMS
+ SG_ TMStemp : 47|8@0+ (1,-50) [-50|205] ""  EMS
+ SG_ TmsTempSet : 39|8@0+ (1,-50) [-50|205] ""  EMS
+ SG_ TmsSupplyTemp : 15|8@0+ (1,-50) [-50|205] ""  EMS
+ SG_ TmsRunMode : 31|8@0+ (1,0) [0|255] ""  EMS
+ SG_ TmsReturnTemp : 23|8@0+ (1,-50) [-50|205] ""  EMS
+ SG_ TmsRunSts : 7|8@0+ (1,0) [0|255] ""  EMS
+
+BO_ 2147491840 BattConnectError: 2 BMS
+ SG_ CriticalAlarms_arenotallcleared : 13|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Not_meeting_Dsg_conditions : 12|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Not_meeting_Chg_conditions : 11|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Insulationalarmsarenotallcleared : 10|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Typy1alarmsarenotallcleared : 9|1@0+ (1,0) [0|1] ""  EMS
+ SG_ RackVolDiffLarge1 : 8|1@0+ (1,0) [0|1] ""  EMS
+ SG_ SMSConfirmationOvertime : 1|1@0+ (1,0) [0|1] ""  EMS
+ SG_ RackVol_DiffLarge : 0|1@0+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 2147512304 LifeCycle: 8 BMS
+ SG_ TotalUseTime : 45|21@0+ (5,0) [0|10485755] "min"  EMS
+ SG_ TotalDischargeTime : 18|21@0+ (5,0) [0|10485755] "min"  EMS
+ SG_ TotalChargeTime : 7|21@0+ (5,0) [0|10485755] "min"  EMS
+
+BO_ 2147487744 EmsHvCtl1: 2 EMS
+ SG_ LSS2_control : 9|2@0+ (1,0) [0|3] ""  BMS
+ SG_ EMS_SHUNT_restart : 7|1@0+ (1,0) [0|1] ""  BMS
+ SG_ EMS_ACCutOff_request : 6|1@0+ (1,0) [0|1] ""  BMS
+ SG_ EMS_BCURestart_request : 5|1@0+ (1,0) [0|1] ""  BMS
+ SG_ EMS_PowerOnReq : 0|1@0+ (1,0) [0|1] ""  BMS
+ SG_ EMS_PowerOFFReq : 1|1@0+ (1,0) [0|1] ""  BMS
+ SG_ EMS_UrgencyCutOffPowerReq : 2|1@0+ (1,0) [0|1] ""  BMS
+ SG_ EMS_BCU_insulate : 3|1@0+ (1,0) [0|1] ""  BMS
+ SG_ EMS_BCU_precharge_request : 4|1@0+ (1,0) [0|1] ""  BMS
+
+BO_ 2147488768 BattInfo02: 8 BMS
+ SG_ BattVolt : 7|16@0+ (0.1,0) [0|2000] "V"  EMS
+ SG_ BattCurr : 23|16@0+ (0.1,-1000) [-1000|1000] "A"  EMS
+ SG_ SOC : 39|16@0+ (0.1,0) [0|100] "%"  EMS
+ SG_ RealSoc : 55|16@0+ (0.1,0) [0|100] "%"  EMS
+
+BO_ 2147488512 BattInfo01: 8 BMS
+ SG_ BMS_RunState : 3|4@0+ (1,0) [0|15] ""  EMS
+ SG_ BMS_ConnectionStatus : 7|4@0+ (1,0) [0|15] ""  EMS
+ SG_ BMS_PrechargeStatus : 9|2@0+ (1,0) [0|3] ""  EMS
+ SG_ BMS_SelfCheckStatus : 11|2@0+ (1,0) [0|3] ""  EMS
+ SG_ BMS_BalanceStatus : 12|1@0+ (1,0) [0|1] ""  EMS
+ SG_ BMS_HeatingStatus : 13|1@0+ (1,0) [0|1] ""  EMS
+ SG_ BMS_RefrigerationStatus : 14|1@0+ (1,0) [0|1] ""  EMS
+ SG_ HighVoltLoopLockStatus : 15|1@0+ (1,0) [0|1] ""  EMS
+ SG_ PositiveInsulationResistance : 23|16@0+ (1,0) [0|65535] "kohm"  EMS
+ SG_ NegativeInsulationResistance : 39|16@0+ (1,0) [0|65535] "kohm"  EMS
+ SG_ BMS_AlarmLevel : 55|8@0+ (1,0) [0|15] ""  EMS
+ SG_ Ready : 57|2@0+ (1,0) [0|3] ""  EMS
+ SG_ BmsMode : 58|1@0+ (1,0) [0|1] ""  EMS
+ SG_ BattChrgState : 60|2@0+ (1,0) [0|3] ""  EMS
+
+BO_ 2147488000 SOP: 8 BMS
+ SG_ ChargeMaxCellVoltLimit : 7|16@0+ (0.1,0) [0|6553.5] "V"  EMS
+ SG_ MaxDischargeCurrent : 23|16@0+ (0.1,0) [0|65535] "A"  EMS
+ SG_ DischargeMinCellVoltLimit : 39|16@0+ (0.1,0) [0|6553.5] "V"  EMS
+ SG_ MaxChargeCurrent : 55|16@0+ (0.1,0) [0|65535] "A"  EMS
+
+BO_ 2147489280 BMS_RelayStatus: 2 BMS
+ SG_ Relay_PositiveStatus : 0|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Relay_NegativeStatus : 1|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Relay_PrechargeStatus : 2|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Relay_DisconnectoStatus : 3|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Relay_PositiveFaultStatus : 9|2@0+ (1,0) [0|3] ""  EMS
+ SG_ Relay_NegativeFaultStatus : 11|2@0+ (1,0) [0|3] ""  EMS
+ SG_ Relay_PrechargeFaultStatus : 13|2@0+ (1,0) [0|3] ""  EMS
+ SG_ Relay_DisconnectFaultStatus : 15|2@0+ (1,0) [0|3] ""  EMS
+
+BO_ 2147488256 CellVoltStatistic: 8 BMS
+ SG_ Slave_Version : 55|4@0+ (1,0) [0|15] ""  EMS
+ SG_ AvgCellVolt : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ MaxCellVolt : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ MaxCellVoltIndex : 7|12@0+ (1,0) [0|65535] ""  EMS
+ SG_ MinCellVolt : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ MinCellVoltIndex : 35|12@0+ (1,0) [0|65535] ""  EMS
+
+BO_ 2147489024 CellTempStatistic: 8 BMS
+ SG_ TempDiff : 63|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ AvgCellTemp : 55|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ MaxCellTemp : 7|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ MaxCellTempIndex : 11|12@0+ (1,0) [0|65535] ""  EMS
+ SG_ MinCellTemp : 31|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ MinCellTempIndex : 35|12@0+ (1,0) [0|65535] ""  EMS
+
+BO_ 2147489536 PoleTempStatistic: 8 BMS
+ SG_ Statistic_DeltaVoltage : 55|16@0+ (0.001,0) [0|6.5535] "V"  EMS
+ SG_ Statistic_PoleMaxTemp : 7|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ Statistic_PoleMaxTempIndex : 15|16@0+ (1,0) [0|65535] ""  EMS
+ SG_ Statistic_PoleMinTemp : 31|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ Statistic_PoleMinTempIndex : 39|16@0+ (1,0) [0|65535] ""  EMS
+
+BO_ 2147495936 CellVoltage_01: 8 BMS
+ SG_ CellVolt005 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt004 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt003 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt002 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt001 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147495952 CellVoltage_02: 8 BMS
+ SG_ CellVolt010 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt009 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt008 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt007 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt006 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147495968 CellVoltage_03: 8 BMS
+ SG_ CellVolt015 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt014 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt013 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt012 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt011 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147495984 CellVoltage_04: 8 BMS
+ SG_ CellVolt020 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt019 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt018 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt017 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt016 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496000 CellVoltage_05: 8 BMS
+ SG_ CellVolt025 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt024 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt023 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt022 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt021 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496016 CellVoltage_06: 8 BMS
+ SG_ CellVolt030 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt029 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt028 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt027 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt026 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496032 CellVoltage_07: 8 BMS
+ SG_ CellVolt035 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt034 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt033 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt032 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt031 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496048 CellVoltage_08: 8 BMS
+ SG_ CellVolt040 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt039 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt038 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt037 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt036 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496064 CellVoltage_09: 8 BMS
+ SG_ CellVolt045 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt044 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt043 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt042 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt041 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496080 CellVoltage_10: 8 BMS
+ SG_ CellVolt050 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt049 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt048 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt047 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt046 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496096 CellVoltage_11: 8 BMS
+ SG_ CellVolt055 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt054 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt053 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt052 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt051 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496112 CellVoltage_12: 8 BMS
+ SG_ CellVolt060 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt059 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt058 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt057 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt056 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496128 CellVoltage_13: 8 BMS
+ SG_ CellVolt065 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt064 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt063 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt062 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt061 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496144 CellVoltage_14: 8 BMS
+ SG_ CellVolt070 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt069 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt068 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt067 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt066 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496160 CellVoltage_15: 8 BMS
+ SG_ CellVolt075 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt074 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt073 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt072 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt071 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496176 CellVoltage_16: 8 BMS
+ SG_ CellVolt080 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt079 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt078 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt077 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt076 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496192 CellVoltage_17: 8 BMS
+ SG_ CellVolt085 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt084 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt083 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt082 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt081 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496208 CellVoltage_18: 8 BMS
+ SG_ CellVolt090 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt089 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt088 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt087 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt086 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496224 CellVoltage_19: 8 BMS
+ SG_ CellVolt095 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt094 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt093 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt092 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt091 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496240 CellVoltage_20: 8 BMS
+ SG_ CellVolt100 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt099 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt098 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt097 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt096 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496256 CellVoltage_21: 8 BMS
+ SG_ CellVolt105 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt104 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt103 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt102 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt101 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496272 CellVoltage_22: 8 BMS
+ SG_ CellVolt110 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt109 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt108 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt107 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt106 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496288 CellVoltage_23: 8 BMS
+ SG_ CellVolt115 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt114 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt113 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt112 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt111 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496304 CellVoltage_24: 8 BMS
+ SG_ CellVolt120 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt119 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt118 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt117 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt116 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496320 CellVoltage_25: 8 BMS
+ SG_ CellVolt125 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt124 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt123 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt122 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt121 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496336 CellVoltage_26: 8 BMS
+ SG_ CellVolt130 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt129 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt128 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt127 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt126 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496352 CellVoltage_27: 8 BMS
+ SG_ CellVolt135 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt134 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt133 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt132 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt131 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496368 CellVoltage_28: 8 BMS
+ SG_ CellVolt140 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt139 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt138 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt137 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt136 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496384 CellVoltage_29: 8 BMS
+ SG_ CellVolt145 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt144 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt143 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt142 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt141 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496400 CellVoltage_30: 8 BMS
+ SG_ CellVolt150 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt149 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt148 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt147 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt146 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496416 CellVoltage_31: 8 BMS
+ SG_ CellVolt155 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt154 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt153 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt152 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt151 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496432 CellVoltage_32: 8 BMS
+ SG_ CellVolt160 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt159 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt158 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt157 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt156 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496448 CellVoltage_33: 8 BMS
+ SG_ CellVolt165 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt164 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt163 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt162 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt161 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496464 CellVoltage_34: 8 BMS
+ SG_ CellVolt170 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt169 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt168 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt167 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt166 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496480 CellVoltage_35: 8 BMS
+ SG_ CellVolt175 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt174 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt173 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt172 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt171 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496496 CellVoltage_36: 8 BMS
+ SG_ CellVolt180 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt179 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt178 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt177 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt176 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496512 CellVoltage_37: 8 BMS
+ SG_ CellVolt185 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt184 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt183 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt182 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt181 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496528 CellVoltage_38: 8 BMS
+ SG_ CellVolt190 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt189 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt188 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt187 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt186 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496544 CellVoltage_39: 8 BMS
+ SG_ CellVolt195 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt194 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt193 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt192 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt191 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496560 CellVoltage_40: 8 BMS
+ SG_ CellVolt200 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt199 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt198 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt197 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt196 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496576 CellVoltage_41: 8 BMS
+ SG_ CellVolt205 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt204 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt203 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt202 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt201 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496592 CellVoltage_42: 8 BMS
+ SG_ CellVolt210 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt209 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt208 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt207 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt206 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496608 CellVoltage_43: 8 BMS
+ SG_ CellVolt215 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt214 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt213 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt212 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt211 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496624 CellVoltage_44: 8 BMS
+ SG_ CellVolt220 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt219 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt218 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt217 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt216 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496640 CellVoltage_45: 8 BMS
+ SG_ CellVolt225 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt224 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt223 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt222 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt221 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496656 CellVoltage_46: 8 BMS
+ SG_ CellVolt230 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt229 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt228 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt227 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt226 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496672 CellVoltage_47: 8 BMS
+ SG_ CellVolt235 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt234 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt233 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt232 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt231 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496688 CellVoltage_48: 8 BMS
+ SG_ CellVolt240 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt239 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt238 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt237 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt236 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496704 CellVoltage_49: 8 BMS
+ SG_ CellVolt245 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt244 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt243 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt242 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt241 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496720 CellVoltage_50: 8 BMS
+ SG_ CellVolt250 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt249 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt248 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt247 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt246 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496736 CellVoltage_51: 8 BMS
+ SG_ CellVolt255 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt254 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt253 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt252 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt251 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496752 CellVoltage_52: 8 BMS
+ SG_ CellVolt260 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt259 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt258 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt257 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt256 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496768 CellVoltage_53: 8 BMS
+ SG_ CellVolt265 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt264 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt263 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt262 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt261 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496784 CellVoltage_54: 8 BMS
+ SG_ CellVolt270 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt269 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt268 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt267 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt266 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496800 CellVoltage_55: 8 BMS
+ SG_ CellVolt275 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt274 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt273 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt272 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt271 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496816 CellVoltage_56: 8 BMS
+ SG_ CellVolt280 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt279 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt278 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt277 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt276 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496832 CellVoltage_57: 8 BMS
+ SG_ CellVolt285 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt284 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt283 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt282 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt281 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496848 CellVoltage_58: 8 BMS
+ SG_ CellVolt290 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt289 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt288 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt287 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt286 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496864 CellVoltage_59: 8 BMS
+ SG_ CellVolt295 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt294 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt293 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt292 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt291 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496880 CellVoltage_60: 8 BMS
+ SG_ CellVolt300 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt299 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt298 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt297 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt296 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496896 CellVoltage_61: 8 BMS
+ SG_ CellVolt305 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt304 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt303 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt302 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt301 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496912 CellVoltage_62: 8 BMS
+ SG_ CellVolt310 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt309 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt308 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt307 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt306 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496928 CellVoltage_63: 8 BMS
+ SG_ CellVolt315 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt314 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt313 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt312 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt311 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496944 CellVoltage_64: 8 BMS
+ SG_ CellVolt320 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt319 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt318 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt317 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt316 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496960 CellVoltage_65: 8 BMS
+ SG_ CellVolt325 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt324 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt323 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt322 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt321 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496976 CellVoltage_66: 8 BMS
+ SG_ CellVolt330 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt329 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt328 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt327 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt326 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147496992 CellVoltage_67: 8 BMS
+ SG_ CellVolt335 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt334 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt333 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt332 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt331 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497008 CellVoltage_68: 8 BMS
+ SG_ CellVolt340 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt339 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt338 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt337 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt336 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497024 CellVoltage_69: 8 BMS
+ SG_ CellVolt345 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt344 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt343 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt342 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt341 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497040 CellVoltage_70: 8 BMS
+ SG_ CellVolt350 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt349 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt348 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt347 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt346 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497056 CellVoltage_71: 8 BMS
+ SG_ CellVolt355 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt354 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt353 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt352 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt351 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497072 CellVoltage_72: 8 BMS
+ SG_ CellVolt360 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt359 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt358 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt357 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt356 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497088 CellVoltage_73: 8 BMS
+ SG_ CellVolt365 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt364 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt363 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt362 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt361 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497104 CellVoltage_74: 8 BMS
+ SG_ CellVolt370 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt369 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt368 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt367 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt366 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497120 CellVoltage_75: 8 BMS
+ SG_ CellVolt375 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt374 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt373 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt372 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt371 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497136 CellVoltage_76: 8 BMS
+ SG_ CellVolt380 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt379 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt378 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt377 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt376 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497152 CellVoltage_77: 8 BMS
+ SG_ CellVolt385 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt384 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt383 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt382 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt381 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497168 CellVoltage_78: 8 BMS
+ SG_ CellVolt390 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt389 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt388 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt387 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt386 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497184 CellVoltage_79: 8 BMS
+ SG_ CellVolt395 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt394 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt393 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt392 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt391 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497200 CellVoltage_80: 8 BMS
+ SG_ CellVolt400 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt399 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt398 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt397 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt396 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497216 CellVoltage_81: 8 BMS
+ SG_ CellVolt405 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt404 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt403 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt402 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt401 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497232 CellVoltage_82: 8 BMS
+ SG_ CellVolt410 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt409 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt408 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt407 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt406 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497248 CellVoltage_83: 8 BMS
+ SG_ CellVolt415 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt414 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt413 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt412 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt411 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147497264 CellVoltage_84: 8 BMS
+ SG_ CellVolt420 : 51|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt419 : 35|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt418 : 31|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt417 : 11|12@0+ (0.001,1) [1|5.095] "V"  EMS
+ SG_ CellVolt416 : 7|12@0+ (0.001,1) [1|5.095] "V"  EMS
+
+BO_ 2147500032 CellTemperature_01: 8 BMS
+ SG_ CellTemp008 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp007 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp006 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp005 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp004 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp003 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp002 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp001 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500048 CellTemperature_02: 8 BMS
+ SG_ CellTemp016 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp015 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp014 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp013 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp012 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp011 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp010 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp009 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500064 CellTemperature_03: 8 BMS
+ SG_ CellTemp024 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp023 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp022 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp021 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp020 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp019 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp018 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp017 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500080 CellTemperature_04: 8 BMS
+ SG_ CellTemp032 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp031 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp030 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp029 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp028 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp027 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp026 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp025 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500096 CellTemperature_05: 8 BMS
+ SG_ CellTemp040 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp039 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp038 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp037 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp036 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp035 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp034 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp033 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500112 CellTemperature_06: 8 BMS
+ SG_ CellTemp048 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp047 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp046 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp045 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp044 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp043 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp042 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp041 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500128 CellTemperature_07: 8 BMS
+ SG_ CellTemp056 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp055 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp054 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp053 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp052 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp051 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp050 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp049 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500144 CellTemperature_08: 8 BMS
+ SG_ CellTemp064 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp063 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp062 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp061 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp060 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp059 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp058 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp057 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500160 CellTemperature_09: 8 BMS
+ SG_ CellTemp072 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp071 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp070 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp069 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp068 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp067 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp066 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp065 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500176 CellTemperature_10: 8 BMS
+ SG_ CellTemp080 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp079 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp078 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp077 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp076 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp075 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp074 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp073 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500192 CellTemperature_11: 8 BMS
+ SG_ CellTemp088 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp087 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp086 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp085 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp084 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp083 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp082 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp081 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500208 CellTemperature_12: 8 BMS
+ SG_ CellTemp096 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp095 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp094 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp093 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp092 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp091 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp090 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp089 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500224 CellTemperature_13: 8 BMS
+ SG_ CellTemp104 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp103 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp102 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp101 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp100 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp099 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp098 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp097 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500240 CellTemperature_14: 8 BMS
+ SG_ CellTemp112 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp111 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp110 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp109 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp108 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp107 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp106 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp105 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500256 CellTemperature_15: 8 BMS
+ SG_ CellTemp120 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp119 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp118 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp117 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp116 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp115 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp114 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp113 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500272 CellTemperature_16: 8 BMS
+ SG_ CellTemp128 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp127 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp126 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp125 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp124 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp123 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp122 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp121 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500288 CellTemperature_17: 8 BMS
+ SG_ CellTemp136 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp135 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp134 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp133 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp132 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp131 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp130 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp129 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500304 CellTemperature_18: 8 BMS
+ SG_ CellTemp144 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp143 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp142 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp141 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp140 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp139 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp138 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp137 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500320 CellTemperature_19: 8 BMS
+ SG_ CellTemp152 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp151 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp150 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp149 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp148 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp147 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp146 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp145 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500336 CellTemperature_20: 8 BMS
+ SG_ CellTemp160 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp159 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp158 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp157 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp156 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp155 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp154 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp153 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500352 CellTemperature_21: 8 BMS
+ SG_ CellTemp168 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp167 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp166 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp165 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp164 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp163 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp162 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp161 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500368 CellTemperature_22: 8 BMS
+ SG_ CellTemp176 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp175 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp174 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp173 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp172 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp171 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp170 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp169 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500384 CellTemperature_23: 8 BMS
+ SG_ CellTemp184 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp183 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp182 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp181 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp180 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp179 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp178 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp177 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500400 CellTemperature_24: 8 BMS
+ SG_ CellTemp192 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp191 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp190 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp189 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp188 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp187 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp186 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp185 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500416 CellTemperature_25: 8 BMS
+ SG_ CellTemp200 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp199 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp198 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp197 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp196 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp195 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp194 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp193 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500432 CellTemperature_26: 8 BMS
+ SG_ CellTemp208 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp207 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp206 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp205 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp204 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp203 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp202 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp201 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500448 CellTemperature_27: 8 BMS
+ SG_ CellTemp216 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp215 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp214 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp213 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp212 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp211 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp210 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp209 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500464 CellTemperature_28: 8 BMS
+ SG_ CellTemp224 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp223 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp222 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp221 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp220 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp219 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp218 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp217 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500480 CellTemperature_29: 8 BMS
+ SG_ CellTemp232 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp231 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp230 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp229 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp228 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp227 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp226 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp225 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500496 CellTemperature_30: 8 BMS
+ SG_ CellTemp240 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp239 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp238 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp237 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp236 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp235 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp234 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp233 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500512 CellTemperature_31: 8 BMS
+ SG_ CellTemp248 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp247 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp246 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp245 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp244 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp243 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp242 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp241 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500528 CellTemperature_32: 8 BMS
+ SG_ CellTemp256 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp255 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp254 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp253 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp252 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp251 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp250 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp249 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500544 CellTemperature_33: 8 BMS
+ SG_ CellTemp264 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp263 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp262 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp261 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp260 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp259 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp258 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp257 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500560 CellTemperature_34: 8 BMS
+ SG_ CellTemp272 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp271 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp270 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp269 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp268 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp267 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp266 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp265 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500576 CellTemperature_35: 8 BMS
+ SG_ CellTemp280 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp279 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp278 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp277 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp276 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp275 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp274 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp273 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500592 CellTemperature_36: 8 BMS
+ SG_ CellTemp288 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp287 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp286 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp285 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp284 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp283 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp282 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp281 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500608 CellTemperature_37: 8 BMS
+ SG_ CellTemp296 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp295 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp294 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp293 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp292 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp291 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp290 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp289 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500624 CellTemperature_38: 8 BMS
+ SG_ CellTemp304 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp303 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp302 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp301 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp300 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp299 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp298 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp297 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500640 CellTemperature_39: 8 BMS
+ SG_ CellTemp312 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp311 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp310 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp309 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp308 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp307 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp306 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp305 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500656 CellTemperature_40: 8 BMS
+ SG_ CellTemp320 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp319 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp318 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp317 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp316 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp315 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp314 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp313 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500672 CellTemperature_41: 8 BMS
+ SG_ CellTemp328 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp327 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp326 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp325 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp324 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp323 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp322 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp321 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500688 CellTemperature_42: 8 BMS
+ SG_ CellTemp336 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp335 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp334 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp333 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp332 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp331 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp330 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp329 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500704 CellTemperature_43: 8 BMS
+ SG_ CellTemp344 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp343 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp342 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp341 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp340 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp339 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp338 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp337 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500720 CellTemperature_44: 8 BMS
+ SG_ CellTemp352 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp351 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp350 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp349 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp348 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp347 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp346 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp345 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500736 CellTemperature_45: 8 BMS
+ SG_ CellTemp360 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp359 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp358 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp357 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp356 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp355 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp354 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp353 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500752 CellTemperature_46: 8 BMS
+ SG_ CellTemp368 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp367 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp366 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp365 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp364 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp363 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp362 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp361 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500768 CellTemperature_47: 8 BMS
+ SG_ CellTemp376 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp375 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp374 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp373 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp372 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp371 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp370 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp369 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500784 CellTemperature_48: 8 BMS
+ SG_ CellTemp384 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp383 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp382 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp381 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp380 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp379 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp378 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp377 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500800 CellTemperature_49: 8 BMS
+ SG_ CellTemp392 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp391 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp390 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp389 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp388 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp387 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp386 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp385 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500816 CellTemperature_50: 8 BMS
+ SG_ CellTemp400 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp399 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp398 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp397 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp396 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp395 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp394 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp393 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500832 CellTemperature_51: 8 BMS
+ SG_ CellTemp408 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp407 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp406 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp405 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp404 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp403 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp402 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp401 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500848 CellTemperature_52: 8 BMS
+ SG_ CellTemp416 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp415 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp414 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp413 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp412 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp411 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp410 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp409 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500864 CellTemperature_53: 8 BMS
+ SG_ CellTemp424 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp423 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp422 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp421 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp420 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp419 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp418 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp417 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500880 CellTemperature_54: 8 BMS
+ SG_ CellTemp432 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp431 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp430 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp429 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp428 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp427 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp426 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp425 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500896 CellTemperature_55: 8 BMS
+ SG_ CellTemp440 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp439 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp438 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp437 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp436 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp435 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp434 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp433 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500912 CellTemperature_56: 8 BMS
+ SG_ CellTemp448 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp447 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp446 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp445 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp444 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp443 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp442 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp441 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500928 CellTemperature_57: 8 BMS
+ SG_ CellTemp456 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp455 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp454 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp453 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp452 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp451 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp450 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp449 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500944 CellTemperature_58: 8 BMS
+ SG_ CellTemp464 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp463 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp462 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp461 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp460 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp459 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp458 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp457 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500960 CellTemperature_59: 8 BMS
+ SG_ CellTemp472 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp471 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp470 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp469 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp468 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp467 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp466 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp465 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500976 CellTemperature_60: 8 BMS
+ SG_ CellTemp480 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp479 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp478 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp477 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp476 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp475 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp474 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp473 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147500992 CellTemperature_61: 8 BMS
+ SG_ CellTemp488 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp487 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp486 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp485 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp484 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp483 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp482 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp481 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147501008 CellTemperature_62: 8 BMS
+ SG_ CellTemp496 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp495 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp494 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp493 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp492 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp491 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp490 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp489 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147501024 CellTemperature_63: 8 BMS
+ SG_ CellTemp504 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp503 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp502 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp501 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp500 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp499 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp498 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp497 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147501040 CellTemperature_64: 8 BMS
+ SG_ CellTemp512 : 63|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp511 : 55|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp510 : 47|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp509 : 39|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp508 : 31|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp507 : 23|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp506 : 15|8@0+ (1,-50) [-50|205] "deg"  BMS
+ SG_ CellTemp505 : 7|8@0+ (1,-50) [-50|205] "deg"  BMS
+
+BO_ 2147504112 PoleTemp: 8 BMS
+ SG_ CellPoleTemperature_StartNum : 7|16@0+ (1,0) [0|65535] ""  EMS
+ SG_ CellPoleTempearture_T1 : 23|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ CellPoleTempearture_T2 : 31|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ CellPoleTempearture_T3 : 39|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ CellPoleTempearture_T4 : 47|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ CellPoleTempearture_T5 : 55|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ CellPoleTempearture_T6 : 63|8@0+ (1,-50) [-50|205] "deg"  EMS
+
+BO_ 2147504096 ChargeStatistic: 8 BMS
+ SG_ CumuCap_Discharge : 7|32@0+ (1,0) [0|255] "AH"  EMS
+ SG_ CumuCap_Charge : 39|32@0+ (1,0) [0|255] "AH"  EMS
+
+BO_ 2147491824 ClusterStaticInfo: 8 BMS
+ SG_ Cell_Number : 7|16@0+ (1,0) [0|65535] ""  EMS
+ SG_ CellTemp_Number : 23|16@0+ (1,0) [0|255] ""  EMS
+ SG_ PoleTemp_Number : 39|16@0+ (1,0) [0|255] ""  EMS
+ SG_ HeatTemp_Numer : 55|16@0+ (1,1) [0|255] ""  EMS
+
+BO_ 2147508208 SOH: 8 BMS
+ SG_ Pack_TotalCap : 7|16@0+ (0.1,0) [0|65535] "AH"  EMS
+ SG_ Statistic_ChargeTimes : 23|16@0+ (1,0) [0|65535] ""  EMS
+ SG_ Pack_RatedVoltage : 39|16@0+ (0.1,0) [0|6553.5] "V"  EMS
+ SG_ SOH : 55|16@0+ (0.1,0) [0|65535] ""  EMS
+
+BO_ 2147491808 ErrorCode: 8 BMS
+ SG_ SOCLow_CriticalAlarm : 63|1@0+ (1,0) [0|1] ""  EMS
+ SG_ CellTempDiffHigh_CriticalAlarm : 62|1@0+ (1,0) [0|1] ""  EMS
+ SG_ CellVolDiffHigh_CriticalAlarm : 61|1@0+ (1,0) [0|1] ""  EMS
+ SG_ HVBTempHigh_CriticalAlarm : 60|1@0+ (1,0) [0|1] ""  EMS
+ SG_ TerminalTempHigh_CriticalAlarm : 59|1@0+ (1,0) [0|1] ""  EMS
+ SG_ InsulationLow_CriticalAlarm : 58|1@0+ (1,0) [0|1] ""  EMS
+ SG_ ChgTempLow_CriticalAlarm : 57|1@0+ (1,0) [0|1] ""  EMS
+ SG_ ChgTempHigh_CriticalAlarm : 56|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DsgTempLow_CriticalAlarm : 55|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DsgTempHigh_CriticalAlarm : 54|1@0+ (1,0) [0|1] ""  EMS
+ SG_ ChgOverCurr_CriticalAlarm : 53|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DsgOverCurr_CriticalAlarm : 52|1@0+ (1,0) [0|1] ""  EMS
+ SG_ CellVolLow_CriticalAlarm : 51|1@0+ (1,0) [0|1] ""  EMS
+ SG_ CellVolHigh_CriticalAlarm : 50|1@0+ (1,0) [0|1] ""  EMS
+ SG_ RackVolLowCritical_Alarm : 49|1@0+ (1,0) [0|1] ""  EMS
+ SG_ RackVolHigh_CriticalAlarm : 48|1@0+ (1,0) [0|1] ""  EMS
+ SG_ SOCLow_Alarm : 47|1@0+ (1,0) [0|1] ""  EMS
+ SG_ CellTempDiffHigh_Alarm : 46|1@0+ (1,0) [0|1] ""  EMS
+ SG_ CellVolDiffHigh_Alarm : 45|1@0+ (1,0) [0|1] ""  EMS
+ SG_ HVBTempHigh_Alarm : 44|1@0+ (1,0) [0|1] ""  EMS
+ SG_ TerminalTempHigh_Alarm : 43|1@0+ (1,0) [0|1] ""  EMS
+ SG_ InsulationLow_Alarm : 42|1@0+ (1,0) [0|1] ""  EMS
+ SG_ ChgTempLow_Alarm : 41|1@0+ (1,0) [0|1] ""  EMS
+ SG_ ChgTempHigh_Alarm : 40|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DsgTempLow_Alarm : 39|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DsgTempHigh_Alarm : 38|1@0+ (1,0) [0|1] ""  EMS
+ SG_ ChgOverCurr_Alarm : 37|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DsgOverCurr_Alarm : 36|1@0+ (1,0) [0|1] ""  EMS
+ SG_ CellVolLow_Alarm : 35|1@0+ (1,0) [0|1] ""  EMS
+ SG_ CellVolHigh_Alarm : 34|1@0+ (1,0) [0|1] ""  EMS
+ SG_ RackVolLow_Alarm : 33|1@0+ (1,0) [0|1] ""  EMS
+ SG_ RackVolHigh_Alarm : 32|1@0+ (1,0) [0|1] ""  EMS
+ SG_ SOCLowWarn : 31|1@0+ (1,0) [0|1] ""  EMS
+ SG_ CellTempDiffHigh_Warn : 30|1@0+ (1,0) [0|1] ""  EMS
+ SG_ CellVolDiffHigh_Warn : 29|1@0+ (1,0) [0|1] ""  EMS
+ SG_ HVBTempHigh_warn : 28|1@0+ (1,0) [0|1] ""  EMS
+ SG_ TerminalTempHigh_Warn : 27|1@0+ (1,0) [0|1] ""  EMS
+ SG_ InsulationLow_warn : 26|1@0+ (1,0) [0|1] ""  EMS
+ SG_ ChgTempLow_Warn : 25|1@0+ (1,0) [0|1] ""  EMS
+ SG_ ChgTempHigh_Warn : 24|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DsgTempLow_Warn : 23|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DsgTempHigh_Warn : 22|1@0+ (1,0) [0|1] ""  EMS
+ SG_ ChgOverCurr_Warn : 21|1@0+ (1,0) [0|1] ""  EMS
+ SG_ DsgOverCurr_Warn : 20|1@0+ (1,0) [0|1] ""  EMS
+ SG_ CellVolLow_Warn : 19|1@0+ (1,0) [0|1] ""  EMS
+ SG_ CellVolHigh_Warn : 18|1@0+ (1,0) [0|1] ""  EMS
+ SG_ RackVolLow_warn : 17|1@0+ (1,0) [0|1] ""  EMS
+ SG_ RackVolHigh_warn : 16|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Totalflagpos_for_BMSRelayFault : 15|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Abnormal_power_supply_volt : 14|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Abnormal_current : 13|1@0+ (1,0) [0|1] ""  EMS
+ SG_ High_ambient_temp : 12|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Thermal_runaway_fault : 11|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Total_voltage_differential_fault : 10|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Precharge_fault : 9|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Discon_Open_when_Rack_Enabled : 8|1@0+ (1,0) [0|1] ""  EMS
+ SG_ IMD_fault : 7|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Current_sensor_fault : 6|1@0+ (1,0) [0|1] ""  EMS
+ SG_ BAU_communication_fault : 5|1@0+ (1,0) [0|1] ""  EMS
+ SG_ BMU_communication_fault : 4|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Contactor_adhesion_fault : 3|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Fuse_protector_fault : 2|1@0+ (1,0) [0|1] ""  EMS
+ SG_ Bcu_hardware : 1|1@0+ (1,0) [0|1] ""  EMS
+ SG_ BMU_hardware_fault : 0|1@0+ (1,0) [0|1] ""  EMS
+
+BO_ 2147492096 PduTemp: 8 BMS
+ SG_ PDUPoleTempearture_T1 : 7|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T2 : 15|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T3 : 23|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T4 : 31|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T5 : 39|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T6 : 47|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T7 : 55|8@0+ (1,-50) [-50|205] "deg"  EMS
+ SG_ PDUPoleTempearture_T8 : 63|8@0+ (1,-50) [-50|205] "deg"  EMS
+
+BO_ 2147492352 PduVolt: 8 BMS
+ SG_ Volt_HV1 : 7|16@0+ (0.1,0) [0|65535] "V"  EMS
+ SG_ Volt_HV2 : 23|16@0+ (0.1,0) [0|65535] "V"  EMS
+ SG_ Volt_HV3 : 39|16@0+ (0.1,0) [0|65535] "V"  EMS
+ SG_ Volt_cumulative_BAT : 55|16@0+ (0.1,0) [0|65535] "V"  EMS
+
+
+
+CM_ BO_ 3221225472 "This is a message for not used signals, created by Vector CANdb++ DBC OLE DB Provider.";
+CM_ SG_ 3221225472 MaxSafeTempIndex "Index of the cell with maximum temperature";
+CM_ SG_ 3221225472 MaxSafeTemp "Maximum cell temperature";
+CM_ SG_ 3221225472 MinSafeTempIndex "Index of the cell with minimum cell temperature";
+CM_ SG_ 3221225472 MinSafeTemp "Minimum cell temperature";
+CM_ SG_ 2147491872 MinCellTemp "Minimum cell temperature";
+CM_ SG_ 2147491872 MaxCellTemp "Maximum cell temperature";
+CM_ BO_ 2147493120 "仅仅单簇客户使用";
+CM_ SG_ 2147493120 SuctionTemp "吸气温度";
+CM_ SG_ 2147493120 PlateTemp "板换温度";
+CM_ SG_ 2147493120 Condensing_temperature "冷凝盘管温度";
+CM_ SG_ 2147493120 Highpressure "高压侧压力值";
+CM_ SG_ 2147493120 Lowpressure "低压侧压力值";
+CM_ SG_ 2147493120 Electronic_expansion_valve "电子膨胀阀开度";
+CM_ SG_ 2147493120 TMSrunState "机组运行状态";
+CM_ BO_ 2147492864 "仅仅单簇客户使用";
+CM_ SG_ 2147492864 TMSPowerVolt "交流供电电压";
+CM_ SG_ 2147492864 TMSSpeed "压缩机转速,暂定精度为50 ，200=10000转速";
+CM_ SG_ 2147492864 waterDiff "压差=出水压力-进水压力";
+CM_ SG_ 2147492864 TMScontrolMode "控制模式";
+CM_ SG_ 2147492864 Softversion "软件版本，
+10进制100表示V1.0.0";
+CM_ SG_ 2147492864 TMSType "产品机型";
+CM_ SG_ 2147492864 Supplycode "供应商代码";
+CM_ SG_ 2147492160 PDUPoleTempearture_T32 "PDUT32极柱温度";
+CM_ SG_ 2147492160 PDUPoleTempearture_T31 "PDUT31极柱温度";
+CM_ SG_ 2147492160 PDUPoleTempearture_T30 "PDUT30极柱温度";
+CM_ SG_ 2147492160 PDUPoleTempearture_T29 "PDUT29极柱温度";
+CM_ SG_ 2147492160 PDUPoleTempearture_T28 "PDUT28极柱温度";
+CM_ SG_ 2147492160 PDUPoleTempearture_T27 "PDUT27极柱温度";
+CM_ SG_ 2147492160 PDUPoleTempearture_T26 "PDUT26极柱温度";
+CM_ SG_ 2147492160 PDUPoleTempearture_T25 "PDUT25极柱温度";
+CM_ SG_ 2147492144 PDUPoleTempearture_T24 "PDUT24极柱温度";
+CM_ SG_ 2147492144 PDUPoleTempearture_T23 "PDUT23极柱温度";
+CM_ SG_ 2147492144 PDUPoleTempearture_T22 "PDUT22极柱温度";
+CM_ SG_ 2147492144 PDUPoleTempearture_T21 "PDUT21极柱温度";
+CM_ SG_ 2147492144 PDUPoleTempearture_T20 "PDUT20极柱温度";
+CM_ SG_ 2147492144 PDUPoleTempearture_T19 "PDUT19极柱温度";
+CM_ SG_ 2147492144 PDUPoleTempearture_T18 "PDUT18极柱温度";
+CM_ SG_ 2147492144 PDUPoleTempearture_T17 "PDUT17极柱温度";
+CM_ SG_ 2147492128 PDUPoleTempearture_T16 "PDUT16极柱温度";
+CM_ SG_ 2147492128 PDUPoleTempearture_T15 "PDUT15极柱温度";
+CM_ SG_ 2147492128 PDUPoleTempearture_T14 "PDUT14极柱温度";
+CM_ SG_ 2147492128 PDUPoleTempearture_T13 "PDUT13极柱温度";
+CM_ SG_ 2147492128 PDUPoleTempearture_T12 "PDUT12极柱温度";
+CM_ SG_ 2147492128 PDUPoleTempearture_T11 "PDUT11极柱温度";
+CM_ SG_ 2147492128 PDUPoleTempearture_T10 "PDUT10极柱温度";
+CM_ SG_ 2147492128 PDUPoleTempearture_T9 "PDUT9极柱温度";
+CM_ BO_ 2147492112 "PACKT极柱温度";
+CM_ SG_ 2147492112 PACKPoleTempearture_T8 "PACKT8极柱温度";
+CM_ SG_ 2147492112 PACKPoleTempearture_T7 "PACKT7极柱温度";
+CM_ SG_ 2147492112 PACKPoleTempearture_T6 "PACKT6极柱温度";
+CM_ SG_ 2147492112 PACKPoleTempearture_T5 "PACKT5极柱温度";
+CM_ SG_ 2147492112 PACKPoleTempearture_T4 "PACKT4极柱温度";
+CM_ SG_ 2147492112 PACKPoleTempearture_T3 "PACKT3极柱温度";
+CM_ SG_ 2147492112 PACKPoleTempearture_T2 "PACKT2极柱温度";
+CM_ SG_ 2147492112 PACKPoleTempearture_T1 "PACKT1极柱温度";
+CM_ SG_ 2147487776 EMS_DehumEndTemp "关闭除湿点";
+CM_ SG_ 2147487776 EMS_DehumStartTemp "开启除湿点";
+CM_ BO_ 2147487760 "触发式，只发一次";
+CM_ SG_ 2147487760 EMS_DiffTemp "电芯温差（自循环温度）";
+CM_ SG_ 2147487760 EMS_HeatTemp "制热目标温度";
+CM_ SG_ 2147487760 EMS_CoolTemp "制冷目标温度";
+CM_ SG_ 2147487760 EMS_HeatEndTemp "关闭制热点";
+CM_ SG_ 2147487760 EMS_HeatStartTemp "开启制热点";
+CM_ SG_ 2147487760 EMS_CoolendTemp "关闭制冷点";
+CM_ SG_ 2147487760 EMS_CoolStartTemp "开启制冷点";
+CM_ SG_ 2147487760 EMS_TMSRunlMode "TMS运行模式";
+CM_ SG_ 2147487760 EMS_TMSpowerOFF "EMS控制TMS关机";
+CM_ SG_ 2147487760 EMS_TMSpowerOn "EMS控制TMS开机";
+CM_ SG_ 2147501568 CellBalSet_49_56 "电池均衡设置49_56";
+CM_ SG_ 2147501568 CellBalSet_41_48 "电池均衡设置41_48";
+CM_ SG_ 2147501568 CellBalSet_33_40 "电池均衡设置33_40";
+CM_ SG_ 2147501568 CellBalSet_25_32 "电池均衡设置25_32";
+CM_ SG_ 2147501568 CellBalSet_17_24 "电池均衡设置17_24";
+CM_ SG_ 2147501568 CellBalSet_9_16 "电池均衡设置9_16";
+CM_ SG_ 2147501568 CellBalSet_1_8 "电池均衡设置1_8";
+CM_ SG_ 2147536880 S8DL2 "8号从机DL2";
+CM_ SG_ 2147536880 S7DL2 "7号从机DL2";
+CM_ SG_ 2147536880 S6DL2 "6号从机DL2";
+CM_ SG_ 2147536880 S5DL2 "5号从机DL2";
+CM_ SG_ 2147536880 S4DL2 "4号从机DL2";
+CM_ SG_ 2147536880 S3DL2 "3号从机DL2";
+CM_ SG_ 2147536880 S2DL2 "S2号从机DL2";
+CM_ SG_ 2147536880 S1DL2 "1号从机DL2";
+CM_ SG_ 2147536880 S8DL1 "8号从机DL1";
+CM_ SG_ 2147536880 S7DL1 "7号从机DL1";
+CM_ SG_ 2147536880 S6DL1 "6号从机DL1";
+CM_ SG_ 2147536880 S5DL1 "5号从机DL1";
+CM_ SG_ 2147536880 S4DL1 "4号从机DL1";
+CM_ SG_ 2147536880 S3DL1 "3号从机DL1";
+CM_ SG_ 2147536880 S2DL1 "2号从机DL1";
+CM_ SG_ 2147536880 S1DL1 "1号从机DL1";
+CM_ SG_ 2147536880 S8HSS2 "8号从机HSS2";
+CM_ SG_ 2147536880 S7HSS2 "7号从机HSS2";
+CM_ SG_ 2147536880 S6HSS2 "6号从机HSS2";
+CM_ SG_ 2147536880 S5HSS2 "5号从机HSS2";
+CM_ SG_ 2147536880 S4HSS2 "4号从机HSS2";
+CM_ SG_ 2147536880 S3HSS2 "3号从机HSS2";
+CM_ SG_ 2147536880 S2HSS2 "2号从机HSS2";
+CM_ SG_ 2147536880 S1HSS2 "1号从机HSS2";
+CM_ SG_ 2147536880 S8HSS1 "8号从机HSS1";
+CM_ SG_ 2147536880 S7HSS1 "7号从机HSS1";
+CM_ SG_ 2147536880 S6HSS1 "6号从机HSS1";
+CM_ SG_ 2147536880 S5HSS1 "5号从机HSS1";
+CM_ SG_ 2147536880 S4HSS1 "4号从机HSS1";
+CM_ SG_ 2147536880 S3HSS1 "3号从机HSS1";
+CM_ SG_ 2147536880 S2HSS1 "2号从机HSS1";
+CM_ SG_ 2147536880 S1HSS1 "1号从机HSS1";
+CM_ SG_ 2147536880 SW_IN1 "湿节点输入";
+CM_ SG_ 2147536880 DIL2 "switch_in2A";
+CM_ SG_ 2147536880 DIL1 "switch_in1A";
+CM_ SG_ 2147536880 DIH8 "DCC";
+CM_ SG_ 2147536880 DIH7 "OBC";
+CM_ SG_ 2147536880 DIH2 "DIG_in2A";
+CM_ SG_ 2147536880 DIH1 "DIG_in1A";
+CM_ SG_ 2147536880 SW_OUT1 "干接点输出";
+CM_ SG_ 2147532784 MeterPower "储能实时功率";
+CM_ SG_ 2147532784 FireWireState "硬线信号_消防检测故障";
+CM_ SG_ 2147532784 LightningWireState "硬线信号_防雷反馈";
+CM_ SG_ 2147532784 SwitchWireState "硬线信号_交流开关";
+CM_ SG_ 2147532784 LiquidState "硬线信号_液位异常";
+CM_ SG_ 2147532784 FireErrorState "硬线信号_消防硬件故障 ";
+CM_ SG_ 2147532784 SmokeWireState "硬线信号_烟感";
+CM_ SG_ 2147532784 WaterWireState "硬线信号_水浸";
+CM_ SG_ 2147532784 StopWireState "硬线信号_急停";
+CM_ SG_ 2147532784 DoorWireState "硬线信号_门禁";
+CM_ SG_ 2147532784 TempState "温湿度";
+CM_ SG_ 2147532784 SmokeState "烟雾数值";
+CM_ SG_ 2147532784 WaterState "水浸";
+CM_ SG_ 2147532784 FireState "消防";
+CM_ SG_ 2147532784 DehumState "除湿机状态";
+CM_ SG_ 2147532784 AirconState "空调/TMS状态";
+CM_ SG_ 2147532784 AmmeterState "电表状态";
+CM_ SG_ 2147532784 FANState "风扇状态";
+CM_ SG_ 2147528688 VOCvalue "VOC数值";
+CM_ SG_ 2147528688 SomkeValue "烟雾数值";
+CM_ SG_ 2147528688 H2Value "H2浓度";
+CM_ SG_ 2147528688 COValue "CO浓度";
+CM_ SG_ 2147524592 EnvDehum "环境湿度";
+CM_ SG_ 2147524592 EnvTemp "环境温度";
+CM_ SG_ 2147524592 EndDehum "除湿关闭湿度";
+CM_ SG_ 2147524592 StartDehum "除湿开启湿度";
+CM_ SG_ 2147524592 EndTemp "除湿关闭温度";
+CM_ SG_ 2147524592 StartTemp "除湿开启温度";
+CM_ SG_ 2147520496 EndHeatTemp "制热关闭温度";
+CM_ SG_ 2147520496 StartHeatTemp "制热开启温度";
+CM_ SG_ 2147520496 EndCoolTemp "制冷关闭温度";
+CM_ SG_ 2147520496 StartCoolTemp "制冷开启温度";
+CM_ SG_ 2147520496 AmmeterNegToDayPower "电表日反向总电量";
+CM_ SG_ 2147520496 AmmeterPosToDayPower "电表日正向总电量";
+CM_ SG_ 2147516400 AmmeterNegCumuPowerLow "电表反向累计电量低字节";
+CM_ SG_ 2147516400 AmmeterNegCumuPowerHigh "电表反向累计电量高字节";
+CM_ SG_ 2147516400 AmmeterPosCumuPowerLow "电表正向累计电量低字节";
+CM_ SG_ 2147516400 AmmeterPosCumuPowerHigh "电表正向累计电量高字节";
+CM_ SG_ 2147493376 Fan4Rev "风机4转速";
+CM_ SG_ 2147493376 FanTm4Temp "风机T4温度";
+CM_ SG_ 2147493376 Fan3Rev "风机3转速";
+CM_ SG_ 2147493376 FanTm3Temp "风机T3温度";
+CM_ SG_ 2147493376 Fan2Rev "风机2转速";
+CM_ SG_ 2147493376 FanTm2Temp "风机T2温度";
+CM_ SG_ 2147493376 Fan1Rev "风机1转速";
+CM_ SG_ 2147493376 FanTm1Temp "风机T1温度";
+CM_ SG_ 2147501856 CellBalSts_129_136 "电池平衡状态129_136";
+CM_ SG_ 2147501840 CellBalSts_57_64 "电池平衡状态57_64";
+CM_ SG_ 2147501840 CellBalSts_97_104 "电池平衡状态97_104";
+CM_ SG_ 2147501840 CellBalSts_89_96 "电池平衡状态89_96";
+CM_ SG_ 2147501840 CellBalSts_81_88 "电池平衡状态81_88";
+CM_ SG_ 2147501840 CellBalSts_73_80 "电池平衡状态73_80";
+CM_ SG_ 2147501840 CellBalSts_65_72 "电池平衡状态65_74";
+CM_ SG_ 2147501840 CellBalSts_113_120 "电池平衡状态113_120";
+CM_ SG_ 2147501840 CellBalSts_105_112 "电池平衡状态105_112";
+CM_ SG_ 2147501824 CellBalSts_49_56 "电池平衡状态49_56";
+CM_ SG_ 2147501824 CellBalSts_41_48 "电池平衡状态41_48";
+CM_ SG_ 2147501824 CellBalSts_33_40 "电池平衡状态33_40";
+CM_ SG_ 2147501824 CellBalSts_25_32 "电池平衡状态25_32";
+CM_ SG_ 2147501824 CellBalSts_17_24 "电池平衡状态17_24";
+CM_ SG_ 2147501824 CellBalSts_1_8 "电池平衡状态1_8";
+CM_ SG_ 2147501824 CellBalSts_9_16 "电池平衡状态9_16";
+CM_ SG_ 2147501824 BattBalancingSts "电池平衡状态";
+CM_ SG_ 2147492608 TmsReturnPressure "回液压力";
+CM_ SG_ 2147492608 TmsSupplyPressure "供液压力";
+CM_ SG_ 2147492608 TmsSupplyTemp "Temperature of TMS outlet";
+CM_ SG_ 2147492608 TmsReturnTemp "Temperature of the TMS inlet";
+CM_ SG_ 2147491840 CriticalAlarms_arenotallcleared "CriticalAlarm 严重告警未全解除";
+CM_ SG_ 2147491840 Not_meeting_Dsg_conditions "不满足放电条件的切入失败";
+CM_ SG_ 2147491840 Not_meeting_Chg_conditions "不满足充电条件的切入失败";
+CM_ SG_ 2147491840 Insulationalarmsarenotallcleared "绝缘报警未解除";
+CM_ SG_ 2147491840 Typy1alarmsarenotallcleared "Type1报警未全部解除";
+CM_ SG_ 2147491840 RackVolDiffLarge1 "模组压差超限";
+CM_ SG_ 2147491840 SMSConfirmationOvertime "允许切入超时。单簇：默认为0；多簇直流侧并机：若有BCU未能并机成功，发送对应故障位，默认发0";
+CM_ SG_ 2147491840 RackVol_DiffLarge "模组压差超限.单簇：默认为0；多簇直流侧并机：若有BCU未能并机成功，发送对应故障位；此簇电池压差不满足并机压差要求。";
+CM_ SG_ 2147487744 LSS2_control "EMS 强控 P750的LSS2";
+CM_ SG_ 2147487744 EMS_SHUNT_restart "EMS控制BMS分流器模块重启";
+CM_ SG_ 2147487744 EMS_ACCutOff_request "切断交流侧断路器指令";
+CM_ SG_ 2147487744 EMS_BCURestart_request "BMS重启指令";
+CM_ SG_ 2147487744 EMS_BCU_insulate "Control if insulation detection should be working 
+控制绝缘检测是否工作
+";
+CM_ SG_ 2147489280 Relay_PositiveStatus "Relay status of the Positive Relay";
+CM_ SG_ 2147489280 Relay_NegativeStatus "Relay status of the Negative Relay";
+CM_ SG_ 2147489280 Relay_PrechargeStatus "Relay status of the Precharge Relay";
+CM_ SG_ 2147489280 Relay_DisconnectoStatus "Relay status of the Disconnect Relay";
+CM_ SG_ 2147489280 Relay_PositiveFaultStatus "Fault status of the Positive Relay";
+CM_ SG_ 2147489280 Relay_NegativeFaultStatus "Fault status of the Negative Relay";
+CM_ SG_ 2147489280 Relay_PrechargeFaultStatus "Fault status of the Precharge Relay";
+CM_ SG_ 2147489280 Relay_DisconnectFaultStatus "Fault status of the Disconnect Relay";
+CM_ SG_ 2147488256 Slave_Version "从机版本号";
+CM_ SG_ 2147488256 AvgCellVolt "Cell average voltage";
+CM_ SG_ 2147488256 MaxCellVolt "Maximum cell voltage";
+CM_ SG_ 2147488256 MaxCellVoltIndex "Index of the cell with maximum cell voltage";
+CM_ SG_ 2147488256 MinCellVolt "Minimum cell voltage";
+CM_ SG_ 2147488256 MinCellVoltIndex "Index of the cell with minimum cell voltage";
+CM_ SG_ 2147489024 TempDiff "温差";
+CM_ SG_ 2147489024 AvgCellTemp "Cell average temperature";
+CM_ SG_ 2147489024 MaxCellTemp "Maximum cell temperature";
+CM_ SG_ 2147489024 MaxCellTempIndex "Index of the cell with maximum temperature";
+CM_ SG_ 2147489024 MinCellTemp "Minimum cell temperature";
+CM_ SG_ 2147489024 MinCellTempIndex "Index of the cell with minimum cell temperature";
+CM_ SG_ 2147489536 Statistic_DeltaVoltage "电池组最大压差";
+CM_ SG_ 2147489536 Statistic_PoleMaxTemp "极柱最大温度";
+CM_ SG_ 2147489536 Statistic_PoleMaxTempIndex "极柱最大温度数";
+CM_ SG_ 2147489536 Statistic_PoleMinTemp "极柱最小温度";
+CM_ SG_ 2147489536 Statistic_PoleMinTempIndex "极柱最小温度数";
+CM_ SG_ 2147491808 SOCLow_CriticalAlarm "SOC低三级报警";
+CM_ SG_ 2147491808 CellTempDiffHigh_CriticalAlarm "单体温差过高三级报警";
+CM_ SG_ 2147491808 CellVolDiffHigh_CriticalAlarm "单体压差过高三级报警";
+CM_ SG_ 2147491808 HVBTempHigh_CriticalAlarm "高压箱连接器温度过高三级报警";
+CM_ SG_ 2147491808 TerminalTempHigh_CriticalAlarm "极柱温度过高三级报警";
+CM_ SG_ 2147491808 InsulationLow_CriticalAlarm "绝缘阻值过低三级报警";
+CM_ SG_ 2147491808 ChgTempLow_CriticalAlarm "充电电池欠温三级报警";
+CM_ SG_ 2147491808 ChgTempHigh_CriticalAlarm "充电电池过温三级报警 ";
+CM_ SG_ 2147491808 DsgTempLow_CriticalAlarm "放电电池欠温三级报警";
+CM_ SG_ 2147491808 DsgTempHigh_CriticalAlarm "放电电池过温三级报警";
+CM_ SG_ 2147491808 ChgOverCurr_CriticalAlarm "充电电流过大三级报警";
+CM_ SG_ 2147491808 DsgOverCurr_CriticalAlarm "放电电流过大三级报警 ";
+CM_ SG_ 2147491808 CellVolLow_CriticalAlarm "单体欠压三级报警";
+CM_ SG_ 2147491808 CellVolHigh_CriticalAlarm "单体过压三级报警";
+CM_ SG_ 2147491808 RackVolLowCritical_Alarm "总电压欠压三级报警   ";
+CM_ SG_ 2147491808 RackVolHigh_CriticalAlarm " 总电压过压三级报警  ";
+CM_ SG_ 2147491808 SOCLow_Alarm "SOC低二级报警";
+CM_ SG_ 2147491808 CellTempDiffHigh_Alarm "单体温差过高二级报警";
+CM_ SG_ 2147491808 CellVolDiffHigh_Alarm "单体压差过高二级报警";
+CM_ SG_ 2147491808 HVBTempHigh_Alarm "高压箱连接器温度过高二级报警";
+CM_ SG_ 2147491808 TerminalTempHigh_Alarm "极柱温度过高二级报警极柱温度过高一级报警,若无极柱温度采集时，默认发送正常；若有极柱温度采集，请按照BMS技术协议规定的触发条件发送";
+CM_ SG_ 2147491808 InsulationLow_Alarm "绝缘阻值过低二级报警";
+CM_ SG_ 2147491808 ChgTempLow_Alarm "充电电池欠温二级报警";
+CM_ SG_ 2147491808 ChgTempHigh_Alarm "充电电池过温二级报警 ";
+CM_ SG_ 2147491808 DsgTempLow_Alarm "放电电池欠温二级报警";
+CM_ SG_ 2147491808 DsgTempHigh_Alarm "放电电池过温二级报警  ";
+CM_ SG_ 2147491808 ChgOverCurr_Alarm "充电电流过大二级报警";
+CM_ SG_ 2147491808 DsgOverCurr_Alarm "放电电流过大二级报警";
+CM_ SG_ 2147491808 CellVolLow_Alarm "单体欠压二级报警 ";
+CM_ SG_ 2147491808 CellVolHigh_Alarm "单体过压二级报警";
+CM_ SG_ 2147491808 RackVolLow_Alarm "总电压欠压二级报警";
+CM_ SG_ 2147491808 RackVolHigh_Alarm "总电压过压二级报警";
+CM_ SG_ 2147491808 SOCLowWarn "SOC低一级报警";
+CM_ SG_ 2147491808 CellTempDiffHigh_Warn "单体温差过高一级报警";
+CM_ SG_ 2147491808 CellVolDiffHigh_Warn "单体压差过高一级报警";
+CM_ SG_ 2147491808 HVBTempHigh_warn "高压箱连接器温度过高一级报警,若无高压连接器温度采集时，默认发送正常；若有高压连接器温度采集，请按照BMS技术协议规定的触发条件发送";
+CM_ SG_ 2147491808 TerminalTempHigh_Warn "极柱温度过高一级报警";
+CM_ SG_ 2147491808 InsulationLow_warn "绝缘阻值过低一级报警";
+CM_ SG_ 2147491808 ChgTempLow_Warn "充电电池欠温一级报警";
+CM_ SG_ 2147491808 ChgTempHigh_Warn "充电电池过温一级报警";
+CM_ SG_ 2147491808 DsgTempLow_Warn "放电电池欠温一级报警 ";
+CM_ SG_ 2147491808 DsgTempHigh_Warn "放电电池过温一级报警 ";
+CM_ SG_ 2147491808 ChgOverCurr_Warn "充电电流过大一级报警  ";
+CM_ SG_ 2147491808 DsgOverCurr_Warn "放电电流过大一级报警";
+CM_ SG_ 2147491808 CellVolLow_Warn "单体欠压一级报警";
+CM_ SG_ 2147491808 CellVolHigh_Warn "单体过压一级报警";
+CM_ SG_ 2147491808 RackVolLow_warn "总电压欠压一级报警";
+CM_ SG_ 2147491808 RackVolHigh_warn "总电压过压一级报警 ";
+CM_ SG_ 2147491808 Totalflagpos_for_BMSRelayFault "BMS断继电器故障总标志位,只要BMS有断继电器的故障触发，此位置置一";
+CM_ SG_ 2147491808 Abnormal_power_supply_volt "供电电压异常";
+CM_ SG_ 2147491808 Abnormal_current "电流异常";
+CM_ SG_ 2147491808 High_ambient_temp "环境温度高温";
+CM_ SG_ 2147491808 Thermal_runaway_fault "热失控故障";
+CM_ SG_ 2147491808 Total_voltage_differential_fault "总压压差故障";
+CM_ SG_ 2147491808 Precharge_fault "预充故障";
+CM_ SG_ 2147491808 Discon_Open_when_Rack_Enabled "隔开开关异常断开,隔离开关在断开情况下，此位置发1";
+CM_ SG_ 2147491808 IMD_fault "绝缘监测设备故障,报绝缘故障";
+CM_ SG_ 2147491808 Current_sensor_fault "电流传感器故障:电流采集异常，或电流传感器故障";
+CM_ SG_ 2147491808 BAU_communication_fault "BAU通信故障, 默认发0";
+CM_ SG_ 2147491808 BMU_communication_fault "BMU通信故障,BMU与BCU之间的主从通讯内网故障";
+CM_ SG_ 2147491808 Contactor_adhesion_fault "接触器粘连故障,总正/总负继电器粘连状态上报";
+CM_ SG_ 2147491808 Fuse_protector_fault "熔断器故障,若有熔断器状态检测，则真实反馈；若无熔断器状态检测，默认发0";
+CM_ SG_ 2147491808 Bcu_hardware "BCU硬件故障,BCU初始化故障";
+CM_ SG_ 2147491808 BMU_hardware_fault "BMU初始化故障,BMU硬件故障";
+BA_DEF_  "Manufacturer" STRING ;
+BA_DEF_  "BusType" STRING ;
+BA_DEF_ BO_  "GenMsgSendType" ENUM  "Cyclic","OnEvent","Cyclic_and_OnEvent";
+BA_DEF_ BO_  "GenMsgCycleTime" INT 0 65536;
+BA_DEF_DEF_  "Manufacturer" "UDAN";
+BA_DEF_DEF_  "BusType" "CAN";
+BA_DEF_DEF_  "GenMsgSendType" "Cyclic";
+BA_DEF_DEF_  "GenMsgCycleTime" 0;
+BA_ "GenMsgCycleTime" BO_ 2147493120 3000;
+BA_ "GenMsgCycleTime" BO_ 2147492864 3000;
+BA_ "GenMsgCycleTime" BO_ 2147492160 1000;
+BA_ "GenMsgCycleTime" BO_ 2147492144 1000;
+BA_ "GenMsgCycleTime" BO_ 2147492128 1000;
+BA_ "GenMsgCycleTime" BO_ 2147492112 1000;
+BA_ "GenMsgCycleTime" BO_ 2147487776 1000;
+BA_ "GenMsgSendType" BO_ 2147487776 1;
+BA_ "GenMsgCycleTime" BO_ 2147487760 1000;
+BA_ "GenMsgSendType" BO_ 2147487760 1;
+BA_ "GenMsgCycleTime" BO_ 2147501680 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501664 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501648 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501632 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501616 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501600 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501584 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501568 2000;
+BA_ "GenMsgCycleTime" BO_ 2147536880 5000;
+BA_ "GenMsgCycleTime" BO_ 2147532784 5000;
+BA_ "GenMsgCycleTime" BO_ 2147528688 5000;
+BA_ "GenMsgCycleTime" BO_ 2147524592 30000;
+BA_ "GenMsgCycleTime" BO_ 2147520496 30000;
+BA_ "GenMsgCycleTime" BO_ 2147516400 30000;
+BA_ "GenMsgCycleTime" BO_ 2147493376 1000;
+BA_ "GenMsgCycleTime" BO_ 2147501936 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501920 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501904 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501888 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501872 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501856 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501840 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501824 2000;
+BA_ "GenMsgCycleTime" BO_ 2147492608 1000;
+BA_ "GenMsgCycleTime" BO_ 2147491840 1000;
+BA_ "GenMsgCycleTime" BO_ 2147512304 30000;
+BA_ "GenMsgSendType" BO_ 2147512304 0;
+BA_ "GenMsgCycleTime" BO_ 2147487744 100;
+BA_ "GenMsgSendType" BO_ 2147487744 0;
+BA_ "GenMsgCycleTime" BO_ 2147488768 100;
+BA_ "GenMsgCycleTime" BO_ 2147488512 100;
+BA_ "GenMsgCycleTime" BO_ 2147488000 100;
+BA_ "GenMsgCycleTime" BO_ 2147489280 100;
+BA_ "GenMsgCycleTime" BO_ 2147488256 100;
+BA_ "GenMsgCycleTime" BO_ 2147489024 500;
+BA_ "GenMsgCycleTime" BO_ 2147489536 500;
+BA_ "GenMsgCycleTime" BO_ 2147495936 2000;
+BA_ "GenMsgCycleTime" BO_ 2147495952 2000;
+BA_ "GenMsgCycleTime" BO_ 2147495968 2000;
+BA_ "GenMsgCycleTime" BO_ 2147495984 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496000 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496016 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496032 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496048 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496064 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496080 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496096 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496112 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496128 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496144 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496160 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496176 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496192 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496208 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496224 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496240 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496256 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496272 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496288 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496304 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496320 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496336 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496352 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496368 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496384 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496400 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496416 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496432 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496448 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496464 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496480 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496496 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496512 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496528 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496544 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496560 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496576 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496592 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496608 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496624 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496640 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496656 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496672 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496688 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496704 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496720 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496736 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496752 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496768 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496784 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496800 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496816 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496832 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496848 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496864 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496880 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496896 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496912 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496928 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496944 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496960 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496976 2000;
+BA_ "GenMsgCycleTime" BO_ 2147496992 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497008 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497024 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497040 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497056 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497072 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497088 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497104 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497120 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497136 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497152 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497168 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497184 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497200 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497216 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497232 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497248 2000;
+BA_ "GenMsgCycleTime" BO_ 2147497264 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500032 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500048 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500064 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500080 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500096 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500112 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500128 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500144 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500160 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500176 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500192 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500208 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500224 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500240 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500256 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500272 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500288 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500304 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500320 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500336 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500352 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500368 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500384 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500400 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500416 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500432 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500448 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500464 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500480 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500496 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500512 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500528 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500544 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500560 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500576 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500592 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500608 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500624 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500640 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500656 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500672 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500688 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500704 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500720 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500736 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500752 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500768 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500784 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500800 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500816 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500832 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500848 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500864 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500880 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500896 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500912 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500928 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500944 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500960 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500976 2000;
+BA_ "GenMsgCycleTime" BO_ 2147500992 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501008 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501024 2000;
+BA_ "GenMsgCycleTime" BO_ 2147501040 2000;
+BA_ "GenMsgCycleTime" BO_ 2147504112 2000;
+BA_ "GenMsgCycleTime" BO_ 2147504096 2000;
+BA_ "GenMsgCycleTime" BO_ 2147491824 5000;
+BA_ "GenMsgCycleTime" BO_ 2147508208 5000;
+BA_ "GenMsgCycleTime" BO_ 2147491808 5000;
+BA_ "GenMsgCycleTime" BO_ 2147492096 1000;
+BA_ "GenMsgCycleTime" BO_ 2147492352 1000;
+VAL_ 2147493120 TMSrunState 7 "补水泵运行状态" 6 "报警状态" 5 "外风机运行状态" 4 "水泵运行状态" 3 "制热运行状态" 2 "制冷运行状态" 1 "自检状态" 0 "机组运行状态" ;
+VAL_ 2147492864 TMScontrolMode 1 "进水温度控制模式" 0 "出水温度控制模式" ;
+VAL_ 2147492864 TMSType 6 "60KW三相" 5 "50KW三相" 4 "40KW三相" 3 "20KW三相" 2 "8KW三相" 1 "8KW单相" ;
+VAL_ 2147492864 Supplycode 1 "泰铂" ;
+VAL_ 2147487760 EMS_TMSRunlMode 4 "发4，强控TMS待机" 3 "发1，强控TMS自循环" 2 "发1，强控TMS制热" 1 "发1，强控TMS制冷" 0 "发0按照程序中默认模式和阈值运行" ;
+VAL_ 2147487760 EMS_TMSpowerOFF 1 "Request to power off" 0 "No request" ;
+VAL_ 2147487760 EMS_TMSpowerOn 1 "Description for the value '0x1'" 0 "No request" ;
+VAL_ 2147536880 S8DL2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S7DL2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S6DL2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S5DL2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S4DL2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S3DL2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S2DL2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S1DL2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S8DL1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S7DL1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S6DL1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S5DL1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S4DL1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S3DL1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S2DL1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S1DL1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S8HSS2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S7HSS2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S6HSS2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S5HSS2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S4HSS2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S3HSS2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S2HSS2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S1HSS2 1 "normal" 0 "error" ;
+VAL_ 2147536880 S8HSS1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S7HSS1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S6HSS1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S5HSS1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S4HSS1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S3HSS1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S2HSS1 1 "normal" 0 "error" ;
+VAL_ 2147536880 S1HSS1 1 "normal" 0 "error" ;
+VAL_ 2147536880 SW_IN3 1 "normal" 0 "error" ;
+VAL_ 2147536880 SW_IN2 1 "normal" 0 "error" ;
+VAL_ 2147536880 SW_IN1 1 "normal" 0 "error" ;
+VAL_ 2147536880 DIL5 1 "normal" 0 "error" ;
+VAL_ 2147536880 DIL4 1 "normal" 0 "error" ;
+VAL_ 2147536880 DIL3 1 "normal" 0 "error" ;
+VAL_ 2147536880 DIL2 1 "normal" 0 "error" ;
+VAL_ 2147536880 DIL1 1 "normal" 0 "error" ;
+VAL_ 2147536880 DIH8 1 "normal" 0 "error" ;
+VAL_ 2147536880 DIH7 1 "normal" 0 "error" ;
+VAL_ 2147536880 DIH6 1 "normal" 0 "error" ;
+VAL_ 2147536880 DIH5 1 "normal" 0 "error" ;
+VAL_ 2147536880 DIH4 1 "normal" 0 "error" ;
+VAL_ 2147536880 DIH3 1 "normal" 0 "error" ;
+VAL_ 2147536880 DIH2 1 "normal" 0 "error" ;
+VAL_ 2147536880 DIH1 1 "normal" 0 "error" ;
+VAL_ 2147536880 SW_OUT4 1 "normal" 0 "error" ;
+VAL_ 2147536880 SW_OUT3 1 "normal" 0 "error" ;
+VAL_ 2147536880 SW_OUT2 1 "normal" 0 "error" ;
+VAL_ 2147536880 SW_OUT1 1 "normal" 0 "error" ;
+VAL_ 2147536880 LSS4 1 "normal" 0 "error" ;
+VAL_ 2147536880 LSS3 1 "normal" 0 "error" ;
+VAL_ 2147536880 LSS2 1 "normal" 0 "error" ;
+VAL_ 2147536880 LSS1 1 "normal" 0 "error" ;
+VAL_ 2147536880 HSS8 1 "normal" 0 "error" ;
+VAL_ 2147536880 HSS7 1 "normal" 0 "error" ;
+VAL_ 2147536880 HSS6 1 "normal" 0 "error" ;
+VAL_ 2147536880 HSS5 1 "normal" 0 "error" ;
+VAL_ 2147536880 HSS4 1 "normal" 0 "error" ;
+VAL_ 2147536880 HSS3 1 "normal" 0 "error" ;
+VAL_ 2147536880 HSS2 1 "normal" 0 "error" ;
+VAL_ 2147536880 HSS1 1 "normal" 0 "error" ;
+VAL_ 2147532784 FireWireState 3 "消防触发喷洒" 2 "系统正常" 1 "检测到故障" 0 "预留" ;
+VAL_ 2147532784 LightningWireState 2 "系统正常" 1 "异常" 0 "预留" ;
+VAL_ 2147532784 SwitchWireState 2 "开关断开" 1 "开关闭合" 0 "预留" ;
+VAL_ 2147532784 LiquidState 2 "系统正常" 1 "液位异常" 0 "预留" ;
+VAL_ 2147532784 FireErrorState 2 "系统正常" 1 "消防故障" 0 "预留" ;
+VAL_ 2147532784 SmokeWireState 2 "系统正常" 1 "烟感故障" 0 "预留" ;
+VAL_ 2147532784 WaterWireState 2 "系统正常" 1 "水浸故障" 0 "预留" ;
+VAL_ 2147532784 StopWireState 2 "系统正常" 1 "系统急停" 0 "预留" ;
+VAL_ 2147532784 DoorWireState 2 "门关闭" 1 "门打开" 0 "预留" ;
+VAL_ 2147532784 TempState 3 "通信故障" 2 "设备故障" 1 "正常" 0 "预留" ;
+VAL_ 2147532784 SmokeState 3 "通信故障" 2 "设备故障" 1 "正常" 0 "预留" ;
+VAL_ 2147532784 WaterState 3 "通信故障" 2 "设备故障" 1 "正常" 0 "预留" ;
+VAL_ 2147532784 FireState 3 "通信故障" 2 "设备故障" 1 "正常" 0 "保留" ;
+VAL_ 2147532784 DehumState 3 "通信故障" 2 "设备故障" 1 "正常" 0 "预留" ;
+VAL_ 2147532784 AirconState 3 "通信故障" 2 "设备故障" 1 "正常" 0 "预留" ;
+VAL_ 2147532784 AmmeterState 3 "通信故障" 2 "设备故障" 1 "正常" 0 "预留" ;
+VAL_ 2147532784 FANState 3 "通信故障" 2 "设备故障" 1 "正常" 0 "预留" ;
+VAL_ 2147501824 BattBalancingSts 2 "Remote balancing" 1 "Local balancing" 0 "None" ;
+VAL_ 2147492608 TmsRunMode 4 "Automatic" 3 "Self-looping" 2 "Heating" 1 "Refrigeration" ;
+VAL_ 2147492608 TmsRunSts 5 "Communication failure" 4 "Failure" 3 "Delayed shutdown" 2 "Run" 1 "Ready to start" 0 "Idle" ;
+VAL_ 2147491840 CriticalAlarms_arenotallcleared 1 "warning" 0 "normal" ;
+VAL_ 2147491840 Not_meeting_Dsg_conditions 1 "warning" 0 "normal" ;
+VAL_ 2147491840 Not_meeting_Chg_conditions 1 "warning" 0 "normal" ;
+VAL_ 2147491840 Insulationalarmsarenotallcleared 1 "warning" 0 "normal" ;
+VAL_ 2147491840 Typy1alarmsarenotallcleared 1 "warning" 0 "normal" ;
+VAL_ 2147491840 RackVolDiffLarge1 1 "warning" 0 "normal" ;
+VAL_ 2147491840 SMSConfirmationOvertime 1 "warning" 0 "normal" ;
+VAL_ 2147491840 RackVol_DiffLarge 1 "warning" 0 "normal" ;
+VAL_ 2147487744 LSS2_control 3 "无意义" 2 "强控断开" 1 "强控闭合" 0 "无请求" ;
+VAL_ 2147487744 EMS_SHUNT_restart 1 "重启" 0 "无请求" ;
+VAL_ 2147487744 EMS_ACCutOff_request 1 "BMS 切换交流侧断路器" 0 "无请求" ;
+VAL_ 2147487744 EMS_BCURestart_request 1 "bms重启（正常下电流程）" 0 "无请求" ;
+VAL_ 2147487744 EMS_PowerOnReq 1 "Request to power on" 0 "No request" ;
+VAL_ 2147487744 EMS_PowerOFFReq 1 "Request to power off" 0 "No request" ;
+VAL_ 2147487744 EMS_UrgencyCutOffPowerReq 1 "Request to cutoff" 0 "No request" ;
+VAL_ 2147487744 EMS_BCU_insulate 1 "Insulation detect on" 0 "Insulation detect off" ;
+VAL_ 2147487744 EMS_BCU_precharge_request 1 "Request to precharge" 0 "No request" ;
+VAL_ 2147488512 BMS_RunState 4 "Stopped" 3 "Standby" 2 "DischargeForbid" 1 "ChargeForbid" 0 "Normal" ;
+VAL_ 2147488512 BMS_ConnectionStatus 4 "ConnectFailed" 3 "Connected" 2 "Connecting_2" 1 "Connecting_1" 0 "Disconnected" ;
+VAL_ 2147488512 BMS_PrechargeStatus 3 "PrechargeFailed" 2 "Precharged" 1 "Precharging" 0 "None" ;
+VAL_ 2147488512 BMS_SelfCheckStatus 3 "reserved" 2 "Failed" 1 "Passed" 0 "Checking" ;
+VAL_ 2147488512 BMS_BalanceStatus 1 "In balancing" 0 "Not in balancing" ;
+VAL_ 2147488512 BattChrgState 2 "Discharging" 1 "Charging" 0 "Idle" ;
+VAL_ 2147489280 Relay_PositiveStatus 1 "closed" 0 "opened" ;
+VAL_ 2147489280 Relay_NegativeStatus 1 "closed" 0 "opened" ;
+VAL_ 2147489280 Relay_PrechargeStatus 1 "closed" 0 "opened" ;
+VAL_ 2147489280 Relay_DisconnectoStatus 1 "closed" 0 "opened" ;
+VAL_ 2147489280 Relay_PositiveFaultStatus 3 "Circuit fault" 2 "Open fault" 1 "Stick fault" 0 "No fault" ;
+VAL_ 2147489280 Relay_NegativeFaultStatus 3 "Circuit fault" 2 "Open fault" 1 "Stick fault" 0 "No fault" ;
+VAL_ 2147489280 Relay_PrechargeFaultStatus 3 "Circuit fault" 2 "Open fault" 1 "Stick fault" 0 "No fault" ;
+VAL_ 2147489280 Relay_DisconnectFaultStatus 3 "Circuit fault" 2 "Open fault" 1 "Stick fault" 0 "No fault" ;
+VAL_ 2147491808 SOCLow_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 CellTempDiffHigh_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 CellVolDiffHigh_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 HVBTempHigh_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 TerminalTempHigh_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 InsulationLow_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 ChgTempLow_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 ChgTempHigh_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 DsgTempLow_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 DsgTempHigh_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 ChgOverCurr_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 DsgOverCurr_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 CellVolLow_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 CellVolHigh_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 RackVolLowCritical_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 RackVolHigh_CriticalAlarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 SOCLow_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 CellTempDiffHigh_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 CellVolDiffHigh_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 HVBTempHigh_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 TerminalTempHigh_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 InsulationLow_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 ChgTempLow_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 ChgTempHigh_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 DsgTempLow_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 DsgTempHigh_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 ChgOverCurr_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 DsgOverCurr_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 CellVolLow_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 CellVolHigh_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 RackVolLow_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 RackVolHigh_Alarm 1 "warning" 0 "normal" ;
+VAL_ 2147491808 SOCLowWarn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 CellTempDiffHigh_Warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 CellVolDiffHigh_Warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 HVBTempHigh_warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 TerminalTempHigh_Warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 InsulationLow_warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 ChgTempLow_Warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 ChgTempHigh_Warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 DsgTempLow_Warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 DsgTempHigh_Warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 ChgOverCurr_Warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 DsgOverCurr_Warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 CellVolLow_Warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 CellVolHigh_Warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 RackVolLow_warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 RackVolHigh_warn 1 "warning" 0 "normal" ;
+VAL_ 2147491808 Totalflagpos_for_BMSRelayFault 1 "故障" 0 "正常" ;
+VAL_ 2147491808 Abnormal_power_supply_volt 1 "故障" 0 "正常" ;
+VAL_ 2147491808 Abnormal_current 1 "故障" 0 "正常" ;
+VAL_ 2147491808 High_ambient_temp 1 "故障" 0 "正常" ;
+VAL_ 2147491808 Thermal_runaway_fault 1 "故障" 0 "正常" ;
+VAL_ 2147491808 Total_voltage_differential_fault 1 "故障" 0 "正常" ;
+VAL_ 2147491808 Precharge_fault 1 "故障" 0 "正常" ;
+VAL_ 2147491808 Discon_Open_when_Rack_Enabled 1 "故障" 0 "正常" ;
+VAL_ 2147491808 IMD_fault 1 "故障" 0 "正常" ;
+VAL_ 2147491808 Current_sensor_fault 1 "故障" 0 "正常" ;
+VAL_ 2147491808 BAU_communication_fault 1 "故障" 0 "正常" ;
+VAL_ 2147491808 BMU_communication_fault 1 "故障" 0 "正常" ;
+VAL_ 2147491808 Contactor_adhesion_fault 1 "故障" 0 "正常" ;
+VAL_ 2147491808 Fuse_protector_fault 1 "故障" 0 "正常" ;
+VAL_ 2147491808 Bcu_hardware 1 "故障" 0 "正常" ;
+VAL_ 2147491808 BMU_hardware_fault 1 "故障" 0 "正常" ;
+

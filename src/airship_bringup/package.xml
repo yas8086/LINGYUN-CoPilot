@@ -1,18 +1,19 @@
 <?xml version="1.0"?>
-<package format="2">
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>airship_bringup</name>
   <version>0.1.0</version>
-  <description>灵云01号飞艇伴飞电脑启动配置：编排mavros、airship_bridge、airship_control、airship_safety节点</description>
+  <description>灵云01号伴飞电脑启动配置：编排 BMS/MPPT/DCDC 驱动、monitor 监控、link 数传链路节点</description>
   <maintainer email="dev@lingyun.local">Lingyun Airship Team</maintainer>
   <license>Proprietary</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <exec_depend>mavros</exec_depend>
-  <exec_depend>mavros_msgs</exec_depend>
-  <exec_depend>airship_bridge</exec_depend>
-  <exec_depend>airship_control</exec_depend>
-  <exec_depend>airship_safety</exec_depend>
+  <exec_depend>airship_bms</exec_depend>
+  <exec_depend>airship_mppt</exec_depend>
+  <exec_depend>airship_dcdc</exec_depend>
+  <exec_depend>airship_monitor</exec_depend>
+  <exec_depend>airship_link</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
