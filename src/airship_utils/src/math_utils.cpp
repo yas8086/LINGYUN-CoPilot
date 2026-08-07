@@ -40,4 +40,16 @@ float clampf(float val, float min_val, float max_val)
   return val;
 }
 
+void quat_to_euler(
+  float w, float x, float y, float z, float * roll, float * pitch, float * yaw)
+{
+  // ZYX 顺序 (与 PX4/MAVROS 常用约定一致)
+  const float r = std::atan2(2.0f * (w * x + y * z), 1.0f - 2.0f * (x * x + y * y));
+  const float p = std::asin(clampf(2.0f * (w * y - z * x), -1.0f, 1.0f));
+  const float yw = std::atan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
+  *roll = r;
+  *pitch = p;
+  *yaw = yw;
+}
+
 }  // namespace airship_utils

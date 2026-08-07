@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<!-- saved from url=(0105)https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E6.A0.91.E8.8E.93.E6.B4.BERaspbian.E4.B8.8A.E7.BD.91 -->
+<html class="client-js" lang="zh-Hans-CN" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>SIM7600G-H-M2 4G HAT - Waveshare Wiki</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"zh","wgMonthNames":["","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],"wgRequestId":"5e1a7333e47f4627b43366b4","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"SIM7600G-H-M2_4G_HAT","wgTitle":"SIM7600G-H-M2 4G HAT","wgCurRevisionId":140609,"wgRevisionId":140609,"wgArticleId":13324,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["USB接口","模块","4G","GNSS/GSM","3G","4G接口","M.2 B KEY接口"],"wgPageContentLanguage":"zh-cn","wgPageContentModel":"wikitext","wgRelevantPageName":"SIM7600G-H-M2_4G_HAT","wgRelevantArticleId":13324,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};
+RLSTATE={"ext.gadget.tabber":"ready","site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","mediawiki.page.gallery.styles":"ready","jquery.makeCollapsible.styles":"ready","mediawiki.toc.styles":"ready","skins.tweeki.styles":"ready","skins.tweeki.bootstraptheme.styles":"ready","skins.tweeki.externallinks.styles":"ready","skins.tweeki.awesome.styles":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","jquery.makeCollapsible","mediawiki.toc","ext.FancyBoxThumbs","ext.gadget.subnavber","ext.gadget.slidenav","ext.HighlightjsIntegration","skins.tweeki.messages","skins.tweeki.scripts"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});mw.user.options.set({"variant":"zh-cn"});
+});});</script>
+<link rel="stylesheet" href="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/load.php">
+<script async="" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/load(1).php"></script>
+<style>
+.mw-collapsible-toggle{float:right;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none}.mw-collapsible-toggle-default:before{content:'['}.mw-collapsible-toggle-default:after{content:']'}.mw-customtoggle,.mw-collapsible-toggle{cursor:pointer} caption .mw-collapsible-toggle,.mw-content-ltr caption .mw-collapsible-toggle,.mw-content-rtl caption .mw-collapsible-toggle,.mw-content-rtl .mw-content-ltr caption .mw-collapsible-toggle,.mw-content-ltr .mw-content-rtl caption .mw-collapsible-toggle{float:none}
+pre.code2highlight,pre.nohighlight{  padding:0.5em}code.code2highlight.hljs{  padding:1px 4px}.hljs{display:block;overflow-x:auto;padding:0.5em;background:#1E1E1E;color:#DCDCDC}.hljs-keyword,.hljs-literal,.hljs-symbol,.hljs-name{color:#569CD6}.hljs-link{color:#569CD6;text-decoration:underline}.hljs-built_in,.hljs-type{color:#4EC9B0}.hljs-number,.hljs-class{color:#B8D7A3}.hljs-string,.hljs-meta-string{color:#D69D85}.hljs-regexp,.hljs-template-tag{color:#9A5334}.hljs-subst,.hljs-function,.hljs-title,.hljs-params,.hljs-formula{color:#DCDCDC}.hljs-comment,.hljs-quote{color:#57A64A;font-style:italic}.hljs-doctag{color:#608B4E}.hljs-meta,.hljs-meta-keyword,.hljs-tag{color:#9B9B9B}.hljs-variable,.hljs-template-variable{color:#BD63C5}.hljs-attr,.hljs-attribute,.hljs-builtin-name{color:#9CDCFE}.hljs-section{color:gold}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:bold}.hljs-bullet,.hljs-selector-tag,.hljs-selector-id,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo{color:#D7BA7D}.hljs-addition{background-color:#144212;display:inline-block;width:100%}.hljs-deletion{background-color:#600;display:inline-block;width:100%}
+.fancybox-wrap,.fancybox-skin,.fancybox-outer,.fancybox-inner,.fancybox-image,.fancybox-wrap iframe,.fancybox-wrap object,.fancybox-nav,.fancybox-nav span,.fancybox-tmp{padding:0;margin:0;border:0;outline:none;vertical-align:top}.fancybox-wrap{position:absolute;top:0;left:0;z-index:8020}.fancybox-skin{position:relative;background:#f9f9f9;color:#444;text-shadow:none;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}.fancybox-opened{z-index:8030}.fancybox-opened .fancybox-skin{-webkit-box-shadow:0 10px 25px rgba(0,0,0,0.5);-moz-box-shadow:0 10px 25px rgba(0,0,0,0.5);box-shadow:0 10px 25px rgba(0,0,0,0.5)}.fancybox-outer,.fancybox-inner{position:relative}.fancybox-inner{overflow:hidden}.fancybox-type-iframe .fancybox-inner{-webkit-overflow-scrolling:touch}.fancybox-error{color:#444;font:14px/20px "Helvetica Neue",Helvetica,Arial,sans-serif;margin:0;padding:15px;white-space:nowrap}.fancybox-image,.fancybox-iframe{display:block;width:100%;height:100%}.fancybox-image{max-width:100%;max-height:100%}#fancybox-loading,.fancybox-close,.fancybox-prev span,.fancybox-next span{background-image:url(/w/extensions/FancyBoxThumbs/modules/fancyBox/source/fancybox_sprite.png?783d4)}#fancybox-loading{position:fixed;top:50%;left:50%;margin-top:-22px;margin-left:-22px;background-position:0 -108px;opacity:0.8;cursor:pointer;z-index:8060}#fancybox-loading div{width:44px;height:44px;background:url(/w/extensions/FancyBoxThumbs/modules/fancyBox/source/fancybox_loading.gif?c6f1a) center center no-repeat}.fancybox-close{position:absolute;top:-18px;right:-18px;width:36px;height:36px;cursor:pointer;z-index:8040}.fancybox-nav{position:absolute;top:0;width:40%;height:100%;cursor:pointer;text-decoration:none;background:transparent url(/w/extensions/FancyBoxThumbs/modules/fancyBox/source/blank.gif?32547); -webkit-tap-highlight-color:rgba(0,0,0,0);z-index:8040}.fancybox-prev{left:0}.fancybox-next{right:0}.fancybox-nav span{position:absolute;top:50%;width:36px;height:34px;margin-top:-18px;cursor:pointer;z-index:8040;visibility:hidden}.fancybox-prev span{left:10px;background-position:0 -36px}.fancybox-next span{right:10px;background-position:0 -72px}.fancybox-nav:hover span{visibility:visible}.fancybox-tmp{position:absolute;top:-99999px;left:-99999px;visibility:hidden;max-width:99999px;max-height:99999px;overflow:visible !important} .fancybox-lock{overflow:hidden}.fancybox-overlay{position:absolute;top:0;left:0;overflow:hidden;display:none;z-index:8010;background:url(/w/extensions/FancyBoxThumbs/modules/fancyBox/source/fancybox_overlay.png?77aea)}.fancybox-overlay-fixed{position:fixed;bottom:0;right:0}.fancybox-lock .fancybox-overlay{overflow:auto;overflow-y:scroll} .fancybox-title{visibility:hidden;font:normal 13px/20px "Helvetica Neue",Helvetica,Arial,sans-serif;position:relative;text-shadow:none;z-index:8050}.fancybox-opened .fancybox-title{visibility:visible}.fancybox-title-float-wrap{position:absolute;bottom:0;right:50%;margin-bottom:-35px;z-index:8050;text-align:center}.fancybox-title-float-wrap .child{display:inline-block;margin-right:-100%;padding:2px 20px;background:transparent; background:rgba(0,0,0,0.8);-webkit-border-radius:15px;-moz-border-radius:15px;border-radius:15px;text-shadow:0 1px 2px #222;color:#FFF;font-weight:bold;line-height:24px;white-space:nowrap}.fancybox-title-outside-wrap{position:relative;margin-top:10px;color:#fff}.fancybox-title-inside-wrap{padding-top:10px}.fancybox-title-over-wrap{position:absolute;bottom:0;left:0;color:#fff;padding:10px;background:#000;background:rgba(0,0,0,.8)}
+.subnavberlive .subnavbertabhide{display:none}.subnavberlive{margin-top:0px;min-width:260px}.subnavberlive .subnavbertab{padding:5px} .subnavberlive#tab2 .subnavbertab{height:200px;overflow:auto}ul.subnavbernav{ display:block;padding:0 0 0 1px!important;margin:0 0 10px 0!important; height:50px;list-style:none;line-height:1.4;color:#333; }ul.subnavbernav li{ margin:0px;height:50px;text-align:center; float:none;display:table-cell;width:1%}ul.subnavbernav li a{ display:block;margin:0 0 0 -1px;height:50px;padding:0px 5px;line-height:50px;border:solid 2px #fff;border-width:2px 2px 2px 2px; color:#333;background:#f7f7f7; text-decoration:none;overflow:hidden}ul.subnavbernav li a:link{color:#333}ul.subnavbernav li a:visited{color:#667}ul.subnavbernav li a:hover{color:#000;background:#FFF; }ul.subnavbernav li.subnavberactive a{background-color:#fff;position:relative;height:50px; font-weight:bold} .pink-color ul.subnavbernav li.subnavberactive a{background-color:#bc1d46;color:#fff}.black-color ul.subnavbernav li.subnavberactive a{background-color:#2c2c2c;color:#fff}.deep-grey ul.subnavbernav li.subnavberactive a{background-color:#4f5f79;color:#fff}.blue-color ul.subnavbernav li.subnavberactive a{background-color:#36A5E8;color:#fff}.jet-green-color ul.subnavbernav li.subnavberactive a{background-color:#7eb128;color:#fff}.arduino-green-color ul.subnavbernav li.subnavberactive a{background-color:#00989d;color:#fff}.subnavberlive{  width:100%;top:20px;z-index:9; }.subnavberlive a{ border-radius:7px; background:rgba(255,255,255,0.5);-webkit-transition:all 0.2s ease-out;-moz-transition:all 0.2s ease-out;-ms-transition:all 0.2s ease-out;-o-transition:all 0.2s ease-out;transition:all 0.2s ease-out;text-decoration:none;color:black;font-family:sans-serif,arial;font-weight:100}.subnavberlive a.active{background:rgba(0,0,0,0.5);color:white}.subnavberlive a:hover{background:rgba(255,255,255,0.7)}
+.nav-link{ border-radius:2em;transition:all .4s} .blue-color ul.tabbernav li a.active{background-color:#36A5E8;color:#fff!important;font-weight:bold}.blue-color ul.tabbernav li a{color:#36A5E8 !important;font-weight:500}.pink-color ul.tabbernav li a.active{background-color:#bc1d46;color:#fff!important;font-weight:bold}.pink-color ul.tabbernav li a{color:#bc1d46 !important;font-weight:500}.jet-green-color ul.tabbernav li a.active{background-color:#7eb128;color:#fff!important;font-weight:bold}.jet-green-color ul.tabbernav li a{color:#7eb128 !important;font-weight:500}.arduino-green-color ul.tabbernav li a.active{background-color:#00989d;color:#fff!important;font-weight:bold}.arduino-green-color ul.tabbernav li a{color:#00989d !important;font-weight:500}.black-color ul.tabbernav li a.active{background-color:#2c2c2c;color:#fff!important;font-weight:bold}.black-color ul.tabbernav li a{color:#2c2c2c !important;font-weight:500}
+@media screen {
+	.toctoggle{-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none;font-size:94%}}</style><meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/load(2).php">
+<link rel="stylesheet" href="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/load(3).php">
+<meta name="generator" content="MediaWiki 1.35.5">
+<meta property="og:image" content="https://www.waveshare.net/w/upload/thumb/2/26/SIM7600M2-Title.jpg/1200px-SIM7600M2-Title.jpg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="https://www.waveshare.net/favicon.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="https://www.waveshare.net/w/opensearch_desc.php" title="Waveshare Wiki (zh-cn)">
+<link rel="EditURI" type="application/rsd+xml" href="https://www.waveshare.net/w/api.php?action=rsd">
+<link rel="alternate" type="application/atom+xml" title="Waveshare Wiki的Atom feed" href="https://www.waveshare.net/w/index.php?title=%E7%89%B9%E6%AE%8A:%E6%9C%80%E8%BF%91%E6%9B%B4%E6%94%B9&amp;feed=atom">
+<!--[if lt IE 9]><script src="/w/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-SIM7600G-H-M2_4G_HAT rootpage-SIM7600G-H-M2_4G_HAT skin-tweeki action-view tweeki-animateLayout tweeki-non-advanced tweeki-user-anon" style="margin-bottom: 0px; position: relative;">			<!-- navbar -->
+			<div id="mw-navigation" class="navbar navbar-default navbar-fixed-top navbar-expand-lg fixed-top navbar-light bg-light" role="navigation">
+				<h2>导航菜单</h2>
+				<div id="mw-head" class="navbar-inner">
+					<div class="container">
+
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+
+							<a href="https://www.waveshare.net/wiki/Main_Page" class="navbar-brand"><img src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/Waveshare-logo.png" alt="Waveshare Wiki"></a>
+						</div>
+
+						<div id="navbar" class="navbar-collapse collapse">
+													<ul class="nav navbar-nav">
+							<li class="nav"><a href="https://www.waveshare.net/" id="n-https.253A.252F.252Fwww.waveshare.net" rel="nofollow" target="_blank">微雪商城</a></li><li class="nav"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#" id="n-raspberry-pi" class="dropdown-toggle" data-toggle="dropdown">Raspberry Pi <b class="caret"></b></a><ul class="dropdown-menu " role="menu"><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-boards-.25E4.25B8.25BB.25E6.259D.25BF.252F.25E5.25A5.2597.25E4.25BB.25B6.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Boards%20%E4%B8%BB%E6%9D%BF/%E5%A5%97%E4%BB%B6]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Boards">主板/套件</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-displays-.25E6.2598.25BE.25E7.25A4.25BA.25E5.25B1.258F.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Displays%20%E6%98%BE%E7%A4%BA%E5%B1%8F]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Displays">显示屏</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-cameras-.25E6.2591.2584.25E5.2583.258F.25E5.25A4.25B4.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Cameras%20%E6%91%84%E5%83%8F%E5%A4%B4]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Cameras">摄像头</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-expansions-.25E6.2589.25A9.25E5.25B1.2595.25E6.259D.25BF.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Expansions%20%E6%89%A9%E5%B1%95%E6%9D%BF]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Expansions">扩展板</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-laptops-.25E7.25AC.2594.25E8.25AE.25B0.25E6.259C.25AC.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Laptops%20%E7%AC%94%E8%AE%B0%E6%9C%AC]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Laptops">笔记本</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-robots-.25E6.259C.25BA.25E5.2599.25A8.25E4.25BA.25BA.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Robots%20%E6%9C%BA%E5%99%A8%E4%BA%BA]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Robots">机器人</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-games-.25E6.25B8.25B8.25E6.2588.258F.25E6.259C.25BA.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Games%20%E6%B8%B8%E6%88%8F%E6%9C%BA]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Games">游戏机</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523android-linux-boards-android.252Flinux.25E4.25B8.25BB.25E6.259D.25BF.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Android-Linux-Boards%20Android/Linux%E4%B8%BB%E6%9D%BF]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Android-Linux-Boards">Android/Linux主板</a></li></ul></li><li class="nav"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#" id="n-.25E4.25BA.25BA.25E5.25B7.25A5.25E6.2599.25BA.25E8.2583.25BD" class="dropdown-toggle" data-toggle="dropdown">人工智能 <b class="caret"></b></a><ul class="dropdown-menu " role="menu"><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523jetson-ai-boards-.25E4.25B8.25BB.25E6.259D.25BF.252F.25E5.25A5.2597.25E4.25BB.25B6.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Boards%20%E4%B8%BB%E6%9D%BF/%E5%A5%97%E4%BB%B6]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Boards">主板/套件</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523jetson-ai-displays-.25E6.2598.25BE.25E7.25A4.25BA.25E5.25B1.258F.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Displays%20%E6%98%BE%E7%A4%BA%E5%B1%8F]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Displays">显示屏</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523jetson-ai-cameras-.25E6.2591.2584.25E5.2583.258F.25E5.25A4.25B4.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Cameras%20%E6%91%84%E5%83%8F%E5%A4%B4]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Cameras">摄像头</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523jetson-ai-hat-.25E6.2589.25A9.25E5.25B1.2595.25E6.259D.25BF.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Jetson-AI-HAT%20%E6%89%A9%E5%B1%95%E6%9D%BF]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Jetson-AI-HAT">扩展板</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523jetson-ai-robots-.25E6.259C.25BA.25E5.2599.25A8.25E4.25BA.25BA.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Robots%20%E6%9C%BA%E5%99%A8%E4%BA%BA]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Robots">机器人</a></li></ul></li><li class="nav"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#" id="n-.25E6.2598.25BE.25E7.25A4.25BA.25E5.25B1.258F" class="dropdown-toggle" data-toggle="dropdown">显示屏 <b class="caret"></b></a><ul class="dropdown-menu " role="menu"><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523display-lcd-oleds-lcd.252Foled.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Display-LCD-OLEDs%20LCD/OLED]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Display-LCD-OLEDs">LCD/OLED</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523display-e-paper-e-paper.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Display-e-Paper%20e-Paper]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Display-e-Paper">e-Paper</a></li></ul></li><li class="nav"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#" id="n-.25E6.25A8.25A1.25E5.259D.2597" class="dropdown-toggle" data-toggle="dropdown">模块 <b class="caret"></b></a><ul class="dropdown-menu " role="menu"><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523long-range-wireless-comm-.25E8.25BF.259C.25E8.25B7.259D.25E7.25A6.25BB.25E6.2597.25A0.25E7.25BA.25BF.25E9.2580.259A.25E4.25BF.25A1.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Long-range-wireless-comm%20%E8%BF%9C%E8%B7%9D%E7%A6%BB%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Long-range-wireless-comm">远距离无线通信</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523short-range-wireless-comm-.25E8.25BF.2591.25E8.25B7.259D.25E7.25A6.25BB.25E6.2597.25A0.25E7.25BA.25BF.25E9.2580.259A.25E4.25BF.25A1.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Short-range-wireless-comm%20%E8%BF%91%E8%B7%9D%E7%A6%BB%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Short-range-wireless-comm">近距离无线通信</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523wired-communication-.25E6.259C.2589.25E7.25BA.25BF.25E9.2580.259A.25E4.25BF.25A1.252F.25E6.258E.25A5.25E5.258F.25A3.25E8.25BD.25AC.25E6.258D.25A2.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Wired-communication%20%E6%9C%89%E7%BA%BF%E9%80%9A%E4%BF%A1/%E6%8E%A5%E5%8F%A3%E8%BD%AC%E6%8D%A2]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Wired-communication">有线通信/接口转换</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523misc-cameras-av-.25E6.2591.2584.25E5.2583.258F.25E5.25A4.25B4.252F.25E9.259F.25B3.25E8.25A7.2586.25E9.25A2.2591.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Misc-cameras-av%20%E6%91%84%E5%83%8F%E5%A4%B4/%E9%9F%B3%E8%A7%86%E9%A2%91]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Misc-cameras-av">摄像头/音视频</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523misc-sensor-modules-.25E4.25BC.25A0.25E6.2584.259F.25E5.2599.25A8.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Misc-sensor-modules%20%E4%BC%A0%E6%84%9F%E5%99%A8]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Misc-sensor-modules">传感器</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523misc-servos-motors-.25E7.2594.25B5.25E6.259C.25BA.252F.25E8.2588.25B5.25E6.259C.25BA.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Misc-servos-motors%20%E7%94%B5%E6%9C%BA/%E8%88%B5%E6%9C%BA]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Misc-servos-motors">电机/舵机</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523misc-other-modules-.25E5.25A4.25A7.25E6.259D.2582.25E7.2583.25A9.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Misc-other-modules%20%E5%A4%A7%E6%9D%82%E7%83%A9]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Misc-other-modules">大杂烩</a></li></ul></li><li class="nav"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#" id="n-.25E6.259C.25BA.25E5.2599.25A8.25E4.25BA.25BA" class="dropdown-toggle" data-toggle="dropdown">机器人 <b class="caret"></b></a><ul class="dropdown-menu " role="menu"><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523robotics-cars-.25E6.2599.25BA.25E8.2583.25BD.25E8.25BD.25A6.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Robotics-cars%20%E6%99%BA%E8%83%BD%E8%BD%A6]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Robotics-cars">智能车</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523robotics-drivers-sensors-.25E9.25A9.25B1.25E5.258A.25A8.25E5.2599.25A8.252F.25E4.25BC.25A0.25E6.2584.259F.25E5.2599.25A8.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Robotics-drivers-sensors%20%E9%A9%B1%E5%8A%A8%E5%99%A8/%E4%BC%A0%E6%84%9F%E5%99%A8]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Robotics-drivers-sensors">驱动器/传感器</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523robotics-robot-arms-.25E6.259C.25BA.25E6.25A2.25B0.25E6.2589.258B.252F.25E4.25BA.2591.25E5.258F.25B0.25E6.258E.25A7.25E5.2588.25B6.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Robotics-robot-arms%20%E6%9C%BA%E6%A2%B0%E6%89%8B/%E4%BA%91%E5%8F%B0%E6%8E%A7%E5%88%B6]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Robotics-robot-arms">机械手/云台控制</a></li></ul></li><li class="nav"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#" id="n-mcu.252Ffpga" class="dropdown-toggle" data-toggle="dropdown">MCU/FPGA <b class="caret"></b></a><ul class="dropdown-menu " role="menu"><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523arduino-main-boards-arduino.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Arduino-main-boards%20Arduino]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Arduino-main-boards">Arduino</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523micro.253Abit-micro.253Abit.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#micro:bit%20micro:bit]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#micro:bit">micro:bit</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523mcu.2farm-stm32" class="PIC"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#MCU.2FARM%20STM32" tabindex="-1">LPC</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523fpga-fpga.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#FPGA%20FPGA]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#FPGA">FPGA</a></li></ul></li>							</ul>
+						
+													<ul class="nav navbar-nav navbar-right">
+							</ul>
+				<form class="navbar-form navbar-right" action="https://www.waveshare.net/w/index.php" id="searchform">
+					<div class="form-group"><input type="search" name="search" placeholder="搜索" title="搜索Waveshare Wiki[alt-shift-f]" accesskey="f" id="searchInput" class="search-query form-control"><input type="submit" name="go" value="前往" title="若相同标题存在，则直接前往该页面" id="mw-searchButton" class="searchButton btn hidden">
+					</div>
+				</form><ul class="nav navbar-nav navbar-right"><li class="nav"><a href="https://docs.waveshare.net/" id="n-https.253A.252F.252Fdocs.waveshare.net" rel="nofollow" target="_blank">微雪文档</a></li>							</ul>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<!-- /navbar -->
+					<div id="mw-page-base"></div>
+			<div id="mw-head-base"></div>
+			<a id="top"></a>
+
+			<!-- content -->
+			<div id="contentwrapper" class="user-loggedout not-editable container with-navbar with-navbar-fixed">
+
+				
+				<div class="row">
+					<div class="col-md-offset-2 col-md-10" role="main">
+								<div class="mw-body" id="content">
+			<div id="mw-js-message" style="display:none;"></div>
+									<h1 id="firstHeading" class="firstHeading page-header" lang="zh-Hans-CN"><span dir="auto">SIM7600G-H-M2 4G HAT</span></h1>
+									<!-- bodyContent -->
+			<div id="bodyContent">
+								<div id="siteSub">来自Waveshare Wiki</div>
+								<div id="contentSub"></div>
+												<div id="jump-to-nav" class="mw-jump">
+					跳转至：					<a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#mw-navigation">导航</a>、					<a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#p-search">搜索</a>
+				</div>
+				<div id="mw-content-text" lang="zh-Hans-CN" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div class="wiki-pages blue-color">
+<div class="tabberlive newwsnav" id="wsnavbar">
+<ul class="tabbernav">
+<li class="nav-link"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#myintro" class="active">说明</a></li>
+<li class="nav-link"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#myresources" class="">资料</a></li>
+<li class="nav-link"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#myfaq" class="">FAQ</a></li>
+<li class="nav-link"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#mysupport">售后</a></li>
+</ul>
+</div>
+<div class="tabber">
+<table id="infotable" class="a-r at-c roundy bgd-blue bl-blue" style="margin-left: 5px; margin-bottom: 5px;">
+
+<tbody><tr>
+<td colspan="2">
+<table class="at-c roundy" style="background: transparent;width:100%;">
+
+<tbody><tr>
+<td class="at-c textwhite" style="display: none;"><span style="font-size:1.5em; line-height: 36px;"><b>SIM7600G-H-M.2</b></span>
+</td></tr>
+<tr>
+<td class="at-c bgwhite" style="margin:5px;"><div class="subnavberlive"><ul class="subnavbernav"><li class="subnavberactive"><a href="javascript:void(null);" title="模块">模块</a></li></ul><div class="subnavbertab " title=""><a href="https://www.waveshare.net/shop/SIM7600G-H-M2-4G-HAT.htm" title="SIM7600G-H-M.2" target="_blank" rel="nofollow noreferrer noopener"><img alt="SIM7600G-H-M.2" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/360px-SIM7600M2-Title.jpg" decoding="async" loading="lazy" width="360" height="270" srcset="/w/upload/thumb/2/26/SIM7600M2-Title.jpg/540px-SIM7600M2-Title.jpg 1.5x, /w/upload/thumb/2/26/SIM7600M2-Title.jpg/720px-SIM7600M2-Title.jpg 2x"></a></div>
+</div>
+</td></tr></tbody></table>
+</td></tr>
+<tr style="display:none;">
+<td colspan="2">
+<table class="roundy" style="background: transparent;width:100%;">
+
+<tbody><tr>
+<td class="at-c textwhite"><b>{{{name2}}}</b>
+</td></tr>
+<tr>
+<td class="at-c bgwhite" style="margin:5px;">
+</td></tr></tbody></table>
+</td></tr>
+<tr style="display:none;">
+<td>
+<table class="roundy" style="background: transparent;width:100%;">
+
+<tbody><tr>
+<td class="at-c textwhite"><b>{{{name3}}}</b>
+</td></tr>
+<tr>
+<td class="at-c bgwhite" style="margin:5px;">
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td colspan="2">
+<table class="roundy" style="background: transparent; border-collapse:collapse;width:100%;display: none;">
+<tbody><tr>
+<td style="width:2%;">
+</td>
+<td style="width:3%;">
+</td>
+<th colspan="2" width="90%" class="alignt-center roundytop bgl-white">基本信息
+</th>
+<td style="width:3%;">
+</td>
+<td style="width:2%;">
+</td></tr>
+<tr>
+<th colspan="3" width="90px" class="alignt-right roundytl bgwhite b-blue" style="border-width: 0 0 1px 0;">分类：
+</th>
+<td colspan="3" class="at-l roundytr b-blue bgwhite" style="border-width: 0 0 1px 0;">4G模块
+</td></tr>
+<tr style="display:none;">
+<th colspan="3" width="90px" class="alignt-right bgwhite b-blue" style="border-width: 0 0 1px 0;">{{{userDefinedInfo1}}}：
+</th>
+<td colspan="3" class="at-l b-blue bgwhite" style="border-width: 0 0 1px 0;">{{{userdefinedvalue1}}}
+</td></tr>
+<tr style="display:none;">
+<th colspan="3" width="90px" class="alignt-right bgwhite b-blue" style="border-width: 0 0 1px 0;">{{{userDefinedInfo2}}}：
+</th>
+<td colspan="3" class="at-l b-blue bgwhite" style="border-width: 0 0 1px 0;">{{{userdefinedvalue2}}}
+</td></tr>
+<tr style="display:none;">
+<th colspan="3" width="90px" class="alignt-right bgwhite b-blue" style="border-width: 0 0 1px 0;">{{{userDefinedInfo3}}}：
+</th>
+<td colspan="3" class="at-l b-blue bgwhite" style="border-width: 0 0 1px 0;">{{{userdefinedvalue3}}}
+</td></tr>
+<tr>
+<th colspan="3" width="90px" class="alignt-right roundybl bgwhite">品牌：
+</th>
+<td colspan="3" class="at-l roundybr bgwhite">Waveshare
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td colspan="2">
+<table class="align-right roundy" style="background: transparent; border-collapse:collapse;width:100%;">
+<tbody><tr>
+<td style="width:2%;">
+</td>
+<td style="width:3%;">
+</td>
+<th colspan="2" width="90%" class="alignt-center roundytop"><font color="white">功能简介</font>
+</th>
+<td style="width:3%;">
+</td>
+<td style="width:2%;">
+</td></tr>
+<tr>
+<td colspan="6" class="at-c">
+<table class="roundy bd-未知 bgl-未知 textblack bw-1 fulltable">
+
+<tbody><tr>
+<td>
+<table class="roundy bgwhite fulltable" style="text-align:center">
+
+<tbody><tr>
+<td class="roundyleft textwhite bgd-blue bl-blue bw-1" style="width:25%;opacity: 0.8;padding-bottom: 5px;"><small><b>特性</b></small>
+</td>
+<td class="roundyright bl-blue bw-1" colspan="3" style="width:75%;padding-bottom: 5px;color: #666;"><small>4G模块</small>
+</td></tr>
+<tr style="display:none;">
+<td class="roundyleft textwhite bgd-blue bl-blue bw-1" style="width:25%;opacity: 0.8;padding-bottom: 5px;"><small>'<b><i></i></b></small>
+</td>
+<td class="roundyright bl-blue bw-1" colspan="3" style="width:75%;padding-bottom: 5px;color: #666;"><small>无特性，不解释</small>
+</td></tr>
+<tr style="display:none;">
+<td class="roundyleft textwhite bgd-blue bl-blue bw-1" style="width:25%;opacity: 0.8;padding-bottom: 5px;"><small>'<b><i></i></b></small>
+</td>
+<td class="roundyright bl-blue bw-1" colspan="3" style="width:75%;padding-bottom: 5px;color: #666;"><small>无特性，不解释</small>
+</td></tr>
+<tr style="display:none;">
+<td class="roundyleft textwhite bgd-blue bl-blue bw-1" style="width:25%;opacity: 0.8;padding-bottom: 5px;"><small>'<b><i></i></b></small>
+</td>
+<td class="roundyright bl-blue bw-1" colspan="3" style="width:75%;padding-bottom: 5px;color: #666;"><small>无特性，不解释</small>
+</td></tr>
+<tr style="display:none;">
+<td class="roundyleft textwhite bgd-blue bl-blue bw-1" style="width:25%;opacity: 0.8;padding-bottom: 5px;"><small>'<b><i></i></b></small>
+</td>
+<td class="roundyright bl-blue bw-1" colspan="3" style="width:75%;padding-bottom: 5px;color: #666;"><small>无特性，不解释</small>
+</td></tr>
+<tr>
+<td class="roundyleft textwhite bgd-blue bl-blue bw-1" style="width:25%;opacity: 0.8;padding-bottom: 5px;"><small><b>接口</b></small>
+</td>
+<td class="roundyright bl-blue bw-1" style="width:25%;padding-bottom: 5px;color: #666;"><small><a href="https://www.waveshare.net/wiki/%E5%88%86%E7%B1%BB:USB%E6%8E%A5%E5%8F%A3" title="分类:USB接口">USB</a></small>
+</td>
+<td class="roundyright bl-blue bw-1" style="width:25%;padding-bottom: 5px;color: #666;"><small><a href="https://www.waveshare.net/w/index.php?title=%E5%88%86%E7%B1%BB:4G%E6%8E%A5%E5%8F%A3&amp;action=edit&amp;redlink=1" class="new" title="分类:4G接口（页面不存在）">4G</a></small>
+</td>
+<td class="roundyright bl-blue bw-1" style="width:25%;padding-bottom: 5px;color: #666;"><small><a href="https://www.waveshare.net/w/index.php?title=%E5%88%86%E7%B1%BB:M.2_B_KEY%E6%8E%A5%E5%8F%A3&amp;action=edit&amp;redlink=1" class="new" title="分类:M.2 B KEY接口（页面不存在）">M.2 B KEY</a></small>
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td colspan="2">
+<table class="align-right roundy" style="background: transparent; border-collapse:collapse;width:100%;display:none;">
+<tbody><tr>
+<td style="width:2%;">
+</td>
+<td style="width:3%;">
+</td>
+<th colspan="2" width="90%" class="alignt-center roundytop bgl-white">相关产品
+</th>
+<td style="width:3%;">
+</td>
+<td style="width:2%;">
+</td></tr>
+<tr>
+<td colspan="6" class="at-c">
+<table class="roundy bw-1 fulltable table table-striped table-bordered mw-collapsed align-left">
+
+<tbody><tr>
+<th>
+</th></tr>
+<tr>
+<th>♦   <a href="https://www.waveshare.net/wiki/SIM7070G_Cat-M/NB-IoT/GPRS_HAT" title="SIM7070G Cat-M/NB-IoT/GPRS HAT">SIM7070G Cat-M/NB-IoT/GPRS HAT</a> <br>
+<p>♦   <a href="https://www.waveshare.net/wiki/SIM7080G_Cat-M/NB-IoT_HAT" title="SIM7080G Cat-M/NB-IoT HAT">SIM7080G Cat-M/NB-IoT HAT</a> <br> 
+♦   <a href="https://www.waveshare.net/wiki/SIM7000C_NB-IoT_HAT" title="SIM7000C NB-IoT HAT">SIM7000C NB-IoT HAT</a><br> 
+♦   <a href="https://www.waveshare.net/wiki/SIM7020C_NB-IoT_HAT" title="SIM7020C NB-IoT HAT">SIM7020C NB-IoT HAT</a> <br> 
+♦   <a href="https://www.waveshare.net/wiki/Pico-SIM7020C-NB-IoT" title="Pico-SIM7020C-NB-IoT">Pico-SIM7020C-NB-IoT</a> <br> 
+♦   <a href="https://www.waveshare.net/wiki/SIM7600CE_4G_HAT" title="SIM7600CE 4G HAT">SIM7600CE 4G HAT</a> <br> 
+♦   <a href="https://www.waveshare.net/wiki/SIM7600G-H_4G_HAT" title="SIM7600G-H 4G HAT">SIM7600G-H 4G HAT</a> <br> 
+♦   <a href="https://www.waveshare.net/wiki/SIM7600E_LTE_Cat-1_HAT" class="mw-redirect" title="SIM7600E LTE Cat-1 HAT">SIM7600E LTE Cat-1 HAT</a> <br> 
+♦   <a href="https://www.waveshare.net/wiki/A7600C1_Cat-1/GSM/GPRS_HAT" title="A7600C1 Cat-1/GSM/GPRS HAT">A7600C1 Cat-1/GSM/GPRS HAT</a> <br> 
+♦   <a href="https://www.waveshare.net/wiki/A7670C_Cat-1_HAT" title="A7670C Cat-1 HAT">A7670C Cat-1 HAT</a> <br> 
+♦   <a href="https://www.waveshare.net/wiki/SIM800C_GSM/GPRS_HAT" title="SIM800C GSM/GPRS HAT">SIM800C GSM/GPRS HAT</a> <br> 
+♦   <a href="https://www.waveshare.net/wiki/GSM/GPRS/GNSS_HAT" title="GSM/GPRS/GNSS HAT">GSM/GPRS/GNSS HAT</a> <br> 
+♦   <a href="https://www.waveshare.net/wiki/GSM/GPRS/GPS_Shield_(B)" title="GSM/GPRS/GPS Shield (B)">GSM/GPRS/GPS Shield (B)</a><br> 
+♦   <a href="https://www.waveshare.net/wiki/SIM7600G-H-M.2" title="SIM7600G-H-M.2">SIM7600G-H-M.2</a><br> 
+♦   <a href="https://www.waveshare.net/wiki/SIM7600G-H-PCIE" title="SIM7600G-H-PCIE">SIM7600G-H-PCIE</a>
+</p>
+</th></tr>
+<tr style="display:none;">
+<th>♦   {{{Product2}}}
+</th></tr>
+<tr style="display:none;">
+<th>♦   {{{Product3}}}
+</th></tr>
+<tr style="display:none;">
+<th>♦   {{{Product4}}}
+</th></tr>
+<tr style="display:none;">
+<th>♦   {{{Product5}}}
+</th></tr>
+<tr style="display:none;">
+<td>—— <span style="font-size:14px;text-align: left;font-weight: bold;">类目1</span> ——
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr style="display:none;">
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:14px;text-align: left;color: #0645ad;font-weight: bold;">♦   类目1</span>
+</td></tr>
+<tr style="font-size: 13px; text-align: left; display: none;">
+<td>
+<p>列表1
+</p>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr style="display:none;">
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:14px;text-align: left;color: #0645ad;font-weight: bold;">♦   类目2</span>
+</td></tr>
+<tr style="font-size: 13px; text-align: left; display: none;">
+<td>
+<p>列表2
+</p>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr style="display:none;">
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:14px;text-align: left;color: #0645ad;font-weight: bold;">♦   类目3</span>
+</td></tr>
+<tr style="font-size: 13px; text-align: left; display: none;">
+<td>
+<p>列表3
+</p>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr style="display:none;">
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:14px;text-align: left;color: #0645ad;font-weight: bold;">♦   类目4</span>
+</td></tr>
+<tr style="font-size: 13px; text-align: left; display: none;">
+<td>
+<p>列表4
+</p>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr style="display:none;">
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:14px;text-align: left;color: #0645ad;font-weight: bold;">♦   类目5</span>
+</td></tr>
+<tr style="font-size: 13px; text-align: left; display: none;">
+<td>
+<p>列表5
+</p>
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+<div class="tabbertab" title="说明" id="myintro">
+
+
+<h1><span id="说明"></span><span class="mw-headline" id=".E8.AF.B4.E6.98.8E">说明</span></h1>
+<h2><span id="产品特性"></span><span class="mw-headline" id=".E4.BA.A7.E5.93.81.E7.89.B9.E6.80.A7">产品特性</span></h2>
+<ul><li>支持拨号上网、电话、短信、TCP、UDP、MQTT、HTTP(S)、FTP(S) 等功能</li>
+<li>支持 GPS、北斗、Glonass、GALILEO、QZSS、LBS 基站定位</li>
+<li>板载 USB 3.1 接口，向下兼容 USB 2.0，可用于接入电脑、树莓派或 Jetson Nano 主板进行高速 4G 上网</li>
+<li>板载 UART、PWR 和 RST 控制引脚，内置电平转换，支持拨码开关使能，可兼容接入 Raspberry Pi 或 Arduino 等主控</li>
+<li>板载 USB Type-C 接口，可通过开关使能，可用于外加电源给模块单独供电，以便外接更多负载，供电稳定且灵活</li>
+<li>板载电源切换开关、复位按键和 LED 指示灯，方便控制模块开关机和查看运行状态</li>
+<li>预留有 4 路 SMA 转 IPEX 天线转换接口，默认出货焊接 2 路，天线安装方便，可灵活自定义更换 SMA 天线位置</li>
+<li>板载音频接口和音频解码芯片，可用于打电话等语音操作</li>
+<li>板载高效能的电源电路，可输出高达 3A 电流</li></ul>
+<h2><span id="调试"></span><span class="mw-headline" id=".E8.B0.83.E8.AF.95"><b>调试</b></span></h2>
+<ul><li>用户在使用模块前除了micro USB线、LTE天线、GPS天线外，还需要准备以下东西：<br></li></ul>
+<pre>一张4G SIM卡（移动、联通或电信卡，未停机且开通GPRS）；
+一根带麦克风耳机线（可选）；
+一个USB TO UART 模块（可选）；
+</pre>
+<ul><li>断电的情况下，装入已经激活的4G SIM卡、插入带麦克风的耳机线（可选），再接上USB线到电脑。<br></li>
+<li>把micro USB线一端接PC机USB接口，另一端接SIM7600G-H-M2 4G HAT的USB接口，PWR灯亮起，NET灯不亮状态。</li>
+<li>看到NET灯开始隔一秒闪烁一次，则模块开始工作</li>
+<li>拨码开关的TX和RX拨到ON一边，通过USB TO UART模块接到电脑等设备，在对应的COM口可以进行AT指令调试。（可选）</li></ul>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600G-H_-M2-TOP.png" class="image fancybox"><img alt="SIM7600G-H -M2-TOP.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/SIM7600G-H_-M2-TOP.png" decoding="async" loading="lazy" width="800" height="490"></a>
+</p>
+<ul><li>下载驱动：<a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/2/24/SIMCOM_Windows_USB_Drivers_V1.0.2.zip">SIM7600X驱动文件</a><br></li>
+<li>把4G HAT的如上文硬件连接图所示，插入Windows电脑（下文以Windows 10操作系统为例）<br></li>
+<li>确保模块已经正常开机:模块开机并入网后，NET灯会闪烁<br></li>
+<li>解压驱动文件--&gt;鼠标左键双击exe驱动文件--&gt;选择安装路径--&gt;NEXT--&gt;等待安装完成--&gt;重启电脑--&gt;完成驱动安装。<br></li></ul>
+<ul class="gallery mw-gallery-traditional">
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:32px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600X-Driver-1_.jpg" class="image fancybox" rel="group"><img alt="SIM7600X-Driver-1 .jpg" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-SIM7600X-Driver-1_.jpg" decoding="async" loading="lazy" width="120" height="86" srcset="/w/upload/thumb/b/be/SIM7600X-Driver-1_.jpg/180px-SIM7600X-Driver-1_.jpg 1.5x, /w/upload/thumb/b/be/SIM7600X-Driver-1_.jpg/240px-SIM7600X-Driver-1_.jpg 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:50px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600X_Drive(0).png" class="image fancybox" rel="group"><img alt="SIM7600X Drive(0).png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-SIM7600X_Drive(0).png" decoding="async" loading="lazy" width="120" height="50" srcset="/w/upload/thumb/0/0a/SIM7600X_Drive%280%29.png/180px-SIM7600X_Drive%280%29.png 1.5x, /w/upload/thumb/0/0a/SIM7600X_Drive%280%29.png/240px-SIM7600X_Drive%280%29.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:28.5px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600_Drive_(2).png" class="image fancybox" rel="group"><img alt="SIM7600 Drive (2).png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-SIM7600_Drive_(2).png" decoding="async" loading="lazy" width="120" height="93" srcset="/w/upload/thumb/2/2f/SIM7600_Drive_%282%29.png/180px-SIM7600_Drive_%282%29.png 1.5x, /w/upload/thumb/2/2f/SIM7600_Drive_%282%29.png/240px-SIM7600_Drive_%282%29.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:28.5px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600_Drive_(3).png" class="image fancybox" rel="group"><img alt="SIM7600 Drive (3).png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-SIM7600_Drive_(3).png" decoding="async" loading="lazy" width="120" height="93" srcset="/w/upload/thumb/6/63/SIM7600_Drive_%283%29.png/180px-SIM7600_Drive_%283%29.png 1.5x, /w/upload/thumb/6/63/SIM7600_Drive_%283%29.png/240px-SIM7600_Drive_%283%29.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:28.5px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600_Drive_(4).png" class="image fancybox" rel="group"><img alt="SIM7600 Drive (4).png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-SIM7600_Drive_(4).png" decoding="async" loading="lazy" width="120" height="93" srcset="/w/upload/thumb/4/40/SIM7600_Drive_%284%29.png/180px-SIM7600_Drive_%284%29.png 1.5x, /w/upload/thumb/4/40/SIM7600_Drive_%284%29.png/240px-SIM7600_Drive_%284%29.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:28.5px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600_Drive_(5).png" class="image fancybox" rel="group"><img alt="SIM7600 Drive (5).png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-SIM7600_Drive_(5).png" decoding="async" loading="lazy" width="120" height="93" srcset="/w/upload/thumb/2/20/SIM7600_Drive_%285%29.png/180px-SIM7600_Drive_%285%29.png 1.5x, /w/upload/thumb/2/20/SIM7600_Drive_%285%29.png/240px-SIM7600_Drive_%285%29.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+</ul>
+<ul><li>按照上述的方法安装好所有识别到的设备，安装好驱动效果如下：<br></li></ul>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600_Drive_(6).png" class="image fancybox"><img alt="SIM7600 Drive (6).png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/SIM7600_Drive_(6).png" decoding="async" loading="lazy" width="411" height="330"></a> 
+<br>
+</p><p><br>
+</p>
+<h3><span id="NET灯工作状态"></span><span class="mw-headline" id="NET.E7.81.AF.E5.B7.A5.E4.BD.9C.E7.8A.B6.E6.80.81">NET灯工作状态</span></h3>
+<p>NET灯的工作状态说明如下图：<br><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:NETLIGHT.png" class="image fancybox"><img alt="NETLIGHT.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/800px-NETLIGHT.png" decoding="async" loading="lazy" width="800" height="192" srcset="/w/upload/7/77/NETLIGHT.png 1.5x"></a>
+</p>
+<h2><span id="测试简要说明"></span><span class="mw-headline" id=".E6.B5.8B.E8.AF.95.E7.AE.80.E8.A6.81.E8.AF.B4.E6.98.8E">测试简要说明</span></h2>
+<h3><span id="常用AT指令"></span><span class="mw-headline" id=".E5.B8.B8.E7.94.A8AT.E6.8C.87.E4.BB.A4">常用AT指令</span></h3>
+<table class="wikitable">
+
+<tbody><tr>
+<th>命令</th>
+<th>说明</th>
+<th>返回值
+</th></tr>
+<tr>
+<td>AT</td>
+<td>AT测试指令</td>
+<td>OK
+</td></tr>
+<tr>
+<td>ATE</td>
+<td>ATE1设置回显<br> ATE0关闭回显</td>
+<td>OK
+</td></tr>
+<tr>
+<td>AT+CGMI</td>
+<td>查询模组制造商</td>
+<td>OK
+</td></tr>
+<tr>
+<td>AT+CGMM</td>
+<td>查询模组型号</td>
+<td>OK
+</td></tr>
+<tr>
+<td>AT+CGSN</td>
+<td>查询产品序列号</td>
+<td>OK
+</td></tr>
+<tr>
+<td>AT+CSUB</td>
+<td>查询模块版本以及芯片</td>
+<td>OK
+</td></tr>
+<tr>
+<td>AT+CGMR</td>
+<td>查询固件版本序列号</td>
+<td>OK
+</td></tr>
+<tr>
+<td>AT+IPREX</td>
+<td>设置模块硬件串口波特率</td>
+<td>+IPREX:<br>OK
+</td></tr>
+<tr>
+<td>AT+CRESET</td>
+<td>复位模块</td>
+<td>OK
+</td></tr>
+<tr>
+<td>AT+CSQ</td>
+<td>网络信号质量查询，返回信号值</td>
+<td>+CSQ: 17,99<br>OK
+</td></tr>
+<tr>
+<td>AT+CPIN?</td>
+<td>查询SIM卡状态，返回READY，表示SIM卡能正常识别</td>
+<td>+CPIN: READY
+</td></tr>
+<tr>
+<td>AT+COPS?</td>
+<td>查询当前运营商，正常联网后会返回运营商信息</td>
+<td>+COPS:<br>OK
+</td></tr>
+<tr>
+<td>AT+CREG?</td>
+<td>查询网络注册状态</td>
+<td>+CREG:<br>OK
+</td></tr>
+<tr>
+<td>AT+CPSI?</td>
+<td>查询UE系统信息</td>
+<td>
+</td></tr>
+<tr>
+<td>AT+CNMP</td>
+<td>网络模式选择命令：<br>2：Automatic<br>13：GSM only<br>38：LTE only<br>48 ： Any modes but LTE<br>... ....</td>
+<td>OK
+</td></tr></tbody></table>
+<font color="red">更多AT指令请查阅：SIM7500_SIM7600 Series_AT Command Manual_V1.07 </font><br><div class="thumb tleft"><div class="thumbinner" style="width:873px;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600_4G_HAT(B)_AT_command.png" class="image fancybox"><img alt="" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/SIM7600_4G_HAT(B)_AT_command.png" decoding="async" loading="lazy" width="871" height="975" class="thumbimage"></a>  <div class="thumbcaption"><div class="magnify"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600_4G_HAT(B)_AT_command.png" class="internal" title="放大"></a></div>AT指令测试示例图</div></div></div><br>
+<div class="sep0px"></div>
+<h1><span id="计算机Windows使用"></span><span class="mw-headline" id=".E8.AE.A1.E7.AE.97.E6.9C.BAWindows.E4.BD.BF.E7.94.A8"><b>计算机Windows使用</b></span></h1>
+<h2><span id="拨号上网"></span><span class="mw-headline" id=".E6.8B.A8.E5.8F.B7.E4.B8.8A.E7.BD.91">拨号上网</span></h2>
+<p><font color="red">【注意】：须用开通了GPRS联网功能并且未停机的SIM卡，国内支持移动、电信和联通手机卡。</font>
+</p>
+<h4><span id="NDIS拨号上网"></span><span class="mw-headline" id="NDIS.E6.8B.A8.E5.8F.B7.E4.B8.8A.E7.BD.91"><b>NDIS拨号上网</b></span></h4>
+<ul><li>目前接入Windows 10操作系统使用时，接上4G DONGLE模块(装有移动/电信/联通的4G卡)，安装好驱动后，目前大部分电脑会自动联网。<br></li>
+<li>如果WINdows无法上网，则需要手动启动NDIS拨号，打开SIM7600 AT端口，发送指令：<br></li></ul>
+<pre>AT$QCRMCALL=1,1+回车
+</pre>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM8200_dial.png" class="image fancybox"><img alt="SIM8200 dial.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/SIM8200_dial.png" decoding="async" loading="lazy" width="800" height="378"></a><br>
+此时NDIS拨号生效，电脑即可连接网络；如果键入拨号指令返回error，发送以下指令设置为NDIS拨号模式再重新拨号：
+</p>
+<pre>AT+CUSBPIDSWITCH=9001,1,1
+</pre>
+<h4><span id="RNDIS拨号上网"></span><span class="mw-headline" id="RNDIS.E6.8B.A8.E5.8F.B7.E4.B8.8A.E7.BD.91"><b>RNDIS拨号上网</b></span></h4>
+<p>此外也可以使用RNDIS拨号上网：<br>
+</p>
+<ul><li>设备装好SIM卡和天线，USB连接到电脑，电源供电</li>
+<li>参考上文安装USB驱动</li>
+<li>打开串口助手，找到AT串口对应的串口号，发送AT指令查询是否注册上网络：</li></ul>
+<pre>AT+CPSI?  
+</pre>
+<ul><li>如果已成功注册上网络，则再发送AT指令使能USB拨号上网：</li></ul>
+<pre>AT+CUSBPIDSWITCH=9011,1,1
+</pre>
+<ul><li>发送成功，返回OK，且 DTU会自动重启。</li>
+<li>观察设备管理器发现多出一些无法识别的设备，比如 RNDIS （带叹号）：</li>
+<li>右键点击RNDIS，搜索设备软件提示窗口，选择“浏览我的计算机”。选择从设备列表中选择“网络适配器”。</li>
+<li>在网络适配器窗口的制造商列表中选择Microsoft Corporation，然后右侧列表中选择“Remote NDIS Compatible Device”即远端NDIS兼容设备。<br></li>
+<li>点击下一步并等待安装结束，RNDIS Kitl设备将会安装成功。至此，拨号功能设置完成，可以看到PC可以通过DTU上网。</li></ul>
+<ul class="gallery mw-gallery-traditional">
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:16px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600X_4G_DTU_PPP_dial_(1).png" class="image fancybox" rel="group"><img alt="SIM7600X 4G DTU PPP dial (1).png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-SIM7600X_4G_DTU_PPP_dial_(1).png" decoding="async" loading="lazy" width="120" height="118" srcset="/w/upload/thumb/7/7e/SIM7600X_4G_DTU_PPP_dial_%281%29.png/180px-SIM7600X_4G_DTU_PPP_dial_%281%29.png 1.5x, /w/upload/thumb/7/7e/SIM7600X_4G_DTU_PPP_dial_%281%29.png/240px-SIM7600X_4G_DTU_PPP_dial_%281%29.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:32px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600X_4G_DTU_PPP_dial_(2).png" class="image fancybox" rel="group"><img alt="SIM7600X 4G DTU PPP dial (2).png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-SIM7600X_4G_DTU_PPP_dial_(2).png" decoding="async" loading="lazy" width="120" height="86" srcset="/w/upload/thumb/5/5c/SIM7600X_4G_DTU_PPP_dial_%282%29.png/180px-SIM7600X_4G_DTU_PPP_dial_%282%29.png 1.5x, /w/upload/thumb/5/5c/SIM7600X_4G_DTU_PPP_dial_%282%29.png/240px-SIM7600X_4G_DTU_PPP_dial_%282%29.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:27.5px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600X_4G_DTU_PPP_dial_(3).png" class="image fancybox" rel="group"><img alt="SIM7600X 4G DTU PPP dial (3).png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-SIM7600X_4G_DTU_PPP_dial_(3).png" decoding="async" loading="lazy" width="120" height="95" srcset="/w/upload/thumb/6/62/SIM7600X_4G_DTU_PPP_dial_%283%29.png/180px-SIM7600X_4G_DTU_PPP_dial_%283%29.png 1.5x, /w/upload/thumb/6/62/SIM7600X_4G_DTU_PPP_dial_%283%29.png/240px-SIM7600X_4G_DTU_PPP_dial_%283%29.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:27.5px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600X_4G_DTU_PPP_dial_(4).png" class="image fancybox" rel="group"><img alt="SIM7600X 4G DTU PPP dial (4).png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-SIM7600X_4G_DTU_PPP_dial_(4).png" decoding="async" loading="lazy" width="120" height="95" srcset="/w/upload/thumb/9/9f/SIM7600X_4G_DTU_PPP_dial_%284%29.png/180px-SIM7600X_4G_DTU_PPP_dial_%284%29.png 1.5x, /w/upload/thumb/9/9f/SIM7600X_4G_DTU_PPP_dial_%284%29.png/240px-SIM7600X_4G_DTU_PPP_dial_%284%29.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:27.5px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600X_4G_DTU_PPP_dial_(5).png" class="image fancybox" rel="group"><img alt="SIM7600X 4G DTU PPP dial (5).png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-SIM7600X_4G_DTU_PPP_dial_(5).png" decoding="async" loading="lazy" width="120" height="95" srcset="/w/upload/thumb/0/0a/SIM7600X_4G_DTU_PPP_dial_%285%29.png/180px-SIM7600X_4G_DTU_PPP_dial_%285%29.png 1.5x, /w/upload/thumb/0/0a/SIM7600X_4G_DTU_PPP_dial_%285%29.png/240px-SIM7600X_4G_DTU_PPP_dial_%285%29.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+</ul>
+<h4><span id="PPP拨号上网"></span><span class="mw-headline" id="PPP.E6.8B.A8.E5.8F.B7.E4.B8.8A.E7.BD.91"><b>PPP拨号上网</b></span></h4>
+<p>如果NDIS或者RNDIS拨号都不能上网，还可使用PPP拨号，操作步骤如下：<br>
+</p>
+<ul><li>网络和Internet 设置-&gt;设置新连接-&gt;连接到Internet-&gt;拨号(D)-&gt;拨打电话号码(D):*99#(其它默认为空)-&gt;连接-&gt;注册-&gt;已连接到Internet</li></ul>
+<ul class="gallery mw-gallery-traditional">
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:15px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Windows-10-PPP-1.png" class="image fancybox" rel="group"><img alt="Windows-10-PPP-1.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/68px-Windows-10-PPP-1.png" decoding="async" loading="lazy" width="68" height="120" srcset="/w/upload/thumb/0/0a/Windows-10-PPP-1.png/103px-Windows-10-PPP-1.png 1.5x, /w/upload/thumb/0/0a/Windows-10-PPP-1.png/137px-Windows-10-PPP-1.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:35.5px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Windows-10-PPP-2.png" class="image fancybox" rel="group"><img alt="Windows-10-PPP-2.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-Windows-10-PPP-2.png" decoding="async" loading="lazy" width="120" height="79" srcset="/w/upload/thumb/7/7e/Windows-10-PPP-2.png/180px-Windows-10-PPP-2.png 1.5x, /w/upload/thumb/7/7e/Windows-10-PPP-2.png/240px-Windows-10-PPP-2.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:27px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Windows-10-PPP-3.png" class="image fancybox" rel="group"><img alt="Windows-10-PPP-3.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-Windows-10-PPP-3.png" decoding="async" loading="lazy" width="120" height="96" srcset="/w/upload/thumb/c/c6/Windows-10-PPP-3.png/180px-Windows-10-PPP-3.png 1.5x, /w/upload/thumb/c/c6/Windows-10-PPP-3.png/240px-Windows-10-PPP-3.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:27px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Windows-10-PPP-4.png" class="image fancybox" rel="group"><img alt="Windows-10-PPP-4.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-Windows-10-PPP-4.png" decoding="async" loading="lazy" width="120" height="96" srcset="/w/upload/thumb/8/88/Windows-10-PPP-4.png/180px-Windows-10-PPP-4.png 1.5x, /w/upload/thumb/8/88/Windows-10-PPP-4.png/240px-Windows-10-PPP-4.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:27px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Windows-10-PPP-5.png" class="image fancybox" rel="group"><img alt="Windows-10-PPP-5.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-Windows-10-PPP-5.png" decoding="async" loading="lazy" width="120" height="96" srcset="/w/upload/thumb/e/e0/Windows-10-PPP-5.png/180px-Windows-10-PPP-5.png 1.5x, /w/upload/thumb/e/e0/Windows-10-PPP-5.png/240px-Windows-10-PPP-5.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:27px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Windows-10-PPP-6.png" class="image fancybox" rel="group"><img alt="Windows-10-PPP-6.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-Windows-10-PPP-6.png" decoding="async" loading="lazy" width="120" height="96" srcset="/w/upload/thumb/3/37/Windows-10-PPP-6.png/180px-Windows-10-PPP-6.png 1.5x, /w/upload/thumb/3/37/Windows-10-PPP-6.png/240px-Windows-10-PPP-6.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+		<li class="gallerybox" style="width: 155px"><div style="width: 155px">
+			<div class="thumb" style="width: 150px;"><div style="margin:27px auto;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Windows-10-PPP-7.png" class="image fancybox" rel="group"><img alt="Windows-10-PPP-7.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/120px-Windows-10-PPP-7.png" decoding="async" loading="lazy" width="120" height="96" srcset="/w/upload/thumb/a/a7/Windows-10-PPP-7.png/180px-Windows-10-PPP-7.png 1.5x, /w/upload/thumb/a/a7/Windows-10-PPP-7.png/240px-Windows-10-PPP-7.png 2x"></a></div></div>
+			<div class="gallerytext">
+			</div>
+		</div></li>
+</ul>
+<h2><span id="GPS调试"></span><span class="mw-headline" id="GPS.E8.B0.83.E8.AF.95">GPS调试</span></h2>
+<h3><span id="GNSS控制实例"></span><span class="mw-headline" id="GNSS.E6.8E.A7.E5.88.B6.E5.AE.9E.E4.BE.8B">GNSS控制实例</span></h3>
+<ul><li>插上GPS天线，<font color="red">并将接收器置于空旷的室外（注意阴雨天气测试不了）</font>，上电需要等待约1分钟才能接收到定位信号；<br></li></ul>
+<div class="floatnone"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600G-H-M2-GPS.png" class="image fancybox"><img alt="SIM7600G-H-M2-GPS.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/SIM7600G-H-M2-GPS.png" decoding="async" loading="lazy" width="800" height="341"></a></div>
+<ul><li>详细测试指令和截图如下：</li></ul>
+<pre>AT+CGPS=1	    //打开GPS
+AT+CGPSINFO       //将GPS信息打印到串口
+AT+CGPS=0       //关闭GPS
+</pre>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600G-H_4G_HAT(B)_GNSS.png" class="image fancybox"><img alt="SIM7600G-H 4G HAT(B) GNSS.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/800px-SIM7600G-H_4G_HAT(B)_GNSS.png" decoding="async" loading="lazy" width="800" height="476" srcset="/w/upload/b/be/SIM7600G-H_4G_HAT%28B%29_GNSS.png 1.5x"></a>
+</p>
+<h2><span id="TCP/IP联网数据"></span><span class="mw-headline" id="TCP.2FIP.E8.81.94.E7.BD.91.E6.95.B0.E6.8D.AE">TCP/IP联网数据</span></h2>
+<p><font color="red">GPRS 调试须用开通了 GPRS 联网功能的 SIM 卡</font><br> 
+</p><p>下例以接入移动 SIM 卡为例: <br> 
+</p>
+<ol><li>正确安装移动手机卡（须开通 GPRS 联网功能）、 GSM 天线、连接好 USB 线到电脑；</li>
+<li>按下 PWR 键，启动模块，等待十几秒；</li>
+<li>观察指示灯是否正常， PWR 指示灯常亮， NET 灯闪烁；</li></ol>
+<h3><span id="设置本地电脑虚拟服务器"></span><span class="mw-headline" id=".E8.AE.BE.E7.BD.AE.E6.9C.AC.E5.9C.B0.E7.94.B5.E8.84.91.E8.99.9A.E6.8B.9F.E6.9C.8D.E5.8A.A1.E5.99.A8">设置本地电脑虚拟服务器</span></h3>
+<p>虚拟服务器定义了广域网服务端口和局域网网络服务器之间的映射关系，所有对该广域网服务端口的访问都会被重新定位给通过IP地址指定的局域网网络服务器。（请参阅您的路由器对应厂商的说明书）<br>
+</p>
+<ol><li>使用浏览器登录到路由器管理界面（具体地址请参阅您的路由器说明书）</li>
+<li>设置端口号：2317（与已有的端口号不冲突即可。本例设为2317）</li>
+<li>设置电脑端内网IP（局域网内电脑获取的IP，可以在本机运行CMD，进入命令行提示符，输入ipconfig查看IPv4地址，本例的电脑内网IP是192.168.1.168），如下图所示:<br></li></ol>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-18.jpg" class="image fancybox"><img alt="Sim7600CE-18.jpg" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/Sim7600CE-18.jpg" decoding="async" loading="lazy" width="1200" height="86"></a>
+</p>
+<h3><span id="获取外网IP"></span><span class="mw-headline" id=".E8.8E.B7.E5.8F.96.E5.A4.96.E7.BD.91IP">获取外网IP</span></h3>
+<p>外网IP可以通过浏览器搜索IP获得，如下图所示:<br>
+<a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-19.jpg" class="image fancybox"><img alt="Sim7600CE-19.jpg" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/Sim7600CE-19.jpg" decoding="async" loading="lazy" width="1000" height="306"></a>
+</p>
+<h3><span id="配置GPRS"></span><span class="mw-headline" id=".E9.85.8D.E7.BD.AEGPRS">配置GPRS</span></h3>
+<pre>AT+CGDCONT=1,"IP","CMNET"     //设置APN
+AT+CSQ       //查询网络信号质量，其中第一个参数为网络信号质量最大为 31，此数值越大说明网络信号越强
+AT+CREG?         //查询网络注册情况，其中第二个参数为 1 则说明已经注册成功
+AT+CIPMODE=1        //设置TCP/IP模式
+AT+CSOCKSETPN=1          //选择TCP/IP应用模式
+AT+CIPMODE=0          //选择TCP/IP应用模式
+AT+NETOPEN         //开启模式
+AT+CIPOPEN=0,"TCP","113.81.233.65",2317         //设置设置TCP 、IP 和端口号，建立 TCP/IP 连接
+AT+CIPSEND=0,9，         //为指定发送9个字符的数据，返回&gt;即可开始发送9个字符内容
+AT+CIPCLOSE=0，         //关闭TCP连接
+AT+NETCLOSE，         //关闭网络
+</pre>
+<p>操作现象如如下图所示：<br><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-20.jpg" class="image fancybox"><img alt="Sim7600CE-20.jpg" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/1200px-Sim7600CE-20.jpg" decoding="async" loading="lazy" width="1200" height="793" srcset="/w/upload/8/87/Sim7600CE-20.jpg 1.5x"></a>
+</p><p><br>
+</p>
+<h2><span id="拔打电话"></span><span class="mw-headline" id=".E6.8B.94.E6.89.93.E7.94.B5.E8.AF.9D">拔打电话</span></h2>
+<ul><li>参考《硬件配置》章节接好LTE天线、SIM卡(须开通电话功能)和带麦克风耳机线，模块开机。</li>
+<li>拨打电话常用指令：<br></li></ul>
+<table class="wikitable">
+
+<tbody><tr>
+<th>AT+CNUM</th>
+<th>查询本机号码(并非所有的SIM卡都支持此指令)</th>
+<th>+CNUM<br>OK
+</th></tr>
+<tr>
+<td>AT+CSDVC</td>
+<td>AT+CSDVC=1：切换到耳机输出<br>AT+CSDVC=3：切换到喇叭输出</td>
+<td>OK
+</td></tr>
+<tr>
+<td>AT+CLVL=?</td>
+<td>查询音量范围</td>
+<td>OK
+</td></tr>
+<tr>
+<td>AT+CLVL=2</td>
+<td>设置音量为2</td>
+<td>OK
+</td></tr>
+<tr>
+<td>ATD&lt;phone_number&gt;;</td>
+<td>ATD10086;  ：拔打移动10086客服电话</td>
+<td>OK
+</td></tr>
+<tr>
+<td>AT+CHUP</td>
+<td>挂断电话</td>
+<td>OK
+</td></tr>
+<tr>
+<td>AT+CLIP=1</td>
+<td>设置来电显示</td>
+<td>OK
+</td></tr>
+<tr>
+<td>ATA</td>
+<td>接听电话</td>
+<td>OK
+</td></tr></tbody></table>
+<ul><li>详细操作截图如下所示：</li></ul>
+<div class="thumb tleft"><div class="thumbinner" style="width:869px;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-5.jpg" class="image fancybox"><img alt="" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/Sim7600CE-5.jpg" decoding="async" loading="lazy" width="867" height="923" class="thumbimage"></a>  <div class="thumbcaption"><div class="magnify"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-5.jpg" class="internal" title="放大"></a></div>拨打电话示例图</div></div></div><br>
+<div class="sep0px"></div>
+<p><font color="red">【注意】：在使用SSCOM串口助手收发AT指令时，须勾选“加回车换行”</font>
+</p>
+<h2><span id="语音输出模式和音量调节"></span><span class="mw-headline" id=".E8.AF.AD.E9.9F.B3.E8.BE.93.E5.87.BA.E6.A8.A1.E5.BC.8F.E5.92.8C.E9.9F.B3.E9.87.8F.E8.B0.83.E8.8A.82">语音输出模式和音量调节</span></h2>
+<pre>AT+CSDVC=1 		//切换到耳机 
+AT+CSDVC =3 	        //切换到喇叭
+AT+CLVL =?		        //查询音量范围，返回 +CLVL: (0-5)   //说明音量有0~5可调
+AT+CLVL=2     	        //设置音量为2，返回 OK
+</pre>
+<h2><span id="接听电话"></span><span class="mw-headline" id=".E6.8E.A5.E5.90.AC.E7.94.B5.E8.AF.9D">接听电话</span></h2>
+<pre>来电串口显示：RING
+发送“ATA”			//接听电话
+发送“AT+CHUP”   	//挂断电话
+</pre>
+<h2><span id="音频参数调试"></span><span class="mw-headline" id=".E9.9F.B3.E9.A2.91.E5.8F.82.E6.95.B0.E8.B0.83.E8.AF.95">音频参数调试</span></h2>
+<pre>AT+CACDBFN=?
++CACDBFN: (Handset_cal.acdb,Handset_tianmai.acdb)	// 建议考虑设置这组参数
+OK
+</pre>
+<p>A.模块开机初始化阶段,在拨打电话之前,增加如下
+</p>
+<pre>AT^PWRCTL=0,1,3		// 主要改善TDD noise效果
+OK
+</pre>
+<p>B.模块建立语音通话过程中
+</p>
+<pre>VOICE CALL:BEGIN  	// 模块通话建立执行,改善通话效果 
+AT+CECM=1      		//回音抑制处理
+OK
+AT+CECH=0x500 		//改善手机端音量效果
+OK
+</pre>
+<p><font color="red">详见“SIM7X00_Audio_Application_Note”文档</font>
+</p><p><br>
+</p>
+<h2><span id="发送英文短信"></span><span class="mw-headline" id=".E5.8F.91.E9.80.81.E8.8B.B1.E6.96.87.E7.9F.AD.E4.BF.A1">发送英文短信</span></h2>
+<ol><li>正确安装 SIM 手机卡和LTE天线、模块USB接口用USB线接电脑，模块开机；</li>
+<li>观察指示灯是否正常， PWR 指示灯常亮，NET 灯闪烁；</li>
+<li>设置当地短信中心：AT+CSCA="+8613800755500"+回车，返回OK。<br>注：中国移动的短信服务中心号是+861380xxxx500,其中 xxxx 是你所在的长途电话区号，短信中心每个地方可能不一样，具体可百度查询或拨打移动联通客服，此短信中心为深圳（0755）；</li>
+<li>AT+CMGF=1   ：设置短信模式为TEXT ；</li>
+<li>AT+CMGS="phone number"&lt;回车&gt; ，设置接收方手机号 ，然后会返回：“&gt;”，发送需要的内容，如“Send massage test!”，结尾不需要回车，编辑完短信后以十六进制的格式发送1A发信息发送(1A是“CTRL+Z”的键值，用于告诉模块执行发送操作，也可以发送1B即“ESC”取消操作),发送成功后模块返回+CMGS：15确认发送成功。如下图所示。<br><div class="thumb tleft"><div class="thumbinner" style="width:1101px;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-6.jpg" class="image fancybox"><img alt="" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/Sim7600CE-6.jpg" decoding="async" loading="lazy" width="1099" height="582" class="thumbimage"></a>  <div class="thumbcaption"><div class="magnify"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-6.jpg" class="internal" title="放大"></a></div>发送英文指令</div></div></div></li></ol>
+<div class="sep0px"></div>
+<h2><span id="接收英文短信"></span><span class="mw-headline" id=".E6.8E.A5.E6.94.B6.E8.8B.B1.E6.96.87.E7.9F.AD.E4.BF.A1">接收英文短信</span></h2>
+<ol><li>手机上发送一条：“This is a receive test for SIM7600X！”到试验模块上</li>
+<li>接受到信息时，串口会制动上报信息，“SM”， 20，代表存在 SM 里面有20条信息了，刚刚发的信息就是第 20 条</li>
+<li>读取信息：AT+CMGR=20 读取第20条信息（AT+CMGL="ALL" 为读取所有信息）</li>
+<li>删除信息：AT+CMGD=20，如下图所示</li>
+<li>将显示的信息通过编码转换器转换成文本。</li></ol>
+<div><ul> 
+<li style="display: inline-block;"> <div class="thumb tnone"><div class="thumbinner" style="width:882px;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-7.jpg" class="image fancybox"><img alt="" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/880px-Sim7600CE-7.jpg" decoding="async" loading="lazy" width="880" height="460" class="thumbimage" srcset="/w/upload/7/77/Sim7600CE-7.jpg 1.5x"></a>  <div class="thumbcaption"><div class="magnify"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-7.jpg" class="internal" title="放大"></a></div>接收英文短信指令</div></div></div> </li>
+<li style="display: inline-block;"> <div class="thumb tnone"><div class="thumbinner" style="width:460px;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-8.jpg" class="image fancybox"><img alt="" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/Sim7600CE-8.jpg" decoding="async" loading="lazy" width="458" height="317" class="thumbimage"></a>  <div class="thumbcaption"><div class="magnify"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-8.jpg" class="internal" title="放大"></a></div>编码转换</div></div></div> </li>
+</ul>
+</div>
+<h2><span id="发送中文短信"></span><span class="mw-headline" id=".E5.8F.91.E9.80.81.E4.B8.AD.E6.96.87.E7.9F.AD.E4.BF.A1">发送中文短信</span></h2>
+<p>1、设置发送短信参数
+</p>
+<pre>AT+CMGF=1             //设置为文本模式 
+AT+CSCS="UCS2"           //设置信息文本为UCS2编码集
+AT+CSMP=17,167,2,25          //设置文本模式参数。 
+AT+CMGS="00310033003400330032003100310039003100300031"          //设置接收方手机号的UCS2集；
+</pre>
+2、等待返回&gt;，此时发送经过软件转换的信息内容（00530049004D003700360030003000584E2D658777ED4FE16D4B8BD5），结尾不需要回车，编辑完短信后以十六进制的格式发送1A发信息发送，如下图所示:<br><div class="thumb tleft"><div class="thumbinner" style="width:1169px;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-10.jpg" class="image fancybox"><img alt="" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/Sim7600CE-10.jpg" decoding="async" loading="lazy" width="1167" height="501" class="thumbimage"></a>  <div class="thumbcaption"><div class="magnify"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-10.jpg" class="internal" title="放大"></a></div>发送中文短信</div></div></div>
+<div class="sep0px"></div>
+<h2><span id="接收中文短信"></span><span class="mw-headline" id=".E6.8E.A5.E6.94.B6.E4.B8.AD.E6.96.87.E7.9F.AD.E4.BF.A1">接收中文短信</span></h2>
+<p>1、设置短信接收参数
+</p>
+<pre>AT+CMGF=1    	 //设置文本显示
+AT+CSCS="GSM"	//设置GSM编码集
+AT+CNMI=2,1   	//设置新信息提醒
+</pre>
+<p>2、接受到信息时，串口会自动上报信息，如下图所示读取返回的第21条信息：
+</p>
+<pre>AT+CMGR=21        //读取序号21的短信内容
+</pre>
+3、在软件中把信息转成中文，如下图所示：<br><div class="thumb tleft"><div class="thumbinner" style="width:1177px;"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-9.jpg" class="image fancybox"><img alt="" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/Sim7600CE-9.jpg" decoding="async" loading="lazy" width="1175" height="633" class="thumbimage"></a>  <div class="thumbcaption"><div class="magnify"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-9.jpg" class="internal" title="放大"></a></div>接收中文短信</div></div></div>
+</div>
+<div class="tabbertab" title="用于树莓派">
+<h1><span id="树莓派使用"></span><span class="mw-headline" id=".E6.A0.91.E8.8E.93.E6.B4.BE.E4.BD.BF.E7.94.A8">树莓派使用</span></h1>
+<h3><span id="树莓派Raspbian上网"></span><span class="mw-headline" id=".E6.A0.91.E8.8E.93.E6.B4.BERaspbian.E4.B8.8A.E7.BD.91"><b>树莓派Raspbian上网</b></span></h3>
+<p>Raspberry Pi 4B、者树莓派3B+或CM4-IO-BASE-A/B 主板，配套定制的转接头，无须额外连接 USB 线；若用于其它嵌入式主板或 PC 机，可通过配套的双头 usb3.0 数据线 接入使用；如下图所示：<br>
+</p>
+<div class="floatnone"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600-M2-raspberry-dial.jpg" class="image fancybox"><img alt="SIM7600-M2-raspberry-dial.jpg" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/800px-SIM7600-M2-raspberry-dial.jpg" decoding="async" loading="lazy" width="800" height="600" srcset="/w/upload/thumb/3/3c/SIM7600-M2-raspberry-dial.jpg/1200px-SIM7600-M2-raspberry-dial.jpg 1.5x, /w/upload/3/3c/SIM7600-M2-raspberry-dial.jpg 2x"></a></div><div class="sep0px"></div>
+<p><font color="red"><b>关于树莓派拨号上网相关的具体操作，请参考以下链接：</b></font><br>
+</p>
+<ul><li><a href="https://www.waveshare.net/wiki/%E6%A0%91%E8%8E%93%E6%B4%BERNDIS%E6%8B%A8%E5%8F%B7%E4%B8%8A%E7%BD%91" title="树莓派RNDIS拨号上网">树莓派RNDIS拨号上网</a>（推荐）<br></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=962">NDIS拨号上网</a> <br></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/NDIS%E6%8B%A8%E5%8F%B7%E5%B9%B6%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF">NDIS拨号并开机自启</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/SIM7600X_ECM_%E6%8B%A8%E5%8F%B7">SIM7600X ECM拨号上网</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/article-933-1.html">PPP拨号上网</a>  <a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/SIM7X00-PPP-dial-up-Video">（视频教程）</a><br></li></ul>
+<p><br>
+</p>
+<h3><span id="&quot;树莓派minicom发送AT指令调试&quot;"></span><span class="mw-headline" id=".22.E6.A0.91.E8.8E.93.E6.B4.BEminicom.E5.8F.91.E9.80.81AT.E6.8C.87.E4.BB.A4.E8.B0.83.E8.AF.95.22">"树莓派minicom发送AT指令调试"</span></h3>
+<p>1、将模块插入树莓派中<br>
+2、安装minicom，minicom是linux平台串口调试工具：<br>
+</p>
+<pre>sudo apt-get install minicom
+</pre>
+<p>3、USB和UART串口AT指令调试
+</p>
+<ul><li>执行minicom -D /dev/ttyUSB2。（默认波特率为115200）<br></li></ul>
+<pre> sudo minicom -D /dev/ttyUSB2
+</pre>
+<ul><li>在minicom中输入以下AT指令打开UART。（默认波特率为115200）<br></li></ul>
+<pre> AT+CCUART=1
+</pre>
+<ul><li>将SIM76XX 对应所有的A丝印置于ON，用minicom选择对应的串口，树莓派5/3B/2B/zero,用户串口设备号为ttyAMA0，波特率默认为115200<br></li></ul>
+<pre> sudo minicom -D /dev/ttyS0 -b 115200
+</pre>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600X-A.png" class="image fancybox"><img alt="SIM7600X-A.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/SIM7600X-A.png" decoding="async" loading="lazy" width="368" height="299"></a>
+</p>
+<ul><li>以AT同步测试为例，发送相关指令，如下图所示：<br><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Sim7600CE-29.jpg" class="image fancybox"><img alt="Sim7600CE-29.jpg" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/Sim7600CE-29.jpg" decoding="async" loading="lazy" width="880" height="564"></a><br></li></ul>
+<p><font color="red">* minicom可通过按Ctrl+A，再按下Z进入设置模式，选择X退出。如果发送指令没有显示，请发送指令ATE=1 
++回车-&gt;开回显</font>
+</p>
+<h3><span id="示例程序"></span><span class="mw-headline" id=".E7.A4.BA.E4.BE.8B.E7.A8.8B.E5.BA.8F">示例程序</span></h3>
+<p>1、将模块插入和树莓派连接后；
+2、下载示例程序到/home/pi/ 路径下；
+</p>
+<pre>wget <a target="_blank" rel="nofollow noreferrer noopener" class="external free" href="https://www.waveshare.net/w/upload/5/5c/SIM7600G-H-4G-HAT-B-Demo.zip">https://www.waveshare.net/w/upload/5/5c/SIM7600G-H-4G-HAT-B-Demo.zip</a>
+sudo apt-get install p7zip-full
+7z x SIM7600G-H-4G-HAT-B-Demo.zip 
+</pre>
+<p>sudo chmod 777 -R /home/pi/SIM7600X-4G-HAT\(B\)-Demo
+</p><p>3、分别进到对应实例目录下，编译和运行程序，相关指令说明如下(以PhoneCall.py程序为例)：
+</p>
+<pre>cd SIM7600G-H-4G-HAT-B-Demo/Raspberry/python/PhoneCall/      //进入PhoneCall.py 所在的文件夹
+sudo apt-get install python3-pip
+sudo pip3 install pyserial
+</pre>
+<p>sudo pip3 install RPi.GPIO
+</p>
+<pre>sudo python PhoneCall.py       //运行程序
+</pre>
+<h4><span id="AT指令例程"></span><span class="mw-headline" id="AT.E6.8C.87.E4.BB.A4.E4.BE.8B.E7.A8.8B"><b>AT指令例程</b></span></h4>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:7600B_AT.png" class="image fancybox"><img alt="7600B AT.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/7600B_AT.png" decoding="async" loading="lazy" width="800" height="330"></a>
+</p>
+<h4><span id="PHONECALL打电话例程"></span><span class="mw-headline" id="PHONECALL.E6.89.93.E7.94.B5.E8.AF.9D.E4.BE.8B.E7.A8.8B"><b>PHONECALL打电话例程</b></span></h4>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:7600B_phone.png" class="image fancybox"><img alt="7600B phone.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/800px-7600B_phone.png" decoding="async" loading="lazy" width="800" height="479" srcset="/w/upload/1/13/7600B_phone.png 1.5x"></a>
+</p>
+<h4><span id="SMS短信收发例程"></span><span class="mw-headline" id="SMS.E7.9F.AD.E4.BF.A1.E6.94.B6.E5.8F.91.E4.BE.8B.E7.A8.8B"><b>SMS短信收发例程</b></span></h4>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:7600B_message.png" class="image fancybox"><img alt="7600B message.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/800px-7600B_message.png" decoding="async" loading="lazy" width="800" height="593" srcset="/w/upload/2/28/7600B_message.png 1.5x"></a><br>
+备注: 示例程序是发送英文短信，如果发送过中文，需要用以下指令改为英文格式：
+</p>
+<pre>AT+CSMP=17,167,0,240
+</pre>
+<h4><span id="GPS定位例程"></span><span class="mw-headline" id="GPS.E5.AE.9A.E4.BD.8D.E4.BE.8B.E7.A8.8B"><b>GPS定位例程</b></span></h4>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:7600B_GPS.png" class="image fancybox"><img alt="7600B GPS.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/800px-7600B_GPS.png" decoding="async" loading="lazy" width="800" height="737" srcset="/w/upload/5/5d/7600B_GPS.png 1.5x"></a>
+</p>
+<h4><span id="TCP网路通信例程"></span><span class="mw-headline" id="TCP.E7.BD.91.E8.B7.AF.E9.80.9A.E4.BF.A1.E4.BE.8B.E7.A8.8B"><b>TCP网路通信例程</b></span></h4>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:7600B_TCP.png" class="image fancybox"><img alt="7600B TCP.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/7600B_TCP.png" decoding="async" loading="lazy" width="900" height="1285"></a>
+</p>
+<h4><span id="FTP上传和下载例程"></span><span class="mw-headline" id="FTP.E4.B8.8A.E4.BC.A0.E5.92.8C.E4.B8.8B.E8.BD.BD.E4.BE.8B.E7.A8.8B"><b>FTP上传和下载例程</b></span></h4>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:7600B_FTP1.png" class="image fancybox"><img alt="7600B FTP1.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/7600B_FTP1.png" decoding="async" loading="lazy" width="800" height="1160"></a><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:7600B_FTP2.png" class="image fancybox"><img alt="7600B FTP2.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/7600B_FTP2.png" decoding="async" loading="lazy" width="800" height="429"></a>
+</p><p>更多示例程序持续更新中~~
+</p>
+</div>
+<p><br>
+</p>
+<div class="tabbertab" title="用于Jetson Nano">
+<h2><span id="Jetson_Nano例程"></span><span class="mw-headline" id="Jetson_Nano.E4.BE.8B.E7.A8.8B">Jetson Nano例程</span></h2>
+<h3><span id="硬件连接"></span><span class="mw-headline" id=".E7.A1.AC.E4.BB.B6.E8.BF.9E.E6.8E.A5">硬件连接</span></h3>
+<p>Jetson Nano板载USB接口，SIM7600X 4G HAT(B)通过Micro USB接入到Jetson Nano的USB接口使用。
+<a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600-M2-nano.png" class="image fancybox"><img alt="SIM7600-M2-nano.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/SIM7600-M2-nano.png" decoding="async" loading="lazy" width="800" height="532"></a>
+</p>
+<h3><span id="Jetson_Nano_minicom串口调试"></span><span class="mw-headline" id="Jetson_Nano_minicom.E4.B8.B2.E5.8F.A3.E8.B0.83.E8.AF.95">Jetson Nano minicom串口调试</span></h3>
+<p>1、将SIM7600X 4G HAT(B)接入Jetson Nano中，待三秒后开机<br>
+2、<a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/article-894-1.html">使用SERIAL登录Jetson Nano终端</a>，安装minicom，在终端下输入:
+</p>
+<pre>sudo apt-get install minicom
+</pre>
+<p>3、运行minicom进行调试，在终端下输入
+</p>
+<pre>sudo minicom -D /dev/ttyUSB2 -b 115200
+</pre>
+<p>4、 发送AT指令测试，退出minicom先按Ctrl+A，再按X，最后按ENTER<br>
+<a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600_G-H_B_Jetson.png" class="image fancybox"><img alt="SIM7600 G-H B Jetson.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/SIM7600_G-H_B_Jetson.png" decoding="async" loading="lazy" width="800" height="387"></a>
+</p><p>更多示例程序持续更新中… …
+</p>
+</div>
+<div class="tabbertab" title="资料" id="myresources">
+<h1><span id="资料"></span><span class="mw-headline" id=".E8.B5.84.E6.96.99">资料</span></h1>
+<p><br>
+</p>
+<h2><span id="视频"></span><span class="mw-headline" id=".E8.A7.86.E9.A2.91">视频</span></h2>
+<ul><li><a href="https://www.waveshare.net/wiki/SIM7X00-PPP-dial-up-Video" title="SIM7X00-PPP-dial-up-Video">树莓派Raspbian ppp拨号视频</a><a href="https://www.waveshare.net/wiki/SIM7X00-PPP-dial-up-Video" title="SIM7X00-PPP-dial-up-Video"><img alt="Video-logo.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/23px-Video-logo.png" decoding="async" loading="lazy" width="23" height="23" srcset="/w/upload/thumb/5/57/Video-logo.png/35px-Video-logo.png 1.5x, /w/upload/thumb/5/57/Video-logo.png/46px-Video-logo.png 2x"></a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/SIM7X00-NDIS_dial-up-networking-Video">树莓派Raspbian下4G NDIS拨号上网视频</a><a href="https://www.waveshare.net/wiki/SIM7X00-PPP-dial-up-Video" title="SIM7X00-PPP-dial-up-Video"><img alt="Video-logo.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/23px-Video-logo.png" decoding="async" loading="lazy" width="23" height="23" srcset="/w/upload/thumb/5/57/Video-logo.png/35px-Video-logo.png 1.5x, /w/upload/thumb/5/57/Video-logo.png/46px-Video-logo.png 2x"></a>
+<ul><li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=962">树莓派系列教程：通过SIM7600 4G模块NDIS拨号</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/%E6%A0%91%E8%8E%93%E6%B4%BERNDIS%E6%8B%A8%E5%8F%B7%E4%B8%8A%E7%BD%91">树莓派RNDIS拨号上网</a></li></ul></li></ul>
+<h2><span id="文档"></span><span class="mw-headline" id=".E6.96.87.E6.A1.A3">文档</span></h2>
+<ul><li><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600-size.png" title="文件:SIM7600-size.png">尺寸图</a></li></ul>
+<h2><span id="程序"></span><span class="mw-headline" id=".E7.A8.8B.E5.BA.8F">程序</span></h2>
+<p><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://files.waveshare.com/wiki/SIM7600G-H/Demo/SIM7600G-H-4G-HAT-python.zip">示例程序</a>
+</p>
+<h2><span id="软件"></span><span class="mw-headline" id=".E8.BD.AF.E4.BB.B6">软件</span></h2>
+<ul><li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/2/24/SIMCOM_Windows_USB_Drivers_V1.0.2.zip">SIM7600驱动</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/6/62/CP210x_USB_TO_UART.zip">CP2102驱动</a><br></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/2/20/SIM7600-AT-SSCOM-CN.7z">SIM7600串口调试助手</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/c/cc/GPS-Software.7z">GPS调试工具</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/a/a6/TCP-Test_Tool.7z">TCP测试工具</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/b/b4/Xshell.7z">Xshell</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/4/4f/VLC-media-player.7z">VLC media player</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/b/b3/Unicode.7z">Unicode转换软件</a></li></ul>
+<h2><span id="数据手册"></span><span class="mw-headline" id=".E6.95.B0.E6.8D.AE.E6.89.8B.E5.86.8C">数据手册</span></h2>
+<p><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://cn.simcom.com/product/SIM7600X-H.html">SIM7600G-H官方资料链接</a>
+</p>
+<h2><span id="工程图纸"></span><span class="mw-headline" id=".E5.B7.A5.E7.A8.8B.E5.9B.BE.E7.BA.B8">工程图纸</span></h2>
+<ul><li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://files.waveshare.com/wiki/SIM7600G-H/3D/SIM7600X-H-M2_ASM_210830.zip">SIM7600G-H-M.2 3D 图纸</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://files.waveshare.com/wiki/SIM7600G-H/3D/M.2%20TO%204G-5G%20HAT.step">M.2 TO 4G-5G HAT 3D 图纸</a></li></ul>
+<h2><span id="相关应用案例"></span><span class="mw-headline" id=".E7.9B.B8.E5.85.B3.E5.BA.94.E7.94.A8.E6.A1.88.E4.BE.8B">相关应用案例</span></h2>
+<ul><li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/%E5%A6%82%E4%BD%95%E5%B0%86Raspberry_Pi_Zero_W%E5%8F%98%E6%88%903G_4G%E8%B7%AF%E7%94%B1%E5%99%A8">如何将Raspberry Pi Zero W变成3G 4G路由器</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1048">SIM7600CE-T+树莓派4制作OpenWrt软路由，4G高速联网，移动便携4G路由器</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/SIMXXX_%E5%9C%A8%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE%E5%AE%9A%E4%BD%8D%E5%88%B0%E6%88%91%E7%9A%84%E4%BD%8D%E7%BD%AE">SIMXXX 在高德地图定位到我的位置</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.jianshu.com/p/c470f2ab739d">Python+树莓派 制作IoT（物联网）门控设备</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://gitee.com/iqiar/QiarAI">树莓派AI反电销骚扰，智能秘书开源项目，采用Golang语言+前端Vue开发，自带新手向导</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://blog.csdn.net/weixin_48268500/article/details/107531220">树莓派4B 在Centos系统下使用SIM7600G-H进行GPS(直接插在树莓派上使用)</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://blog.csdn.net/weixin_48268500/article/details/107528823">树莓派4B 在Centos系统下使用SIM7600G-H进行4G上网(PPPD模式)(直接插在树莓派上使用)</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.cnblogs.com/mirage-mc/p/12841883.html">树莓派python编程实现通过SIM7600X进行GPS定位</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.bilibili.com/video/BV1mT4y1u7kK/?spm_id_from=trigger_reload">树莓派+SIM7600CE MQTT</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=933">Jetson Nano系列教程11：采用4G模块上网(ppp拨号方式)</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=929">Jetson Nano系列教程10：采用4G模块上网(NDIS拨号方式)</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://blog.csdn.net/qq_43231904/article/details/111652410?spm=1001.2014.3001.5501">内网穿透，获取公网IP</a></li></ul>
+<h2><span id="相关教程"></span><span class="mw-headline" id=".E7.9B.B8.E5.85.B3.E6.95.99.E7.A8.8B">相关教程</span></h2>
+<table>
+
+<tbody><tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr>
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:16px"><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Raspberry_Pi_Documentation">树莓派入门教程（新）</a></span>
+</td></tr>
+<tr style="font-size: 16px; display: none;">
+<td>
+<ul><li class="mw-empty-elt"></li></ul>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr>
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:16px"><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=list&amp;catid=29">树莓派入门教程</a></span>
+</td></tr>
+<tr style="font-size: 16px; display: none;">
+<td>
+<ul><li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=594">树莓派系列教程1：人生若只如初见</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=595">树莓派系列教程2：树莓派烧写镜像</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=596">树莓派系列教程3：访问树莓派</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=741">树莓派系列教程3：访问树莓派之SSH篇</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=743">树莓派系列教程3：访问树莓派之WiFi篇</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=597">树莓派系列教程4：树莓派raspi-config配置</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=598">树莓派系列教程5：linux常用命令以及vi/vim编辑器</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=599">树莓派教程系列6：文件共享(samba)</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=742">树莓派教程系列7：wiringPi、bcm2835、python库安装</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=600">树莓派系列教程8：如何点亮一个LED灯(上）</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=601">树莓派系列教程8&nbsp;: 如何点亮一个LED灯（下）</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=602">树莓派系列教程9：按键</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=603">树莓派系列教程10：I2C</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=604">树莓派系列教程11：I2C编程</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=605">树莓派系列教程12：I2C总线控制BMP180</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=606">树莓派系列教程13：Serial串口</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=598">树莓派系列教程5：linux常用命令以及vi/vim编辑器</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=622">树莓派系列教程15：红外遥控</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=623">树莓派系列教程16：RTC</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=624">树莓派系列教程17：PCF8591 AD/DA</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=625">树莓派系列教程18：SPI</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=744">Alphabot树莓派教程：变身路由器</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=745">Alphabot树莓派教程：刷LEDE(OpenWRT)系统变身路由器</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=789">树莓派引脚对照表</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=790">SIM868 ppp拨号上网</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=962">SIM7600 4G NDIS拨号上网</a></li></ul>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr>
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:16px"><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=list&amp;catid=65">树莓派OpenCV教程</a></span>
+</td></tr>
+<tr style="font-size: 16px; display: none;">
+<td>
+<ul><li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=900">树莓派OpenCV系列教程1：开发环境搭建</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=901">树莓派OpenCV系列教程2：摄像头的基本使用</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=902">树莓派OpenCV系列教程3：IDE及图像存储的数据结构</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=903">树莓派OpenCV系列教程4：图像与视频载入、显示、输出</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=904">树莓派OpenCV系列教程5：ROI，绘图一站式解析</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=910">树莓派OpenCV系列教程6：10行代码添加国旗</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=911">树莓派OpenCV系列教程7：OpenCV中HighGUI及相关上位机开发</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=912">树莓派OpenCV系列教程8：绘图板综合项目</a></li></ul>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr>
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:16px"><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=list&amp;catid=66">树莓派littleGL系列教程</a></span>
+</td></tr>
+<tr style="font-size: 16px; display: none;">
+<td>
+<ul><li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=923">树莓派littlevGL系列教程：littlevGL简单了解</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=924">树莓派littlevGL系列教程：基于Qt creator</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=925">树莓派littlevGL系列教程：基本对象</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=926">树莓派littlevGL系列教程：基本对象</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=927">树莓派littlevGL系列教程：圆弧对象</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=928">树莓派littlevGL系列教程：进度条</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=930">树莓派littlevGL系列教程：单按钮控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=931">树莓派littlevGL系列教程：矩阵按钮控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=932">树莓派littlevGL系列教程：日历控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=935">树莓派littlevGL系列教程：画布控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=936">树莓派littlevGL系列教程：复选框控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=937">树莓派littlevGL系列教程：图表控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=938">树莓派littlevGL系列教程：容器控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=939">树莓派littlevGL系列教程：仪表控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=940">树莓派littlevGL系列教程：下拉列表控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=941">树莓派littlevGL系列教程：图片控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=942">树莓派littlevGL系列教程：图片按钮控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=943">树莓派littlevGL系列教程：键盘控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=944">树莓派littlevGL系列教程：标签控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=945">树莓派littlevGL系列教程：线条控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=946">树莓派littlevGL系列教程：列表控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=947">树莓派littlevGL系列教程：线表控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=948">树莓派littlevGL系列教程：消息弹窗控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=949">树莓派littlevGL系列教程：页面控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=950">树莓派littlevGL系列教程：预加载控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=951">树莓派littlevGL系列教程：滑动列表控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=952">树莓派littlevGL系列教程：滑动条控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=953">树莓派littlevGL系列教程：微调框控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=954">树莓派littlevGL系列教程：滑动按钮控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=955">树莓派littlevGL系列教程：表格控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=956">树莓派littlevGL系列教程：选项卡控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=957">树莓派littlevGL系列教程：窗口控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=958">树莓派littlevGL系列教程：汉字显示</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=959">树莓派littlevGL系列教程：事件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=960">树莓派littlevGL系列教程：任务系统</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=961">树莓派littlevGL系列教程：样式都有哪些属性</a></li></ul>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr>
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:16px"><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=list&amp;catid=67&amp;page=1">树莓派QT教程</a></span>
+</td></tr>
+<tr style="font-size: 16px; display: none;">
+<td>
+<ul><li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1000">树莓派Qt系列教程1：Qt GUI框架简述及了解</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1027">树莓派Qt系列教程2：开发环境搭建</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1006">树莓派Qt系列教程3：新建Qt Quick项目</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1004">树莓派Qt系列教程4：Qt基础知识理解</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1005">树莓派Qt系列教程5：Qt Quick 之 QML 入门</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1008">树莓派Qt系列教程6： QML语言基础</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1009">树莓派Qt系列教程7： 按钮控件类</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1010">树莓派Qt系列教程8： 信号与槽</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1011">树莓派Qt系列教程9：鼠标事件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1012">树莓派Qt系列教程10：键盘事件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1013">树莓派Qt系列教程11：定时器事件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1014">树莓派Qt系列教程12：布局管理(上)</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1015">树莓派Qt系列教程12：布局管理(下)</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1016">树莓派Qt系列教程13：进度条ProgressBar</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1017">树莓派Qt系列教程14：滑块Slider</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1018">树莓派Qt系列教程15：滚动控件Scroll</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1019">树莓派Qt系列教程16：轮选框SpinBox</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1020">树莓派Qt系列教程17：组合框ComboBox</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1021">树莓派Qt系列教程18：行编辑输入控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1022">树莓派Qt系列教程19：块编辑输入控件</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1023">树莓派Qt系列教程20：对话框</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1024">树莓派Qt系列教程21：滑动导航模型SwipeView</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1025">树莓派Qt系列教程22：栈式导航模型StackView</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1028">树莓派Qt系列教程23：图像image</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1034">树莓派Qt系列教程24：BusyIndicator和Delay</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1035">树莓派Qt系列教程25：Dial和Switch</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1036">树莓派Qt系列教程26：Menu、Popup和Drawer</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1038">树莓派Qt系列教程27：TabBar和ToolBar</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1039">树莓派Qt系列教程28：ToolSeparator、ToolT</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1040">树莓派Qt系列教程29(上)：Qml和C++混合编程</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1041">树莓派Qt系列教程29(下)：Qml和C++混合编程</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1042">树莓派Qt系列教程30：源码方式搭建Qt开发环境</a></li></ul>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr>
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:16px"><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=list&amp;catid=69">树莓派OpenWrt教程</a></span>
+</td></tr>
+<tr style="font-size: 16px; display: none;">
+<td>
+<ul><li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1046">树莓派OpenWrt入门教程1：系统编译和配置</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/study/portal.php?mod=view&amp;aid=1048">树莓派OpenWrt入门教程2：打造移动便携的树莓派4G无线路由器</a></li></ul>
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+</div>
+<div class="tabbertab" title="FAQ" id="myfaq">
+<h2><span class="mw-headline" id="FAQ">FAQ</span></h2>
+<br><div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion1">
+								<b>问题：</b>NET灯状态说明？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion1" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:7600-net-led.png" class="image fancybox"><img alt="7600-net-led.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/7600-net-led.png" decoding="async" loading="lazy" width="942" height="323"></a>
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p><p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion2">
+								<b>问题：</b>收不到GPS信号，没有获取到位置信息怎么办？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion2" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<ul><li>插上GPS天线到GNSS天线座子，并将接收器标签面朝下置于空旷的室外（注意阴雨天气测试不了），上电需要等待约1分钟才能接收到定位信号；</li></ul>
+<style data-mw-deduplicate="TemplateStyles:r75601">.mw-parser-output .note{background-position:left 7px top 50%;padding:0.5em 0.5em 0.5em 40px;margin:0.5em 0;overflow:hidden;background-color:#f8f9fa;background-repeat:no-repeat;border:1px solid #ddd}.mw-parser-output .note-inline{display:inline-block;vertical-align:middle}.mw-parser-output .note-info{background-color:#f6efe5;background-size:25px;border-color:#ac6600;padding-left:40px;min-height:28px}.mw-parser-output .note-reminder{background-color:#fff9ea;background-size:25px;border-color:#fc3;min-height:28px}.mw-parser-output .note-warn{background-color:#fff9ea;background-size:25px;border-color:#fc3;min-height:28px}.mw-parser-output .note-error{background-color:#fee7e6;background-size:25px;border-color:#c33;min-height:28px}</style><div role="note" class="note note-info">由于 GPS 室内搜星不稳定，请将模块或者天线放到阳台或窗户旁，或者直接在户外进行实验.</div>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:GPS_outdoors.png" class="image fancybox"><img alt="GPS outdoors.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/GPS_outdoors.png" decoding="async" loading="lazy" width="600" height="640"></a>
+</p>
+<ul><li>对于M2的模组，一般要用无源GPS天线，如果您没有无源的定位天线，配套的4G/5G 天线也可以的，更换4G/5G天线上去，（4G/5G 天线没有配延长线）请放到户外定位：</li></ul>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:No-gps-antenna.jpg" class="image fancybox"><img alt="No-gps-antenna.jpg" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/600px-No-gps-antenna.jpg" decoding="async" loading="lazy" width="600" height="365" srcset="/w/upload/thumb/b/b6/No-gps-antenna.jpg/900px-No-gps-antenna.jpg 1.5x, /w/upload/b/b6/No-gps-antenna.jpg 2x"></a>
+</p>
+<ul><li>如果用的是SIM7600G-H-M2模组，也可以使用以下指令给天线供电，让其可以使用有源天线</li></ul>
+<pre>AT+CVAUXS=1</pre>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion3">
+								<b>问题：</b>SIM卡类型？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion3" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>支持Nano SIM卡，如下图所示，如果是Micro或标准卡需要取下卡套。
+<br><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM_card_size.png" class="image fancybox"><img alt="SIM card size.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/SIM_card_size.png" decoding="async" loading="lazy" width="800" height="512"></a><br>
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion4">
+								<b>问题：</b>SIM7600X开机后NET灯不闪烁，网络异常怎么办？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion4" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>这种情况可能是没有成功入网，可按照下面步骤排查：<br>
+1.首先排查硬件连接:
+</p>
+<ul><li>检查MAIN天线是否接好；<br></li>
+<li>接入的SIM卡是否可以在手机等设备上正常通话和上网：<br></li>
+<li>接入树莓派的话，模块是否进入飞行模式；<br></li></ul>
+<p>2.确认硬件无问题后，软件可以用这些指令：<br>
+</p>
+<ul><li>检查sim卡是否接触良好：AT+CPIN?  <br></li>
+<li>检查网络模式设置是否正确：AT+CNMP?<br></li>
+<li>检查当前环境的信号质量：AT+CSQ<br></li>
+<li>检查运营商接入情况：AT+COPS?<br></li>
+<li>检查联网情况：AT+CPSI?<br></li>
+<li>检查是否成功注册到网络：AT+CGREG?<br></li></ul>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600X_network_check.png" class="image fancybox"><img alt="SIM7600X network check.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/SIM7600X_network_check.png" decoding="async" loading="lazy" width="800" height="659"></a>
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion5">
+								<b>问题：</b>发送AT+CPIN?时，返回ERROR
+							</a>
+						</h4>
+					</div>
+					<div id="accordion5" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>这个问题，一般是由于SIM卡和模块的SIM卡座接触不良导致的。<br>
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion6">
+								<b>问题：</b>如果您注册到网络，成功拨号且获取到IP，但是无法上网，不能ping通怎么办？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion6" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>可能是没有获取到APN，一般APN是能够自动获取的，有些地区（物联网卡）需要手动获取，例如可以通过以下指令设置：
+</p>
+<pre>AT+CGDCONT=1,"IP","CMNET"   //CMNET为中国移动的apn，不同运营商apn不一样</pre>
+<a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600X_apn.png" class="image fancybox"><img alt="SIM7600X apn.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/SIM7600X_apn.png" decoding="async" loading="lazy" width="800" height="128"></a></div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion7">
+								<b>问题：</b>为什么我这里拨号上网的速度很慢？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion7" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<ul><li>一般地，SIM7600默认配置为自动选择网络制式，很可能选择为2G上网；如果需要强制使用4G模式，则需输入以下AT指令配置：<br></li></ul>
+<pre>AT+CNMP=38    //固定4G LTE，如果当地没有4G覆盖，可能会无法注册到网络</pre>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Firm_4G_LTE.png" class="image fancybox"><img alt="Firm 4G LTE.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/Firm_4G_LTE.png" decoding="async" loading="lazy" width="800" height="145"></a>
+</p>
+<ul><li>如果已经固定了4G，速度还是不理想，可能是频段问题；</li></ul>
+<pre>AT+CNBP?  //备份当前频段（返回的频段信息可以复制到记事本等）</pre>
+<pre>AT+CNBP=0x0002000000400183,0x000001E000000000,0x0000000000000021    //返回OK后，测速</pre>
+<pre>AT+CNBP=0x0002000004400180,0x000001E000000000,0x000000000000003F   //如果速度没有改善，试下这个</pre>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600_band_speed.png" class="image fancybox"><img alt="SIM7600 band speed.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/SIM7600_band_speed.png" decoding="async" loading="lazy" width="800" height="281"></a>
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion8">
+								<b>问题：</b>SIM7600固件升级中失败，提示如下图所示，该怎么解决？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion8" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600X_firmware_update.png" class="image fancybox"><img alt="SIM7600X firmware update.png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/800px-SIM7600X_firmware_update.png" decoding="async" loading="lazy" width="800" height="344" srcset="/w/upload/7/7a/SIM7600X_firmware_update.png 1.5x"></a><br>
+1.注意查看设备管理器，升级过程中会提示新的设备插入，第一次升级会没有设备驱动；<br>
+2.注意USB线，升级过程中USB线速率较高，需要选择质量好一点的USB线，避免接触不良。<br>
+3.需要以管理员权限运行升级工具(SIM7500_SIM7600_QDL V1.41 only for Update)<br>
+4.卸载，并重新安装升级工具(SIM7500_SIM7600_QDL V1.41 only for Update)<br>
+5.更多操作细节请参考该视频：<a target="_blank" rel="nofollow noreferrer noopener" class="external free" href="http://www.waveshare.net/wiki/SIM7600-Firmware-upgrade-Video">http://www.waveshare.net/wiki/SIM7600-Firmware-upgrade-Video</a><br>
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion9">
+								<b>问题：</b>SIM7600CE 4G HAT可以保存多少条短信？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion9" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>短信若保存在SIM卡中，一般50条为上限，可通过指令：AT+CPMS？进行查询
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion10">
+								<b>问题：</b>联网时的工作电流是？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion10" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>使用USB 5V供电，联网成功后，电流一般在50~300mA的范围，平均大概为150mA(仅供参考，具体视网络环境和联网工作状态而定。
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion11">
+								<b>问题：</b>SIM7600CE 4G HAT同时负载4g和gps时候的功耗多少？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion11" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>同时开启，均值：110~170mA
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion12">
+								<b>问题：</b>SIM7600CE 4G HAT配套的天线参数是？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion12" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<ul><li>频率：700m 800m 900m 1710-1920M 2010-2100M 2300-2400M 2500-2690M-5800MHZ</li>
+<li>增益：9dbi± 0.7dbi</li></ul>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion13">
+								<b>问题：</b>SIM7600X模块NDIS拨号失败,驱动无法安装怎么办？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion13" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<ul><li>确保您的系统内核是5.4以上的，树莓派不要使用sudo update升级到最新的版本，这样会把内核版本升级到高于目前固件的版本会无法识别，</li>
+<li>建议用更便捷的<a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/%E6%A0%91%E8%8E%93%E6%B4%BERNDIS%E6%8B%A8%E5%8F%B7%E4%B8%8A%E7%BD%91">RNDIS拨号</a></li>
+<li>可以烧录最新的树莓派Raspbian系统，重新配置RNDIS拨号</li>
+<li>或者用已经配置好驱动的镜像 <a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://pan.baidu.com/s/1hnRjIM0NDG5cS6ObaQMXig">RNDIS拨号开机自启 raspbian系统镜像(已装好驱动)</a></li></ul>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion14">
+								<b>问题：</b>SIM7600X接入树莓派，不烧Openwrt镜像怎么开热点？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion14" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>详细步骤参考下文：<br>
+<a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://blog.csdn.net/qq_43231904/article/details/112231049">树莓派随身WIFI</a>
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion15">
+								<b>问题：</b>SIM7600X通过AT+CGPSINFO获取到的定位信息分别代表什么？
+
+							</a>
+						</h4>
+					</div>
+					<div id="accordion15" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>从左至右分别是①维度，②经度，③日期，④时间，⑤高度，⑥速度和⑦航角。<br>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:SIM7600_GNSS_FAQ_(1234567).png" class="image fancybox"><img alt="SIM7600 GNSS FAQ (1234567).png" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/SIM7600_GNSS_FAQ_(1234567).png" decoding="async" loading="lazy" width="800" height="169"></a>
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion16">
+								<b>问题：</b>为什么定位不准确，获取到的坐标和网上查询到的有出入？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion16" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>SIM7600X 获取到的经纬度以分为单位，我们常见的一般是度为单位，更多详情请看下文: <br>
+<a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/SIM7600X_%E9%80%9A%E8%BF%87_uSTAR_%E5%AE%9A%E5%88%B0%E6%88%91%E7%9A%84%E4%BD%8D%E7%BD%AE">SIM7600X 通过 uSTAR 定到我的位置</a>
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion17">
+								<b>问题：</b>SIM7600X常用指令，复位，飞行模式，查询IP地址？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion17" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>请戳下方链接：<br>
+<a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://blog.csdn.net/qq_43231904/article/details/111954013">SIM7600X 常用指令</a>
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion18">
+								<b>问题：</b>SIM7600X接入树莓派，通过ssh怎么访问不在同一个局域网的树莓派？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion18" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>内网穿透可以，详细步骤参考下文：<br>
+<a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://blog.csdn.net/qq_43231904/article/details/111652410">内网穿透,透内通外</a>
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion19">
+								<b>问题：</b>SIM7600X可以通过UART方式进行PPP拨号么？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion19" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>可以的，UART拨号详细步骤如下链接：<br>
+<a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://blog.csdn.net/qq_43231904/article/details/112287388">SIM7600X PPP拨号上网教程</a>
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion20">
+								<b>问题：</b>执行chmod 777 sim7600_4G_hat_init命令时，报错：“chmod: 无法访问'sim7600_4G_hat_init': 没有那个文件或目录”<br></a><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:2019-10-11_18-59-32.jpg" class="image fancybox"><img alt="2019-10-11 18-59-32.jpg" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/2019-10-11_18-59-32.jpg" decoding="async" loading="lazy" width="575" height="75"></a><br>怎么处理？
+							
+						</h4>
+					</div>
+					<div id="accordion20" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>请确认当前路径下有sim7600_4G_hat_init文件<br><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:2019-10-11_19-15-04.jpg" class="image fancybox"><img alt="2019-10-11 19-15-04.jpg" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/2019-10-11_19-15-04.jpg" decoding="async" loading="lazy" width="558" height="121"></a>
+<br>
+一般操作是：下载示例程序，解压后，把Raspberry文件夹下的c文件夹改名为SIM7600X，然后把SIM7600X整个文件夹复制到树莓派/home/pi目录下，
+命令行进入到/home/pi/SIM7600X目录下，然后再执行chmod 777 sim7600_4G_hat_init命令。
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#accordion21">
+								<b>问题：</b>在编译BCM2835库，出现Makefile:327:recipe for target 'aclocal.m4' failed <br></a><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Bcm2835-make-error.jpg" class="image fancybox"><img alt="Bcm2835-make-error.jpg" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/Bcm2835-make-error.jpg" decoding="async" loading="lazy" width="633" height="136"></a>
+							
+						</h4>
+					</div>
+					<div id="accordion21" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<ul><li>执行：autoreconf -vfi  ，再重新编译，详见下图：</li></ul></div>
+<div> 
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Bcm2835-make-error-2.jpg" class="image fancybox"><img alt="Bcm2835-make-error-2.jpg" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/Bcm2835-make-error-2.jpg" decoding="async" loading="lazy" width="810" height="758"></a>
+</p>
+</div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+</div>
+<div class="tabbertab" title="售后" id="mysupport">
+<h1><span id="技术支持"></span><span class="mw-headline" id=".E6.8A.80.E6.9C.AF.E6.94.AF.E6.8C.81">技术支持</span></h1>
+<p><br>联系人：黄康信<br>
+EMAIL：3005423122@qq.com<br>
+电话：0755-83040712<br>
+QQ：3005763927<br>
+微信：扫下方二维码添加<br>
+<a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Hkx-wx.jpg" class="image fancybox"><img alt="Hkx-wx.jpg" src="./SIM7600G-H-M2 4G HAT - Waveshare Wiki_files/200px-Hkx-wx.jpg" decoding="async" loading="lazy" width="200" height="200" srcset="/w/upload/thumb/4/49/Hkx-wx.jpg/300px-Hkx-wx.jpg 1.5x, /w/upload/4/49/Hkx-wx.jpg 2x"></a><br>
+</p>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r75601"><div role="note" class="note note-error">说明：进行售后服务前，请准备好客户信息（定货单位、定货人等），以供验证</div></div>
+</div>
+</div>
+<!-- 
+NewPP limit report
+Cached time: 20260805171934
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.222 seconds
+Real time usage: 0.260 seconds
+Preprocessor visited node count: 1623/1000000
+Post‐expand include size: 43098/2097152 bytes
+Template argument size: 27222/2097152 bytes
+Highest expansion depth: 10/40
+Expensive parser function count: 1/100
+Unstrip recursion depth: 1/20
+Unstrip post‐expand size: 34940/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  115.986      1 -total
+ 67.33%   78.088      1 模板:SIM7600G-H-M2_4G_HAT_FAQ
+ 55.92%   64.854     21 模板:FAQ
+ 11.32%   13.135      2 模板:Note
+  6.12%    7.096      1 模板:外围模块
+  4.82%    5.587      1 模板:Raspberry_Pi_Study
+  3.67%    4.257      1 模板:SIM7600-Software
+  2.68%    3.107      1 模板:Study
+  2.23%    2.591      1 模板:Service18
+  1.31%    1.518      1 模板:GPRS-Related-Product
+-->
+
+<!-- Saved in parser cache with key ws_wiki_135_cn:pcache:idhash:13324-0!canonical!groups=* and timestamp 20260805171934 and revision id 140609
+ -->
+</div></div>								<div class="printfooter">
+				取自“<a dir="ltr" href="https://www.waveshare.net/w/index.php?title=SIM7600G-H-M2_4G_HAT&amp;oldid=140609">https://www.waveshare.net/w/index.php?title=SIM7600G-H-M2_4G_HAT&amp;oldid=140609</a>”				</div>
+												<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="https://www.waveshare.net/wiki/%E7%89%B9%E6%AE%8A:%E9%A1%B5%E9%9D%A2%E5%88%86%E7%B1%BB" title="特殊:页面分类">分类</a>：<ul><li><a href="https://www.waveshare.net/wiki/%E5%88%86%E7%B1%BB:%E6%A8%A1%E5%9D%97" title="分类:模块">模块</a></li><li><a href="https://www.waveshare.net/wiki/%E5%88%86%E7%B1%BB:4G" title="分类:4G">4G</a></li><li><a href="https://www.waveshare.net/wiki/%E5%88%86%E7%B1%BB:GNSS/GSM" title="分类:GNSS/GSM">GNSS/GSM</a></li><li><a href="https://www.waveshare.net/wiki/%E5%88%86%E7%B1%BB:3G" title="分类:3G">3G</a></li><li><a href="https://www.waveshare.net/w/index.php?title=%E5%88%86%E7%B1%BB:4G%E6%8E%A5%E5%8F%A3&amp;action=edit&amp;redlink=1" class="new" title="分类:4G接口（页面不存在）">4G接口</a></li><li><a href="https://www.waveshare.net/w/index.php?title=%E5%88%86%E7%B1%BB:M.2_B_KEY%E6%8E%A5%E5%8F%A3&amp;action=edit&amp;redlink=1" class="new" title="分类:M.2 B KEY接口（页面不存在）">M.2 B KEY接口</a></li></ul></div><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">隐藏分类：<ul><li><a href="https://www.waveshare.net/wiki/%E5%88%86%E7%B1%BB:USB%E6%8E%A5%E5%8F%A3" title="分类:USB接口">USB接口</a></li></ul></div></div>												<div class="visualClear"></div>
+							</div>
+			<!-- /bodyContent -->
+		</div>
+						</div>
+				</div>
+			</div>
+			<!-- /content -->
+
+			<!-- sidebar-left -->
+			<div class="sidebar-wrapper sidebar-left-wrapper">
+				<div class="sidebar-container container">
+					<div class="row">
+						<div id="sidebar-left" class="col-md-2 col-md-offset-0">
+							<div id="tweekiTOC"><div class="toctitle" lang="zh-Hans-CN" dir="ltr"><h2 id="mw-toc-heading">目录</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div><div id="toc" class="toc" role="navigation" aria-labelledby="mw-toc-heading" style="display: table;"><input type="checkbox" role="button" id="toctogglecheckbox" class="toctogglecheckbox" style="display:none">
+<ul class="nav">
+<li class="toclevel-1"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E8.AF.B4.E6.98.8E"><span class="tocnumber">1</span> <span class="toctext">说明</span></a>
+<ul class="nav">
+<li class="toclevel-2 tocsection-1"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E4.BA.A7.E5.93.81.E7.89.B9.E6.80.A7"><span class="tocnumber">1.1</span> <span class="toctext">产品特性</span></a></li>
+<li class="toclevel-2 tocsection-2"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E8.B0.83.E8.AF.95"><span class="tocnumber">1.2</span> <span class="toctext"><b>调试</b></span></a>
+<ul class="nav">
+<li class="toclevel-3 tocsection-3"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#NET.E7.81.AF.E5.B7.A5.E4.BD.9C.E7.8A.B6.E6.80.81"><span class="tocnumber">1.2.1</span> <span class="toctext">NET灯工作状态</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-4"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E6.B5.8B.E8.AF.95.E7.AE.80.E8.A6.81.E8.AF.B4.E6.98.8E"><span class="tocnumber">1.3</span> <span class="toctext">测试简要说明</span></a>
+<ul class="nav">
+<li class="toclevel-3 tocsection-5"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E5.B8.B8.E7.94.A8AT.E6.8C.87.E4.BB.A4"><span class="tocnumber">1.3.1</span> <span class="toctext">常用AT指令</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6 active"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E8.AE.A1.E7.AE.97.E6.9C.BAWindows.E4.BD.BF.E7.94.A8"><span class="tocnumber">2</span> <span class="toctext"><b>计算机Windows使用</b></span></a>
+<ul class="nav">
+<li class="toclevel-2 tocsection-7 active"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E6.8B.A8.E5.8F.B7.E4.B8.8A.E7.BD.91"><span class="tocnumber">2.1</span> <span class="toctext">拨号上网</span></a>
+<ul class="nav">
+<li class="toclevel-3 tocsection-8 active"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#NDIS.E6.8B.A8.E5.8F.B7.E4.B8.8A.E7.BD.91"><span class="tocnumber">2.1.1</span> <span class="toctext"><b>NDIS拨号上网</b></span></a></li>
+<li class="toclevel-3 tocsection-9"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#RNDIS.E6.8B.A8.E5.8F.B7.E4.B8.8A.E7.BD.91"><span class="tocnumber">2.1.2</span> <span class="toctext"><b>RNDIS拨号上网</b></span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#PPP.E6.8B.A8.E5.8F.B7.E4.B8.8A.E7.BD.91"><span class="tocnumber">2.1.3</span> <span class="toctext"><b>PPP拨号上网</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-11"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#GPS.E8.B0.83.E8.AF.95"><span class="tocnumber">2.2</span> <span class="toctext">GPS调试</span></a>
+<ul class="nav">
+<li class="toclevel-3 tocsection-12"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#GNSS.E6.8E.A7.E5.88.B6.E5.AE.9E.E4.BE.8B"><span class="tocnumber">2.2.1</span> <span class="toctext">GNSS控制实例</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-13"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#TCP.2FIP.E8.81.94.E7.BD.91.E6.95.B0.E6.8D.AE"><span class="tocnumber">2.3</span> <span class="toctext">TCP/IP联网数据</span></a>
+<ul class="nav">
+<li class="toclevel-3 tocsection-14"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E8.AE.BE.E7.BD.AE.E6.9C.AC.E5.9C.B0.E7.94.B5.E8.84.91.E8.99.9A.E6.8B.9F.E6.9C.8D.E5.8A.A1.E5.99.A8"><span class="tocnumber">2.3.1</span> <span class="toctext">设置本地电脑虚拟服务器</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E8.8E.B7.E5.8F.96.E5.A4.96.E7.BD.91IP"><span class="tocnumber">2.3.2</span> <span class="toctext">获取外网IP</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E9.85.8D.E7.BD.AEGPRS"><span class="tocnumber">2.3.3</span> <span class="toctext">配置GPRS</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-17"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E6.8B.94.E6.89.93.E7.94.B5.E8.AF.9D"><span class="tocnumber">2.4</span> <span class="toctext">拔打电话</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E8.AF.AD.E9.9F.B3.E8.BE.93.E5.87.BA.E6.A8.A1.E5.BC.8F.E5.92.8C.E9.9F.B3.E9.87.8F.E8.B0.83.E8.8A.82"><span class="tocnumber">2.5</span> <span class="toctext">语音输出模式和音量调节</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E6.8E.A5.E5.90.AC.E7.94.B5.E8.AF.9D"><span class="tocnumber">2.6</span> <span class="toctext">接听电话</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E9.9F.B3.E9.A2.91.E5.8F.82.E6.95.B0.E8.B0.83.E8.AF.95"><span class="tocnumber">2.7</span> <span class="toctext">音频参数调试</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E5.8F.91.E9.80.81.E8.8B.B1.E6.96.87.E7.9F.AD.E4.BF.A1"><span class="tocnumber">2.8</span> <span class="toctext">发送英文短信</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E6.8E.A5.E6.94.B6.E8.8B.B1.E6.96.87.E7.9F.AD.E4.BF.A1"><span class="tocnumber">2.9</span> <span class="toctext">接收英文短信</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E5.8F.91.E9.80.81.E4.B8.AD.E6.96.87.E7.9F.AD.E4.BF.A1"><span class="tocnumber">2.10</span> <span class="toctext">发送中文短信</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E6.8E.A5.E6.94.B6.E4.B8.AD.E6.96.87.E7.9F.AD.E4.BF.A1"><span class="tocnumber">2.11</span> <span class="toctext">接收中文短信</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-25"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E6.A0.91.E8.8E.93.E6.B4.BE.E4.BD.BF.E7.94.A8"><span class="tocnumber">3</span> <span class="toctext">树莓派使用</span></a>
+<ul class="nav">
+<li class="toclevel-2 tocsection-26"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E6.A0.91.E8.8E.93.E6.B4.BERaspbian.E4.B8.8A.E7.BD.91"><span class="tocnumber">3.1</span> <span class="toctext"><b>树莓派Raspbian上网</b></span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.22.E6.A0.91.E8.8E.93.E6.B4.BEminicom.E5.8F.91.E9.80.81AT.E6.8C.87.E4.BB.A4.E8.B0.83.E8.AF.95.22"><span class="tocnumber">3.2</span> <span class="toctext">"树莓派minicom发送AT指令调试"</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E7.A4.BA.E4.BE.8B.E7.A8.8B.E5.BA.8F"><span class="tocnumber">3.3</span> <span class="toctext">示例程序</span></a>
+<ul class="nav">
+<li class="toclevel-3 tocsection-29"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#AT.E6.8C.87.E4.BB.A4.E4.BE.8B.E7.A8.8B"><span class="tocnumber">3.3.1</span> <span class="toctext"><b>AT指令例程</b></span></a></li>
+<li class="toclevel-3 tocsection-30"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#PHONECALL.E6.89.93.E7.94.B5.E8.AF.9D.E4.BE.8B.E7.A8.8B"><span class="tocnumber">3.3.2</span> <span class="toctext"><b>PHONECALL打电话例程</b></span></a></li>
+<li class="toclevel-3 tocsection-31"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#SMS.E7.9F.AD.E4.BF.A1.E6.94.B6.E5.8F.91.E4.BE.8B.E7.A8.8B"><span class="tocnumber">3.3.3</span> <span class="toctext"><b>SMS短信收发例程</b></span></a></li>
+<li class="toclevel-3 tocsection-32"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#GPS.E5.AE.9A.E4.BD.8D.E4.BE.8B.E7.A8.8B"><span class="tocnumber">3.3.4</span> <span class="toctext"><b>GPS定位例程</b></span></a></li>
+<li class="toclevel-3 tocsection-33"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#TCP.E7.BD.91.E8.B7.AF.E9.80.9A.E4.BF.A1.E4.BE.8B.E7.A8.8B"><span class="tocnumber">3.3.5</span> <span class="toctext"><b>TCP网路通信例程</b></span></a></li>
+<li class="toclevel-3 tocsection-34"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#FTP.E4.B8.8A.E4.BC.A0.E5.92.8C.E4.B8.8B.E8.BD.BD.E4.BE.8B.E7.A8.8B"><span class="tocnumber">3.3.6</span> <span class="toctext"><b>FTP上传和下载例程</b></span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-35"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#Jetson_Nano.E4.BE.8B.E7.A8.8B"><span class="tocnumber">3.4</span> <span class="toctext">Jetson Nano例程</span></a>
+<ul class="nav">
+<li class="toclevel-3 tocsection-36"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E7.A1.AC.E4.BB.B6.E8.BF.9E.E6.8E.A5"><span class="tocnumber">3.4.1</span> <span class="toctext">硬件连接</span></a></li>
+<li class="toclevel-3 tocsection-37"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#Jetson_Nano_minicom.E4.B8.B2.E5.8F.A3.E8.B0.83.E8.AF.95"><span class="tocnumber">3.4.2</span> <span class="toctext">Jetson Nano minicom串口调试</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E8.B5.84.E6.96.99"><span class="tocnumber">4</span> <span class="toctext">资料</span></a>
+<ul class="nav">
+<li class="toclevel-2 tocsection-38"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E8.A7.86.E9.A2.91"><span class="tocnumber">4.1</span> <span class="toctext">视频</span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E6.96.87.E6.A1.A3"><span class="tocnumber">4.2</span> <span class="toctext">文档</span></a></li>
+<li class="toclevel-2 tocsection-40"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E7.A8.8B.E5.BA.8F"><span class="tocnumber">4.3</span> <span class="toctext">程序</span></a></li>
+<li class="toclevel-2 tocsection-41"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E8.BD.AF.E4.BB.B6"><span class="tocnumber">4.4</span> <span class="toctext">软件</span></a></li>
+<li class="toclevel-2 tocsection-42"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E6.95.B0.E6.8D.AE.E6.89.8B.E5.86.8C"><span class="tocnumber">4.5</span> <span class="toctext">数据手册</span></a></li>
+<li class="toclevel-2 tocsection-43"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E5.B7.A5.E7.A8.8B.E5.9B.BE.E7.BA.B8"><span class="tocnumber">4.6</span> <span class="toctext">工程图纸</span></a></li>
+<li class="toclevel-2 tocsection-44"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E7.9B.B8.E5.85.B3.E5.BA.94.E7.94.A8.E6.A1.88.E4.BE.8B"><span class="tocnumber">4.7</span> <span class="toctext">相关应用案例</span></a></li>
+<li class="toclevel-2 tocsection-45"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E7.9B.B8.E5.85.B3.E6.95.99.E7.A8.8B"><span class="tocnumber">4.8</span> <span class="toctext">相关教程</span></a></li>
+<li class="toclevel-2 tocsection-46"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#FAQ"><span class="tocnumber">4.9</span> <span class="toctext">FAQ</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="https://www.waveshare.net/wiki/SIM7600G-H-M2_4G_HAT#.E6.8A.80.E6.9C.AF.E6.94.AF.E6.8C.81"><span class="tocnumber">5</span> <span class="toctext">技术支持</span></a></li>
+</ul>
+<div id="toctotop"><a href="javascript:scrollTo(0,0);"> 回到顶部</a></div></div></div>						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /sidebar-left -->
+					<!-- footer -->
+			<div id="footer" role="contentinfo" class="footer container footer-sticky bg-light" style="margin-top: 0px; opacity: 1;">
+			<ul id="footer-custom"><li class="dropup"><a href="https://www.waveshare.net/w/index.php?title=%E7%89%B9%E6%AE%8A:%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95&amp;returnto=SIM7600G-H-M2+4G+HAT" title="我们鼓励您登录；然而，这不是强制性的[alt-shift-o]" accesskey="o">Login / Create Account</a></li><li class="dropup"><a href="invalid-title:[https://www.waveshare.net Copyright %C2%A9 2022 %E6%B7%B1%E5%9C%B3%E5%B8%82%E5%BE%AE%E9%9B%AA%E7%94%B5%E5%AD%90%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8 %E7%89%88%E6%9D%83%E6%89%80%E6%9C%89]" id="n-.255Bhttps.253A.252F.252Fwww.waveshare.net-copyright-.25C2.25A9-2022-.25E6.25B7.25B1.25E5.259C.25B3.25E5.25B8.2582.25E5.25BE.25AE.25E9.259B.25AA.25E7.2594.25B5.25E5.25AD.2590.25E6.259C.2589.25E9.2599.2590.25E5.2585.25AC.25E5.258F.25B8-.25E7.2589.2588.25E6.259D.2583.25E6.2589.2580.25E6.259C.2589.255D"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/">Copyright © 2022 深圳市微雪电子有限公司 版权所有</a></li></ul><div style="clear:both"></div>			</div>
+			<!-- /footer -->
+		
+<script>
+var fbtFancyBoxOptions = {"openEffect":"elastic","closeEffect":"elastic","helpers":{"title":{"type":"inside"}}};
+</script>
+
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.222","walltime":"0.260","ppvisitednodes":{"value":1623,"limit":1000000},"postexpandincludesize":{"value":43098,"limit":2097152},"templateargumentsize":{"value":27222,"limit":2097152},"expansiondepth":{"value":10,"limit":40},"expensivefunctioncount":{"value":1,"limit":100},"unstrip-depth":{"value":1,"limit":20},"unstrip-size":{"value":34940,"limit":5000000},"timingprofile":["100.00%  115.986      1 -total"," 67.33%   78.088      1 模板:SIM7600G-H-M2_4G_HAT_FAQ"," 55.92%   64.854     21 模板:FAQ"," 11.32%   13.135      2 模板:Note","  6.12%    7.096      1 模板:外围模块","  4.82%    5.587      1 模板:Raspberry_Pi_Study","  3.67%    4.257      1 模板:SIM7600-Software","  2.68%    3.107      1 模板:Study","  2.23%    2.591      1 模板:Service18","  1.31%    1.518      1 模板:GPRS-Related-Product"]},"cachereport":{"timestamp":"20260805171934","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":90});});</script>	
+
+</body></html>

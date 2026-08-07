@@ -56,24 +56,24 @@
 
 ### 关键报文 ID
 
+> 帧 ID 为 SocketCAN 收到的 29 位扩展帧 ID(已做 `0x1FFFFFFF` 掩码, 即 DBC `0x8000xxxx` 去掉最高位)。
+
 | 报文 | CAN ID | 关键信号 |
 |------|--------|---------|
-| `BattInfo02` | `0x80001100` | BattVolt(0.1V)、BattCurr(0.1A,-100偏移)、SOC(0.1%) |
-| `BattInfo01` | `0x80001000` | BMS_AlarmLevel、运行状态、绝缘电阻 |
-| `CellVoltStatistic` | `0x80001140` | 单体电压极值统计 |
-| `CellTempStatistic` | `0x80001180` | 单体温度极值统计 |
-| `CellVoltage_01..` | `0x80003000+` | 单体电压(每帧5节) |
-| `CellTemperature_01..` | `0x80004000+` | 单体温度(每帧8点) |
-| `PACKVolt` | `0x80001410` | 总压极值/单体编号 |
-| `PACKTemp` | `0x80004110` | 温度极值 |
-| `ErrorCode1` | `0x80001fd0` | 故障字/告警级别 |
+| `BattInfo02` | `0x001400` | BattVolt(0.1V)、BattCurr(0.1A,-100偏移)、SOC(0.1%)、RealSoc |
+| `BattInfo01` | `0x001300` | BMS_AlarmLevel、运行状态、连接状态、绝缘电阻 |
+| `CellVoltStatistic` | `0x001200` | 单体电压极值统计 |
+| `CellTempStatistic` | `0x001500` | 单体温度极值统计 (1℃,-50偏移) |
+| `CellVoltage_01..` | `0x003000 + 0x10*n` | 单体电压, 每帧5节, 12位信号(0.001V,+1偏移) |
+| `PACKTemp` | `0x002110` | 极耳温度 8 点 (1℃,-50偏移) |
+| `SOP` | `0x001100` | 充放电限值 |
 
 ### 信号分辨率速查
 - BattVolt: `raw × 0.1` [V]
 - BattCurr: `raw × 0.1 - 100` [A]
 - SOC: `raw × 0.1` [%]
-- 单体电压: 参考 DBC 中分辨率
-- 温度: `raw × 1 - 50` [℃] (部分帧)
+- 单体电压: `raw × 0.001 + 1` [V] (12位 Motorola 布局)
+- 温度: `raw - 50` [℃]
 
 ---
 

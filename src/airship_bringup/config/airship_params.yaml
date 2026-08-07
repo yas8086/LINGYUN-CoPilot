@@ -45,3 +45,23 @@ link_node:
     baud_rate: 115200
     # 遥测下传频率 (Hz)
     tx_rate_hz: 5.0
+
+fc_monitor_node:
+  ros__parameters:
+    # 聚合状态发布频率 (Hz)
+    pub_rate_hz: 10.0
+    # 飞控掉线判定超时 (s)
+    fc_timeout_s: 2.0
+
+cloud_node:
+  ros__parameters:
+    # MQTT broker 地址(4G 云服务器, 待定)
+    mqtt_host: "localhost"
+    mqtt_port: 1883
+    # 上云遥测 topic
+    mqtt_topic: "lingyun01/telemetry"
+    # 认证(可选)
+    mqtt_username: ""
+    mqtt_password: ""
+    # 上云发送频率 (Hz)
+    tx_rate_hz: 2.0

@@ -15,6 +15,7 @@ set(msg_files
   "msg/MpptStatus.msg"
   "msg/DcdcStatus.msg"
   "msg/DeviceAlert.msg"
+  "msg/FlightStatus.msg"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}

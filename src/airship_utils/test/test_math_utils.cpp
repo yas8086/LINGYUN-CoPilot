@@ -25,6 +25,7 @@
 using airship_utils::angle_diff;
 using airship_utils::clampf;
 using airship_utils::normalize_angle;
+using airship_utils::quat_to_euler;
 
 // ============================================================
 // 1. 最基本的 TEST() 用例
@@ -212,3 +213,66 @@ TEST(ClampTest2, InvalidRangeBehaviour)
 // gtest 主函数:ament_add_gtest 会注入 main,因此这里不需要写 main。
 // 若你用原生 gtest 而非 ament_add_gtest,则需要:
 //   int main(int argc, char ** argv) { ::testing::InitGoogleTest(&argc, argv); return RUN_ALL_TESTS(); }
+
+// ============================================================
+// 7. 四元数 -> 欧拉角 (飞控姿态转换)
+// ============================================================
+TEST(QuatToEulerTest, IdentityAttitude)
+{
+  // 单位四元数 w=1 -> 全零姿态
+  float r, p, y;
+  quat_to_euler(1.0f, 0.0f, 0.0f, 0.0f, &r, &p, &y);
+  EXPECT_FLOAT_EQ(r, 0.0f);
+  EXPECT_FLOAT_EQ(p, 0.0f);
+  EXPECT_FLOAT_EQ(y, 0.0f);
+}
+
+TEST(QuatToEulerTest, Yaw90Deg)
+{
+  // 纯偏航 90°: q = (cos45, 0, 0, sin45)
+  const float s = std::sqrt(2.0f) / 2.0f;
+  float r, p, y;
+  quat_to_euler(s, 0.0f, 0.0f, s, &r, &p, &y);
+  EXPECT_NEAR(r, 0.0f, 1e-4);
+  EXPECT_NEAR(p, 0.0f, 1e-4);
+  EXPECT_NEAR(y, static_cast<float>(M_PI / 2.0), 1e-4);
+}
+
+TEST(QuatToEulerTest, Pitch45Deg)
+{
+  // 纯俯仰 45°: q = (cos22.5, 0, sin22.5, 0)
+  const float a = 22.5f * static_cast<float>(M_PI) / 180.0f;
+  float r, p, y;
+  quat_to_euler(std::cos(a), 0.0f, std::sin(a), 0.0f, &r, &p, &y);
+  EXPECT_NEAR(p, static_cast<float>(M_PI / 4.0), 1e-4);
+  EXPECT_NEAR(y, 0.0f, 1e-4);
+}
+
+TEST(QuatToEulerTest, Roll30Pitch0)
+{
+  // 纯横滚 30°: q = (cos15, sin15, 0, 0)
+  const float a = 15.0f * static_cast<float>(M_PI) / 180.0f;
+  float r, p, y;
+  quat_to_euler(std::cos(a), std::sin(a), 0.0f, 0.0f, &r, &p, &y);
+  EXPECT_NEAR(r, static_cast<float>(M_PI / 6.0), 1e-4);
+  EXPECT_NEAR(p, 0.0f, 1e-4);
+}
+
+TEST(QuatToEulerTest, CombinationAngle)
+{
+  // 组合姿态: 俯仰 30°, 偏航 45° (roll=0)
+  // ZYX 欧拉角(roll=0)对应的四元数:
+  //   w = cos(ψ/2)cos(θ/2), x = -sin(ψ/2)sin(θ/2),
+  //   y = cos(ψ/2)sin(θ/2), z = sin(ψ/2)cos(θ/2)
+  const float pitch = 30.0f * static_cast<float>(M_PI) / 180.0f;
+  const float yaw = 45.0f * static_cast<float>(M_PI) / 180.0f;
+  const float cp = std::cos(pitch / 2.0f);
+  const float sp = std::sin(pitch / 2.0f);
+  const float cy = std::cos(yaw / 2.0f);
+  const float sy = std::sin(yaw / 2.0f);
+  float r, p, y;
+  quat_to_euler(cy * cp, -sy * sp, cy * sp, sy * cp, &r, &p, &y);
+  EXPECT_NEAR(r, 0.0f, 1e-3);
+  EXPECT_NEAR(p, pitch, 1e-3);
+  EXPECT_NEAR(y, yaw, 1e-3);
+}

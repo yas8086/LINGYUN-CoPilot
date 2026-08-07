@@ -17,6 +17,11 @@ float normalize_angle(float angle);
 // 限幅: 将 val 限制在 [min_val, max_val] 区间内
 float clampf(float val, float min_val, float max_val);
 
+// 四元数(w,x,y,z) 转欧拉角(roll, pitch, yaw), ZYX 顺序, 输出弧度
+// 输入四元数需为单位四元数; 输出经 clamp 保证 pitch 在 [-pi/2, pi/2]
+void quat_to_euler(
+  float w, float x, float y, float z, float * roll, float * pitch, float * yaw);
+
 }  // namespace airship_utils
 
 #endif  // AIRSHIP_UTILS__MATH_UTILS_HPP_

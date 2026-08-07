@@ -61,11 +61,33 @@ std::string dcdc_to_json(const airship_msgs::msg::DcdcStatus & msg)
   return s;
 }
 
+std::string fc_to_json(const airship_msgs::msg::FlightStatus & msg)
+{
+  std::string s = "\"fc\":{";
+  s += "\"online\":" + std::string(msg.online ? "true" : "false") + ",";
+  s += "\"roll\":" + fmt_float(msg.roll_deg) + ",";
+  s += "\"pitch\":" + fmt_float(msg.pitch_deg) + ",";
+  s += "\"yaw\":" + fmt_float(msg.yaw_deg) + ",";
+  s += "\"lat\":" + fmt_float(static_cast<float>(msg.lat)) + ",";
+  s += "\"lon\":" + fmt_float(static_cast<float>(msg.lon)) + ",";
+  s += "\"alt\":" + fmt_float(msg.alt_rel) + ",";
+  s += "\"vx\":" + fmt_float(msg.vx) + ",";
+  s += "\"vy\":" + fmt_float(msg.vy) + ",";
+  s += "\"vz\":" + fmt_float(msg.vz) + ",";
+  s += "\"mode\":\"" + msg.flight_mode + "\",";
+  s += "\"armed\":" + std::string(msg.armed ? "true" : "false") + ",";
+  s += "\"batt_v\":" + fmt_float(msg.battery_voltage) + ",";
+  s += "\"batt_pct\":" + fmt_float(msg.battery_remaining);
+  s += "}";
+  return s;
+}
+
 std::string pack_telemetry_json(
   double timestamp_sec,
   const airship_msgs::msg::BmsStatus * bms,
   const airship_msgs::msg::MpptStatus * mppt,
-  const airship_msgs::msg::DcdcStatus * dcdc)
+  const airship_msgs::msg::DcdcStatus * dcdc,
+  const airship_msgs::msg::FlightStatus * flight)
 {
   std::string s = "{\"t\":";
   char tb[32];
@@ -81,6 +103,9 @@ std::string pack_telemetry_json(
   }
   if (dcdc != nullptr && dcdc->online) {
     s += "," + dcdc_to_json(*dcdc);
+  }
+  if (flight != nullptr && flight->online) {
+    s += "," + fc_to_json(*flight);
   }
 
   s += "}";

@@ -8,6 +8,7 @@
 
 #include "airship_msgs/msg/bms_status.hpp"
 #include "airship_msgs/msg/dcdc_status.hpp"
+#include "airship_msgs/msg/flight_status.hpp"
 #include "airship_msgs/msg/mppt_status.hpp"
 
 namespace airship_link
@@ -22,13 +23,17 @@ std::string mppt_to_json(const airship_msgs::msg::MpptStatus & msg);
 // DCDC 状态 -> JSON 片段
 std::string dcdc_to_json(const airship_msgs::msg::DcdcStatus & msg);
 
-// 组装完整帧: {"t":<sec>, "bms":{...}, "mppt":{...}, "dcdc":{...}}
-// 空设备(online=false)不出现在帧中
+// 飞控状态 -> JSON 片段
+std::string fc_to_json(const airship_msgs::msg::FlightStatus & msg);
+
+// 组装完整帧: {"t":<sec>, "bms":{...}, "mppt":{...}, "dcdc":{...}, "fc":{...}}
+// 空设备(online=false)不出现在帧中; flight 可不传(为 nullptr)以保持向后兼容
 std::string pack_telemetry_json(
   double timestamp_sec,
   const airship_msgs::msg::BmsStatus * bms,
   const airship_msgs::msg::MpptStatus * mppt,
-  const airship_msgs::msg::DcdcStatus * dcdc);
+  const airship_msgs::msg::DcdcStatus * dcdc,
+  const airship_msgs::msg::FlightStatus * flight = nullptr);
 
 }  // namespace airship_link
 
