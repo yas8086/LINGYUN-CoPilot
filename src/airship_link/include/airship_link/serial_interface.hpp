@@ -46,6 +46,13 @@ public:
   // 写入字符串
   bool write(const std::string & data);
 
+  // 读取最多 len 字节到 data, 最多等待 timeout_ms 毫秒。
+  // 返回实际读取字节数; 超时/错误返回 -1。(用于 Modbus 等请求-响应协议)
+  int read(char * data, size_t len, int timeout_ms);
+
+  // 清空接收缓冲(Modbus 请求前调用, 避免读到上次残留的应答)
+  void flush_rx();
+
   bool is_open() const {return fd_ >= 0;}
 
 private:

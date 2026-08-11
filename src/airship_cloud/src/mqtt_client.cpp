@@ -13,9 +13,13 @@ MqttClient::MqttClient(
   const std::string & host, int port,
   const std::string & client_id,
   const std::string & username,
-  const std::string & password)
+  const std::string & password,
+  bool enable_tls,
+  const std::string & ca_cert,
+  bool tls_insecure)
 : mosq_(nullptr), host_(host), port_(port),
-  client_id_(client_id), username_(username), password_(password)
+  client_id_(client_id), username_(username), password_(password),
+  enable_tls_(enable_tls), ca_cert_(ca_cert), tls_insecure_(tls_insecure)
 {
 }
 
@@ -40,6 +44,28 @@ bool MqttClient::connect()
 
   if (!username_.empty()) {
     mosquitto_username_pw_set(mosq_, username_.c_str(), password_.c_str());
+  }
+
+  // TLS 配置(EMQX Cloud Serverless 必须走 8883 + TLS)
+  if (enable_tls_) {
+    const char * cafile = ca_cert_.empty() ? nullptr : ca_cert_.c_str();
+    const char * capath = ca_cert_.empty() ? "/etc/ssl/certs" : nullptr;
+    // cafile/capath 两者择一: 指定了 ca_cert 用 cafile, 否则用系统 CA 目录
+    int rc = mosquitto_tls_set(mosq_, cafile, capath, nullptr, nullptr, nullptr);
+    if (rc != MOSQ_ERR_SUCCESS) {
+      mosquitto_destroy(mosq_);
+      mosq_ = nullptr;
+      return false;
+    }
+    // tls_insecure=true 时跳过证书 CN/SAN 主机名校验(仅限内网/调试)
+    rc = mosquitto_tls_insecure_set(mosq_, tls_insecure_ ? true : false);
+    if (rc != MOSQ_ERR_SUCCESS) {
+      mosquitto_destroy(mosq_);
+      mosq_ = nullptr;
+      return false;
+    }
+    // TLS ALPN 协商使用 SSLv23 兼容模式(libmosquitto 默认即可)
+    mosquitto_tls_opts_set(mosq_, 1 /* cert_reqs: 验证对端证书 */, nullptr, nullptr);
   }
 
   mosquitto_connect_callback_set(mosq_, &MqttClient::on_connect_cb);

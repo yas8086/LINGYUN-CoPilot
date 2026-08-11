@@ -1,6 +1,11 @@
 // 灵云01号伴飞电脑 — CAN 帧解析工具
 // 提供与 ROS 无关的纯函数,用于解析 CAN 数据帧中的小端整数、
 // 按分辨率换算物理量、以及位域提取。所有函数均为纯函数,便于 gtest。
+//
+// 【前置条件】以下提取函数(get_u16_le/get_u32_le/get_i16_le/get_u8/get_bits2)
+//   以裸指针+offset 访问, 本身不做长度检查。调用方(各协议库)必须在调用前
+//   依据 DLC 完成帧长度校验, 确保 data 长度 >= offset + 所需字节数,
+//   否则行为未定义。当前所有协议库已在 parse 入口校验, 本层为契约约定。
 #ifndef AIRSHIP_UTILS__CAN_UTILS_HPP_
 #define AIRSHIP_UTILS__CAN_UTILS_HPP_
 

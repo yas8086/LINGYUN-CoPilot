@@ -8,25 +8,17 @@ namespace airship_utils
 
 float angle_diff(float target, float current)
 {
-  float diff = target - current;
-  while (diff > M_PI) {
-    diff -= 2.0f * static_cast<float>(M_PI);
-  }
-  while (diff < -M_PI) {
-    diff += 2.0f * static_cast<float>(M_PI);
-  }
-  return diff;
+  // std::remainder 返回 [-π, π] 区间余数, 比 while 循环更高效且对任意大角正确
+  return std::remainder(static_cast<double>(target - current),
+    2.0 * M_PI);
 }
 
 float normalize_angle(float angle)
 {
-  while (angle > M_PI) {
-    angle -= 2.0f * static_cast<float>(M_PI);
-  }
-  while (angle < -M_PI) {
-    angle += 2.0f * static_cast<float>(M_PI);
-  }
-  return angle;
+  // 与 angle_diff 一致, 用 std::remainder 归一化到 [-π, π]:
+  // 对任意大角 O(1) 且正确, 避免 while 循环在极端输入(如积分漂移)下卡顿
+  return static_cast<float>(
+    std::remainder(static_cast<double>(angle), 2.0 * M_PI));
 }
 
 float clampf(float val, float min_val, float max_val)
@@ -43,13 +35,24 @@ float clampf(float val, float min_val, float max_val)
 void quat_to_euler(
   float w, float x, float y, float z, float * roll, float * pitch, float * yaw)
 {
+  // 先归一化, 避免非单位四元数导致姿态失真
+  const float norm = std::sqrt(w * w + x * x + y * y + z * z);
+  if (norm < 1e-6f) {
+    // 零范数(非法四元数) 安全回退
+    *roll = 0.0f;
+    *pitch = 0.0f;
+    *yaw = 0.0f;
+    return;
+  }
+  const float nw = w / norm;
+  const float nx = x / norm;
+  const float ny = y / norm;
+  const float nz = z / norm;
   // ZYX 顺序 (与 PX4/MAVROS 常用约定一致)
-  const float r = std::atan2(2.0f * (w * x + y * z), 1.0f - 2.0f * (x * x + y * y));
-  const float p = std::asin(clampf(2.0f * (w * y - z * x), -1.0f, 1.0f));
-  const float yw = std::atan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
-  *roll = r;
-  *pitch = p;
-  *yaw = yw;
+  // 万向节锁定: pitch=±90° 时 roll/yaw 退化(固有特性), asin 已用 clampf 限幅
+  *roll = std::atan2(2.0f * (nw * nx + ny * nz), 1.0f - 2.0f * (nx * nx + ny * ny));
+  *pitch = std::asin(clampf(2.0f * (nw * ny - nz * nx), -1.0f, 1.0f));
+  *yaw = std::atan2(2.0f * (nw * nz + nx * ny), 1.0f - 2.0f * (ny * ny + nz * nz));
 }
 
 }  // namespace airship_utils

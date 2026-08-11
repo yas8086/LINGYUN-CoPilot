@@ -92,24 +92,27 @@ struct MpptData
   bool charging_enabled = false;  // 充电开关是否开启
 };
 
-// 构造只读查询远程帧: 0x14[code]A1[src]
+// 构造只读查询帧: 0x14[code]A1[src]
 // src: 本机(主机)源地址, 默认 0x00
+// 注: 当前实现按"8 字节数据帧(数据全 0)"发送查询(见 mppt_protocol.cpp)。
+//     协议文档(MPPT-CAN通信协议 V1.2)未明确是否需 CAN RTR 远程帧,
+//     若现场实测从机不响应, 需按设备实际行为改为 RTR 远程帧(见 docs/02_CAN协议汇总.md)。
 airship_can::CanFrame build_query_frame(uint8_t code, uint8_t src = 0x00);
 
 // 解析 0x03 实时电压/电流帧
-void parse_realtime(const uint8_t * data, MpptData & out);
+void parse_realtime(const uint8_t * data, uint32_t len, MpptData & out);
 // 解析 0x02 额定参数帧
-void parse_rated(const uint8_t * data, MpptData & out);
+void parse_rated(const uint8_t * data, uint32_t len, MpptData & out);
 // 解析 0x04 充电/故障状态帧
-void parse_state(const uint8_t * data, MpptData & out);
+void parse_state(const uint8_t * data, uint32_t len, MpptData & out);
 // 解析 0x05 日/月发电量帧
-void parse_energy_day(const uint8_t * data, MpptData & out);
+void parse_energy_day(const uint8_t * data, uint32_t len, MpptData & out);
 // 解析 0x06 总发电量帧
-void parse_energy_total(const uint8_t * data, MpptData & out);
+void parse_energy_total(const uint8_t * data, uint32_t len, MpptData & out);
 // 解析 0x08 温度帧
-void parse_temp(const uint8_t * data, MpptData & out);
+void parse_temp(const uint8_t * data, uint32_t len, MpptData & out);
 // 解析 0x0A 控制模式/充电开关帧
-void parse_control(const uint8_t * data, MpptData & out);
+void parse_control(const uint8_t * data, uint32_t len, MpptData & out);
 
 }  // namespace airship_mppt
 

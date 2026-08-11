@@ -18,12 +18,26 @@ TEST(JsonPackerTest, BmsOnline)
   msg.pack_voltage = 48.0f;
   msg.pack_current = 10.5f;
   msg.soc = 85.0f;
+  msg.real_soc = 82.0f;
+  msg.max_cell_temp = 30.0f;
+  msg.min_cell_temp = 25.0f;
+  msg.avg_cell_temp = 27.5f;
+  msg.temp_diff = 5.0f;
+  msg.positive_insulation_kohm = 1000;
+  msg.negative_insulation_kohm = 1100;
   msg.alarm_level = 1;
 
   const std::string s = bms_to_json(msg);
   EXPECT_NE(s.find("\"bms\""), std::string::npos);
   EXPECT_NE(s.find("\"pack_v\":48"), std::string::npos);
   EXPECT_NE(s.find("\"soc\":85"), std::string::npos);
+  EXPECT_NE(s.find("\"rsoc\":82"), std::string::npos);
+  EXPECT_NE(s.find("\"max_t\":30"), std::string::npos);
+  EXPECT_NE(s.find("\"min_t\":25"), std::string::npos);
+  EXPECT_NE(s.find("\"avg_t\":27.5"), std::string::npos);
+  EXPECT_NE(s.find("\"diff_t\":5"), std::string::npos);
+  EXPECT_NE(s.find("\"riso_p\":1000"), std::string::npos);
+  EXPECT_NE(s.find("\"riso_n\":1100"), std::string::npos);
   EXPECT_NE(s.find("\"alarm\":1"), std::string::npos);
 }
 
@@ -49,7 +63,8 @@ TEST(JsonPackerTest, DcdcOnline)
 
   const std::string s = dcdc_to_json(msg);
   EXPECT_NE(s.find("\"dcdc\""), std::string::npos);
-  EXPECT_NE(s.find("\"out_p\":2e+03"), std::string::npos);
+  // 2000.0 在 %.4g 下输出 "2000"(4 位有效数字), 不再用 %.3g 的科学计数法 "2e+03"
+  EXPECT_NE(s.find("\"out_p\":2000"), std::string::npos);
 }
 
 // ===== 完整打包 =====

@@ -84,7 +84,10 @@ jobs:
       - name: Test
         run: |
           source /opt/ros/jazzy/setup.bash
-          colcon test --event-handlers console_cohesion+
+          # --return-code-on-test-failure: 任一测试失败即阻塞流水线(质量门禁)
+          # --executor sequential: 顺序执行,避免资源竞争导致偶发失败
+          colcon test --event-handlers console_cohesion+ \
+            --return-code-on-test-failure --executor sequential
           colcon test-result --verbose
 
       - name: Upload test results

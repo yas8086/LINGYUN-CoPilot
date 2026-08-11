@@ -26,7 +26,7 @@ TEST(BmsProtocol, ParseBattInfo)
     0x58, 0x0E, 0x1A, 0x04, 0x52, 0x03, 0x52, 0x03,
   };
   BmsData out;
-  airship_bms::parse_batt_info(d.data(), out);
+  airship_bms::parse_batt_info(d.data(), 8, out);
   EXPECT_FLOAT_EQ(out.pack_voltage, 367.2f);
   EXPECT_FLOAT_EQ(out.pack_current, 5.0f);
   EXPECT_FLOAT_EQ(out.soc, 85.0f);
@@ -40,7 +40,7 @@ TEST(BmsProtocol, ParseBattStatus)
     0x21, 0x00, 0xE8, 0x03, 0x4C, 0x04, 0x03, 0x00,
   };
   BmsData out;
-  airship_bms::parse_batt_status(d.data(), out);
+  airship_bms::parse_batt_status(d.data(), 8, out);
   EXPECT_EQ(out.run_state, 1);
   EXPECT_EQ(out.connection_status, 2);
   EXPECT_EQ(out.positive_insulation_kohm, 1000);
@@ -55,7 +55,7 @@ TEST(BmsProtocol, ParseCellVoltage)
     0x89, 0x88, 0xFC, 0x96, 0x09, 0xC4, 0x0A, 0x28,
   };
   BmsData out;
-  airship_bms::parse_cell_voltage(0x003000, d.data(), out);
+  airship_bms::parse_cell_voltage(0x003000, d.data(), 8, out);
   EXPECT_FLOAT_EQ(out.cell_voltages[0], 3.2f);
   EXPECT_FLOAT_EQ(out.cell_voltages[1], 3.3f);
   EXPECT_FLOAT_EQ(out.cell_voltages[2], 3.4f);
@@ -70,7 +70,7 @@ TEST(BmsProtocol, ParseCellVoltageSecondFrame)
     0x89, 0x88, 0xFC, 0x96, 0x09, 0xC4, 0x0A, 0x28,
   };
   BmsData out;
-  airship_bms::parse_cell_voltage(0x003010, d.data(), out);
+  airship_bms::parse_cell_voltage(0x003010, d.data(), 8, out);
   EXPECT_FLOAT_EQ(out.cell_voltages[5], 3.2f);
   EXPECT_FLOAT_EQ(out.cell_voltages[9], 3.6f);
 }
@@ -82,7 +82,7 @@ TEST(BmsProtocol, ParseCellTempStatistic)
     85, 0, 0, 80, 0, 0, 82, 55,
   };
   BmsData out;
-  airship_bms::parse_cell_temp_statistic(d.data(), out);
+  airship_bms::parse_cell_temp_statistic(d.data(), 8, out);
   EXPECT_FLOAT_EQ(out.max_cell_temp, 35.0f);
   EXPECT_FLOAT_EQ(out.min_cell_temp, 30.0f);
   EXPECT_FLOAT_EQ(out.avg_cell_temp, 32.0f);
@@ -96,8 +96,25 @@ TEST(BmsProtocol, ParsePackTemp)
     75, 80, 85, 90, 95, 100, 105, 110,
   };
   BmsData out;
-  airship_bms::parse_pack_temp(d.data(), out);
+  airship_bms::parse_pack_temp(d.data(), 8, out);
   for (uint32_t i = 0; i < 8; ++i) {
     EXPECT_FLOAT_EQ(out.pole_temps[i], 25.0f + static_cast<float>(i) * 5.0f);
   }
+}
+
+// 帧长不足时应忽略该帧, 不产生越界或假数据
+TEST(BmsProtocol, ShortFrameIgnored)
+{
+  BmsData out;
+  const std::array<uint8_t, 4> d = {0x58, 0x0E, 0x1A, 0x04};
+  // 传入不足长度, 各解析函数应安全返回且不修改结果
+  airship_bms::parse_batt_info(d.data(), 4, out);
+  airship_bms::parse_batt_status(d.data(), 4, out);
+  airship_bms::parse_cell_voltage(0x003000, d.data(), 4, out);
+  airship_bms::parse_cell_temp_statistic(d.data(), 4, out);
+  airship_bms::parse_pack_temp(d.data(), 4, out);
+  EXPECT_EQ(out.pack_voltage, 0.0f);
+  EXPECT_EQ(out.alarm_level, 0);
+  EXPECT_EQ(out.cell_voltages[0], 0.0f);
+  EXPECT_EQ(out.pole_temps[0], 0.0f);
 }

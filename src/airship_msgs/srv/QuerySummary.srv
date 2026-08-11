@@ -1,0 +1,5 @@
+# 灵云01号伴飞电脑 — 主动触发一次 LoRa 统计汇总
+---
+bool success
+string message
+LoRaSummary summary

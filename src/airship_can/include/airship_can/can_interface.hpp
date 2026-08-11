@@ -4,6 +4,7 @@
 #define AIRSHIP_CAN__CAN_INTERFACE_HPP_
 
 #include <cstdint>
+#include <mutex>
 #include <string>
 
 namespace airship_can
@@ -48,11 +49,24 @@ public:
   bool receive(CanFrame & frame, int timeout_ms);
 
   // 接口是否已打开
-  bool is_open() const {return fd_ >= 0;}
+  bool is_open() const;
+
+  // 确保接口打开: 若尚未打开则尝试打开; 返回当前是否可用。
+  // 用于实现 CAN 掉线自动重连(USB-CAN 插拔/接口重启后 fd 失效)。
+  // 线程安全: 供多线程(如 DCDC 控制线程+接收线程)并发调用。
+  bool ensure_open();
 
 private:
   std::string ifname_;
   int fd_;
+  // 保护 fd_ 的并发访问 (open/close/send/receive/ensure_open)
+  mutable std::mutex mutex_;
+
+  // 无锁内部实现 (调用方需持有 mutex_)
+  bool open_unlocked();
+  void close_unlocked();
+  bool send_unlocked(const CanFrame & frame);
+  bool receive_unlocked(CanFrame & frame, int timeout_ms);
 };
 
 }  // namespace airship_can

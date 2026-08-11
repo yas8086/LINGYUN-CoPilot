@@ -10,10 +10,16 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>airship_bms</exec_depend>
+  <exec_depend>airship_backup_bms</exec_depend>
   <exec_depend>airship_mppt</exec_depend>
   <exec_depend>airship_dcdc</exec_depend>
+  <exec_depend>airship_lora</exec_depend>
   <exec_depend>airship_monitor</exec_depend>
   <exec_depend>airship_link</exec_depend>
+  <exec_depend>airship_safety</exec_depend>
+  <exec_depend>airship_fc</exec_depend>
+  <exec_depend>airship_cloud</exec_depend>
+  <exec_depend>mavros</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

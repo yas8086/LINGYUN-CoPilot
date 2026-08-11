@@ -34,7 +34,18 @@ public:
     // ===== 参数 =====
     can_if_ = this->declare_parameter("can_interface", std::string("can0"));
     query_rate_hz_ = this->declare_parameter("query_rate_hz", 1.0);
+    // 除零防护: 频率必须为正, 否则 1000.0/rate 产生 inf 导致 static_cast<int> 未定义行为
+    if (query_rate_hz_ <= 0.0) {
+      RCLCPP_WARN(this->get_logger(), "query_rate_hz 非法值 %.3f, 重置为 1.0", query_rate_hz_);
+      query_rate_hz_ = 1.0;
+    }
     device_addr_ = static_cast<uint8_t>(this->declare_parameter("device_addr", 1));
+    // 无数据超时 (s): 超过该时长未收到任何有效帧, 判定设备离线, 兜底发布 online=false
+    link_timeout_s_ = this->declare_parameter("link_timeout_s", 3.0);
+    if (link_timeout_s_ <= 0.0) {
+      RCLCPP_WARN(this->get_logger(), "link_timeout_s 非法值 %.3f, 重置为 3.0", link_timeout_s_);
+      link_timeout_s_ = 3.0;
+    }
 
     // ===== 发布器 =====
     status_pub_ =
@@ -46,6 +57,8 @@ public:
     }
 
     running_ = true;
+    last_data_time_ = this->now();
+    last_offline_pub_time_ = this->now();
     query_thread_ = std::thread(&MpptNode::query_loop, this);
     receive_thread_ = std::thread(&MpptNode::receive_loop, this);
   }
@@ -74,11 +87,16 @@ private:
       ReadCode::kCodeTemp, ReadCode::kCodeControl,
     };
     while (running_.load()) {
-      if (can_.is_open()) {
+      // USB-CAN 插拔/接口重启后自动重连
+      if (can_.ensure_open()) {
         for (ReadCode code : codes) {
           can_.send(airship_mppt::build_query_frame(code));
           std::this_thread::sleep_for(std::chrono::milliseconds(20));
         }
+      } else {
+        RCLCPP_WARN_THROTTLE(
+          this->get_logger(), *this->get_clock(), 3000,
+          "CAN 接口 %s 不可用, 重连中", can_if_.c_str());
       }
       std::this_thread::sleep_for(period);
     }
@@ -88,52 +106,71 @@ private:
   void receive_loop()
   {
     while (running_.load()) {
-      CanFrame frame{};
-      if (!can_.receive(frame, 100)) {
+      if (!can_.ensure_open()) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         continue;
       }
+      CanFrame frame{};
+      if (!can_.receive(frame, 100)) {
+        // 无数据超时兜底: 距上次有效数据超过 link_timeout_s 后周期发布 online=false,
+        // 让下游能感知设备失联(而非停留在最后一次旧数据)。
+        const auto now = this->now();
+        if ((now - last_data_time_).seconds() > link_timeout_s_ &&
+          (now - last_offline_pub_time_).seconds() >= link_timeout_s_)
+        {
+          last_offline_pub_time_ = now;
+          publish_status(false);
+        }
+        continue;
+      }
+      last_data_time_ = this->now();
       // 校验只读类型与目标地址
       const uint8_t type = static_cast<uint8_t>((frame.id >> 24) & 0xFF);
       const uint8_t target = static_cast<uint8_t>((frame.id >> 8) & 0xFF);
       if (type != airship_mppt::kReadType || target != airship_mppt::kTargetAddr) {
         continue;
       }
+      // 校验源地址与期望设备一致, 避免多设备总线串扰导致误解析
+      const uint8_t src = static_cast<uint8_t>(frame.id & 0xFF);
+      if (src != device_addr_) {
+        continue;
+      }
       const uint8_t code = static_cast<uint8_t>((frame.id >> 16) & 0xFF);
       switch (static_cast<ReadCode>(code)) {
         case ReadCode::kCodeRated:
-          airship_mppt::parse_rated(frame.data, mppt_data_);
+          airship_mppt::parse_rated(frame.data, frame.len, mppt_data_);
           break;
         case ReadCode::kCodeRealtime:
-          airship_mppt::parse_realtime(frame.data, mppt_data_);
+          airship_mppt::parse_realtime(frame.data, frame.len, mppt_data_);
           break;
         case ReadCode::kCodeState:
-          airship_mppt::parse_state(frame.data, mppt_data_);
+          airship_mppt::parse_state(frame.data, frame.len, mppt_data_);
           break;
         case ReadCode::kCodeEnergyDay:
-          airship_mppt::parse_energy_day(frame.data, mppt_data_);
+          airship_mppt::parse_energy_day(frame.data, frame.len, mppt_data_);
           break;
         case ReadCode::kCodeEnergyTotal:
-          airship_mppt::parse_energy_total(frame.data, mppt_data_);
+          airship_mppt::parse_energy_total(frame.data, frame.len, mppt_data_);
           break;
         case ReadCode::kCodeTemp:
-          airship_mppt::parse_temp(frame.data, mppt_data_);
+          airship_mppt::parse_temp(frame.data, frame.len, mppt_data_);
           break;
         case ReadCode::kCodeControl:
-          airship_mppt::parse_control(frame.data, mppt_data_);
+          airship_mppt::parse_control(frame.data, frame.len, mppt_data_);
           break;
         default:
           continue;
       }
-      publish_status();
+      publish_status(true);
     }
   }
 
   // 发布聚合状态
-  void publish_status()
+  void publish_status(bool online)
   {
     auto msg = airship_msgs::msg::MpptStatus();
     msg.header.stamp = this->now();
-    msg.online = true;
+    msg.online = online;
     msg.device_addr = device_addr_;
 
     msg.pv_voltage = mppt_data_.pv_voltage;
@@ -168,9 +205,12 @@ private:
   std::thread receive_thread_;
 
   double query_rate_hz_;
+  double link_timeout_s_;
   uint8_t device_addr_;
 
   MpptData mppt_data_;
+  rclcpp::Time last_data_time_;
+  rclcpp::Time last_offline_pub_time_;
 
   rclcpp::Publisher<airship_msgs::msg::MpptStatus>::SharedPtr status_pub_;
 };

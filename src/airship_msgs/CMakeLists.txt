@@ -12,14 +12,26 @@ find_package(builtin_interfaces REQUIRED)
 
 set(msg_files
   "msg/BmsStatus.msg"
+  "msg/BackupBmsStatus.msg"
   "msg/MpptStatus.msg"
   "msg/DcdcStatus.msg"
   "msg/DeviceAlert.msg"
   "msg/FlightStatus.msg"
+  "msg/FcAlert.msg"
+  "msg/LoRaSample.msg"
+  "msg/LoRaSamples.msg"
+  "msg/LoRaSummary.msg"
+  "msg/SafetyStatus.msg"
+)
+
+set(srv_files
+  "srv/QueryNode.srv"
+  "srv/QuerySummary.srv"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   ${msg_files}
+  ${srv_files}
   DEPENDENCIES std_msgs builtin_interfaces
   ADD_LINTER_TESTS
 )

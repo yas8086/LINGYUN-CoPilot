@@ -6,7 +6,7 @@ std_msgs/Header header
 # ===== 连接状态 =====
 bool online                 # CAN 链路是否在线
 uint8 device_addr           # 设备地址 (0x00-0xF7)
-uint16 can_id               # 本帧源 CAN ID(调试用)
+uint32 can_id               # 本帧源 CAN ID(调试用, 29位扩展帧)
 
 # ===== 电压/电流 =====
 float32 pv_voltage          # 光伏电压 [V]

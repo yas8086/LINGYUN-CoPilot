@@ -1,0 +1,68 @@
+# 灵云01号伴飞电脑 — 设备监控系统 systemd 服务
+#
+# 功能:
+#   1. 开机自启整个 ROS2 设备监控系统
+#   2. ExecStartPre 先初始化 CAN 接口 (保证启动顺序)
+#   3. Restart=always 崩溃自动重启 (节点崩溃自愈)
+#   4. 以 User=lingyun01 运行 (串口权限由 udev 规则授予 dialout 组)
+#
+# 安装:
+#   sudo cp tools/airship-device-monitor.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable airship-device-monitor   # 开机自启
+#   sudo systemctl start  airship-device-monitor   # 立即启动
+#
+# 常用命令:
+#   systemctl status airship-device-monitor        # 查看状态
+#   journalctl -u airship-device-monitor -f        # 实时查看日志
+#   sudo systemctl restart airship-device-monitor  # 重启
+
+[Unit]
+Description=Lingyun Airship Device Monitor (ROS2)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=lingyun01
+Group=lingyun01
+WorkingDirectory=/home/lingyun01/LINGYUN-CoPilot
+
+# ---- 敏感凭据注入 ----
+# 从 env 文件读取 MQTT_PASSWORD 等环境变量(- 前缀: 文件缺失不报错)。
+# 文件仅 root 可读, 权限 600, 由 install_production.sh 或手动创建:
+#   sudo mkdir -p /etc/airship && sudo touch /etc/airship/airship.env
+#   sudo chmod 600 /etc/airship/airship.env
+#   echo 'MQTT_PASSWORD=...' | sudo tee /etc/airship/airship.env > /dev/null
+EnvironmentFile=-/etc/airship/airship.env
+
+# ---- 前置: 初始化 CAN 接口 (can0, 250kbps) ----
+# 在服务启动前确保 CAN 接口配置完成, 避免节点 open 失败
+ExecStartPre=/bin/bash -c '\
+  if ip link show can0 >/dev/null 2>&1; then \
+    ip link set can0 up type can bitrate 250000 2>/dev/null || true; \
+    echo "CAN can0 initialized @250kbps"; \
+  else \
+    echo "WARN: can0 not present, nodes will auto-reconnect when ready"; \
+  fi'
+
+# ---- 主程序: 启动 ROS2 设备监控 launch ----
+ExecStart=/bin/bash -c '\
+  source /opt/ros/jazzy/setup.bash && \
+  source /home/lingyun01/LINGYUN-CoPilot/install/setup.bash && \
+  exec ros2 launch airship_bringup device_monitor.launch.py'
+
+# ---- 崩溃自愈 ----
+Restart=always
+RestartSec=3
+
+# ---- 资源与清理 ----
+TimeoutStartSec=30
+TimeoutStopSec=15
+
+# 日志交给 journald 集中管理 (见 /etc/systemd/journald.conf 的 SystemMaxUse)
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

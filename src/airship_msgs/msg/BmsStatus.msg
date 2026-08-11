@@ -11,16 +11,24 @@ uint32 can_id               # 本帧源 CAN ID(调试用)
 float32 pack_voltage        # 电池包总压 [V]
 float32 pack_current        # 电池包总电流 [A] (充电为正)
 float32 soc                 # 荷电状态 [0-100 %]
+float32 real_soc            # 真实 SOC [0-100 %]
 float32 soh                 # 健康状态 [0-100 %]
 float32 max_cell_voltage    # 最高单体电压 [V]
 float32 min_cell_voltage    # 最低单体电压 [V]
 float32 cell_voltage_diff   # 单体压差 [V]
 float32 max_cell_temp       # 最高单体温度 [℃]
 float32 min_cell_temp       # 最低单体温度 [℃]
+float32 avg_cell_temp       # 平均单体温度 [℃]
+float32 temp_diff           # 单体温差 [℃]
+float32[8] pole_temps       # 极耳温度 [℃] (未用位置填 0)
 
-# ===== 单体电压/温度(定长数组, 未用位置填 NaN) =====
-float32[256] cell_voltages  # 单体电压 [V]
-float32[256] cell_temps     # 单体温度 [℃]
+# ===== 绝缘电阻 =====
+uint16 positive_insulation_kohm   # 正极绝缘电阻 [kΩ]
+uint16 negative_insulation_kohm   # 负极绝缘电阻 [kΩ]
+
+# ===== 单体电压/温度(可变长, 长度等于实际电芯数, 未用位置填 NaN) =====
+float32[] cell_voltages      # 单体电压 [V]
+float32[] cell_temps         # 单体温度 [℃]
 
 # ===== 故障与告警 (位映射, 见 BMS 协议 BMS_alarmLevel) =====
 uint16 fault_word1          # 一级故障字

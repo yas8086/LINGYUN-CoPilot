@@ -43,7 +43,7 @@ TEST(DcdcProtocol, ParseStatus)
   // 故障字节: BIT2(输出开) + BIT5(短路) + BIT7(总故障) = 0x80|0x20|0x04 = 0xA4
   const std::array<uint8_t, 8> d = {0xA4, 0, 0, 0, 0, 0, 0, 0};
   DcdcData out;
-  airship_dcdc::parse_status(d.data(), out);
+  airship_dcdc::parse_status(d.data(), 8, out);
   EXPECT_EQ(out.fault_word, 0xA4);
   EXPECT_TRUE(out.output_enabled);
   EXPECT_TRUE((out.fault_word & airship_dcdc::fault::kShortCircuit) != 0);
@@ -55,7 +55,7 @@ TEST(DcdcProtocol, ParseStatusOutputOff)
   // 仅 BIT0 输入欠压
   const std::array<uint8_t, 8> d = {0x01, 0, 0, 0, 0, 0, 0, 0};
   DcdcData out;
-  airship_dcdc::parse_status(d.data(), out);
+  airship_dcdc::parse_status(d.data(), 8, out);
   EXPECT_FALSE(out.output_enabled);
   EXPECT_TRUE((out.fault_word & airship_dcdc::fault::kInputUndervolt) != 0);
 }
@@ -66,10 +66,23 @@ TEST(DcdcProtocol, ParseAnalog)
   // temp_with_offset(raw) = raw - 40. 要 45℃ -> raw=85, 55℃ -> raw=95
   const std::array<uint8_t, 8> d = {0x68, 0x01, 0xE0, 0x01, 0x7D, 0x00, 85, 95};
   DcdcData out;
-  airship_dcdc::parse_analog(d.data(), out);
+  airship_dcdc::parse_analog(d.data(), 8, out);
   EXPECT_FLOAT_EQ(out.input_voltage, 360.0f);
   EXPECT_FLOAT_EQ(out.output_voltage, 48.0f);
   EXPECT_FLOAT_EQ(out.output_current, 12.5f);
   EXPECT_FLOAT_EQ(out.ambient_temp, 45.0f);
   EXPECT_FLOAT_EQ(out.heatsink_temp, 55.0f);
+}
+
+// 帧长不足时应安全返回: parse_status 仅需 1 字节可正常解析;
+// parse_analog 需 8 字节, 帧长不足时应跳过不产生越界
+TEST(DcdcProtocol, ShortFrameIgnored)
+{
+  const std::array<uint8_t, 2> d = {0xA4, 0};
+  DcdcData out;
+  airship_dcdc::parse_status(d.data(), 1, out);   // len>=1, 正常解析
+  airship_dcdc::parse_analog(d.data(), 1, out);   // len<8, 应跳过
+  EXPECT_EQ(out.fault_word, 0xA4);
+  EXPECT_TRUE(out.output_enabled);
+  EXPECT_EQ(out.input_voltage, 0.0f);  // parse_analog 未执行
 }

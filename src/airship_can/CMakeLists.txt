@@ -29,9 +29,13 @@ ament_export_include_directories(include)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
+  find_package(ament_cmake_gtest REQUIRED)
   # 闭源代码: 跳过 ament_copyright 版权检查
   set(ament_cmake_copyright_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
+
+  ament_add_gtest(test_can_threadsafe test/test_can_threadsafe.cpp)
+  target_link_libraries(test_can_threadsafe ${PROJECT_NAME})
 endif()
 
 ament_package()

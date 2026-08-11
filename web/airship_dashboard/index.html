@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>灵云01号 伴飞电脑远程监控</title>
+<script src="https://cdn.jsdelivr.net/npm/mqtt@5.5.0/dist/mqtt.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1420;
+    --panel: #1a2130;
+    --panel2: #222b3d;
+    --border: #2c3a52;
+    --text: #e6edf7;
+    --dim: #8b97a8;
+    --accent: #3fa9f5;
+    --ok: #2ecc71;
+    --warn: #f5b041;
+    --err: #e74c3c;
+    --off: #5a6575;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); min-height: 100vh;
+  }
+  header {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 12px 20px; background: var(--panel); border-bottom: 1px solid var(--border);
+  }
+  header h1 { font-size: 18px; font-weight: 600; margin-right: auto; }
+  #conn-status { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  #conn-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--off); }
+  #conn-dot.online { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+  #conn-dot.connecting { background: var(--warn); }
+  #conn-dot.offline { background: var(--err); }
+  header label { font-size: 12px; color: var(--dim); }
+  header input {
+    background: var(--panel2); border: 1px solid var(--border); color: var(--text);
+    border-radius: 6px; padding: 6px 8px; font-size: 13px; width: 150px;
+  }
+  header button {
+    background: var(--accent); border: none; color: #fff; border-radius: 6px;
+    padding: 7px 16px; font-size: 13px; cursor: pointer; font-weight: 600;
+  }
+  header button:hover { filter: brightness(1.1); }
+  header button.stop { background: var(--err); }
+  #ts { font-size: 12px; color: var(--dim); }
+  main { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; padding: 20px; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .panel h2 { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .panel h2 .tag {
+    font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 600;
+  }
+  .tag.on { background: rgba(46,204,113,.15); color: var(--ok); }
+  .tag.off { background: rgba(90,101,117,.2); color: var(--dim); }
+  .tag.alert { background: rgba(231,76,60,.2); color: var(--err); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 10px; }
+  .metric { background: var(--panel2); border-radius: 8px; padding: 10px; }
+  .metric .label { font-size: 12px; color: var(--dim); margin-bottom: 4px; }
+  .metric .value { font-size: 20px; font-weight: 700; }
+  .metric .unit { font-size: 12px; color: var(--dim); font-weight: 400; margin-left: 2px; }
+  .metric.alert { border: 1px solid var(--err); }
+  .metric.alert .value { color: var(--err); }
+  .bar { height: 10px; background: var(--panel2); border-radius: 5px; margin-top: 6px; overflow: hidden; }
+  .bar > div { height: 100%; background: var(--accent); transition: width .4s; }
+  .lora-node {
+    background: var(--panel2); border-radius: 8px; padding: 8px 12px; margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .lora-node .name { font-weight: 600; font-size: 13px; }
+  .lora-node .vals { font-size: 13px; color: var(--dim); }
+  .lora-node.alert { border: 1px solid var(--err); }
+  .empty { color: var(--dim); font-size: 13px; padding: 10px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🛩️ 灵云01号 伴飞电脑 · 远程监控</h1>
+  <div id="conn-status">
+    <span id="conn-dot" class="offline"></span><span id="conn-text">未连接</span>
+  </div>
+  <span id="ts"></span>
+</header>
+
+<div class="conn-bar" style="padding:10px 20px; display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; background:var(--panel); border-bottom:1px solid var(--border);">
+  <!--
+    安全提示: 当前默认 broker.emqx.io 为公共匿名测试 broker, 数据可被任何人订阅, 仅用于本地联调。
+    生产部署必须改用私有 MQTT broker(如 4G/EMQX Cloud Serverless)并填写用户名/密码鉴权, 避免飞艇遥测/GPS 数据泄露。
+    生产连接方式为 TLS/WSS + 鉴权, 端口 8084 是 broker.emqx.io 的 WSS 端口。
+  -->
+  <label>Broker<br><input id="f-host" value="broker.emqx.io"></label>
+  <label>端口(WSS)<br><input id="f-port" value="8084" style="width:70px"></label>
+  <label>Topic<br><input id="f-topic" value="lingyun01/telemetry" style="width:180px"></label>
+  <label>用户名<br><input id="f-user" value=""></label>
+  <label>密码<br><input id="f-pass" type="password" value=""></label>
+  <button id="btn-conn" onclick="toggleConnect()">连接</button>
+</div>
+
+<main>
+  <!-- BMS -->
+  <section class="panel">
+    <h2>🔋 BMS 电池 <span id="bms-tag" class="tag off">离线</span></h2>
+    <div class="grid">
+      <div class="metric"><div class="label">SOC</div><div class="value" id="bms-soc">--</div><div class="bar"><div id="bms-soc-bar" style="width:0%"></div></div></div>
+      <div class="metric"><div class="label">真实SOC rsoc</div><div class="value" id="bms-rsoc">--</div><span class="unit">%</span></div>
+      <div class="metric"><div class="label">总压 pack_v</div><div class="value" id="bms-pv">--</div><span class="unit">V</span></div>
+      <div class="metric"><div class="label">总电流 pack_i</div><div class="value" id="bms-pi">--</div><span class="unit">A</span></div>
+      <div class="metric"><div class="label">最高单体 max_v</div><div class="value" id="bms-maxv">--</div><span class="unit">V</span></div>
+      <div class="metric"><div class="label">最低单体 min_v</div><div class="value" id="bms-minv">--</div><span class="unit">V</span></div>
+      <div class="metric"><div class="label">压差 diff_v</div><div class="value" id="bms-diffv">--</div><span class="unit">V</span></div>
+      <div class="metric"><div class="label">最高温度 max_t</div><div class="value" id="bms-maxt">--</div><span class="unit">℃</span></div>
+      <div class="metric"><div class="label">最低温度 min_t</div><div class="value" id="bms-mint">--</div><span class="unit">℃</span></div>
+      <div class="metric"><div class="label">绝缘电阻 +</div><div class="value" id="bms-risop">--</div><span class="unit">kΩ</span></div>
+      <div class="metric"><div class="label">绝缘电阻 -</div><div class="value" id="bms-rjson">--</div><span class="unit">kΩ</span></div>
+      <div class="metric"><div class="label">温差 diff_t</div><div class="value" id="bms-difft">--</div><span class="unit">℃</span></div>
+      <div class="metric" id="bms-alarm"><div class="label">告警</div><div class="value" id="bms-alarm-v">--</div></div>
+    </div>
+  </section>
+
+  <!-- MPPT -->
+  <section class="panel">
+    <h2>☀️ MPPT 光伏 <span id="mppt-tag" class="tag off">离线</span></h2>
+    <div class="grid">
+      <div class="metric"><div class="label">光伏电压 pv_v</div><div class="value" id="mppt-pvv">--</div><span class="unit">V</span></div>
+      <div class="metric"><div class="label">光伏功率 pv_p</div><div class="value" id="mppt-pvp">--</div><span class="unit">W</span></div>
+      <div class="metric"><div class="label">电池电压 batt_v</div><div class="value" id="mppt-battv">--</div><span class="unit">V</span></div>
+      <div class="metric"><div class="label">充电电流 charge_i</div><div class="value" id="mppt-chargei">--</div><span class="unit">A</span></div>
+      <div class="metric"><div class="label">日发电 today</div><div class="value" id="mppt-today">--</div><span class="unit">kWh</span></div>
+      <div class="metric"><div class="label">总发电 total</div><div class="value" id="mppt-total">--</div><span class="unit">kWh</span></div>
+      <div class="metric" id="mppt-fault"><div class="label">故障</div><div class="value" id="mppt-fault-v">--</div></div>
+    </div>
+  </section>
+
+  <!-- DCDC -->
+  <section class="panel">
+    <h2>⚡ DCDC 电源 <span id="dcdc-tag" class="tag off">离线</span></h2>
+    <div class="grid">
+      <div class="metric"><div class="label">输入 in_v</div><div class="value" id="dcdc-inv">--</div><span class="unit">V</span></div>
+      <div class="metric"><div class="label">输出 out_v</div><div class="value" id="dcdc-outv">--</div><span class="unit">V</span></div>
+      <div class="metric"><div class="label">输出电流 out_i</div><div class="value" id="dcdc-outi">--</div><span class="unit">A</span></div>
+      <div class="metric"><div class="label">输出功率 out_p</div><div class="value" id="dcdc-outp">--</div><span class="unit">W</span></div>
+      <div class="metric"><div class="label">散热器温度</div><div class="value" id="dcdc-temp">--</div><span class="unit">℃</span></div>
+      <div class="metric"><div class="label">输出 enabled</div><div class="value" id="dcdc-enabled">--</div></div>
+      <div class="metric" id="dcdc-fault"><div class="label">故障</div><div class="value" id="dcdc-fault-v">--</div></div>
+    </div>
+  </section>
+
+  <!-- FC -->
+  <section class="panel">
+    <h2>✈️ 飞控 FC <span id="fc-tag" class="tag off">离线</span></h2>
+    <div class="grid">
+      <div class="metric"><div class="label">姿态 roll</div><div class="value" id="fc-roll">--</div><span class="unit">°</span></div>
+      <div class="metric"><div class="label">pitch</div><div class="value" id="fc-pitch">--</div><span class="unit">°</span></div>
+      <div class="metric"><div class="label">yaw</div><div class="value" id="fc-yaw">--</div><span class="unit">°</span></div>
+      <div class="metric"><div class="label">纬度 lat</div><div class="value" id="fc-lat">--</div></div>
+      <div class="metric"><div class="label">经度 lon</div><div class="value" id="fc-lon">--</div></div>
+      <div class="metric"><div class="label">高度 alt</div><div class="value" id="fc-alt">--</div><span class="unit">m</span></div>
+      <div class="metric"><div class="label">速度 vx/vy/vz</div><div class="value" id="fc-v">--</div></div>
+      <div class="metric"><div class="label">模式 mode</div><div class="value" id="fc-mode" style="font-size:16px">--</div></div>
+      <div class="metric"><div class="label">解锁 armed</div><div class="value" id="fc-armed">--</div></div>
+      <div class="metric"><div class="label">机载电量</div><div class="value" id="fc-batt">--</div></div>
+    </div>
+  </section>
+
+  <!-- LoRa -->
+  <section class="panel" style="grid-column: 1 / -1;">
+    <h2>📡 LoRa 温度/压力节点 <span id="lora-tag" class="tag off">离线</span></h2>
+    <div id="lora-list"><div class="empty">暂无节点数据</div></div>
+  </section>
+</main>
+
+<script>
+let client = null;
+let connected = false;
+
+function setStatus(cls, text) {
+  const dot = document.getElementById('conn-dot');
+  dot.className = cls;
+  document.getElementById('conn-text').textContent = text;
+}
+function setTag(id, on, alertTxt) {
+  const el = document.getElementById(id);
+  if (alertTxt) {
+    el.textContent = alertTxt; el.className = 'tag alert';
+  } else if (on) {
+    el.textContent = '在线'; el.className = 'tag on';
+  } else {
+    el.textContent = '离线'; el.className = 'tag off';
+  }
+}
+function setVal(id, v) {
+  const el = document.getElementById(id);
+  if (v === null || v === undefined) el.textContent = '--';
+  else el.textContent = v;
+}
+function resetPanel() {
+  ['bms-soc','bms-rsoc','bms-pv','bms-pi','bms-maxv','bms-minv','bms-diffv','bms-maxt','bms-mint','bms-risop','bms-rjson','bms-difft','bms-alarm-v',
+   'mppt-pvv','mppt-pvp','mppt-battv','mppt-chargei','mppt-today','mppt-total','mppt-fault-v',
+   'dcdc-inv','dcdc-outv','dcdc-outi','dcdc-outp','dcdc-temp','dcdc-enabled','dcdc-fault-v',
+   'fc-roll','fc-pitch','fc-yaw','fc-lat','fc-lon','fc-alt','fc-v','fc-mode','fc-armed','fc-batt'
+  ].forEach(id => document.getElementById(id).textContent = '--');
+  document.getElementById('bms-soc-bar').style.width = '0%';
+  ['bms-alarm','mppt-fault','dcdc-fault'].forEach(id => document.getElementById(id).classList.remove('alert'));
+  ['bms-tag','mppt-tag','dcdc-tag','fc-tag','lora-tag'].forEach(id => setTag(id, false));
+  document.getElementById('lora-list').innerHTML = '<div class="empty">暂无节点数据</div>';
+}
+
+function fmt(v, unit, digits) {
+  if (v === null || v === undefined || isNaN(v)) return '--';
+  const d = (digits === undefined) ? 1 : digits;
+  return parseFloat(v).toFixed(d) + (unit ? ' <span class="unit">'+unit+'</span>' : '');
+}
+
+function render(frame) {
+  const t = frame.t;
+  if (t) {
+    const dt = new Date(t * 1000);
+    document.getElementById('ts').textContent = '数据时间: ' + dt.toLocaleTimeString('zh-CN', {hour12:false});
+  }
+  // 告警严重度判断
+  const alertFor = (obj, field, level) => obj && obj[field] && obj[field] > 0 ? ('故障' + (level||'')) : null;
+
+  // ---- BMS ----
+  if (frame.bms) {
+    const b = frame.bms;
+    setTag('bms-tag', true, b.alarm > 0 ? '告警' : null);
+    setVal('bms-soc', fmt(b.soc, '%', 0));
+    document.getElementById('bms-soc-bar').style.width = Math.min(100, Math.max(0, b.soc || 0)) + '%';
+    setVal('bms-rsoc', fmt(b.rsoc, '%', 0));
+    setVal('bms-pv', fmt(b.pack_v, 'V'));
+    setVal('bms-pi', fmt(b.pack_i, 'A'));
+    setVal('bms-maxv', fmt(b.max_v, 'V'));
+    setVal('bms-minv', fmt(b.min_v, 'V'));
+    setVal('bms-diffv', fmt(b.diff_v, 'V'));
+    setVal('bms-maxt', fmt(b.max_t, '℃'));
+    setVal('bms-mint', fmt(b.min_t, '℃'));
+    setVal('bms-risop', fmt(b.riso_p, 'kΩ'));
+    setVal('bms-rjson', fmt(b.riso_n, 'kΩ'));
+    setVal('bms-difft', fmt(b.diff_t, '℃'));
+    setVal('bms-alarm-v', b.alarm || 0);
+    document.getElementById('bms-alarm').classList.toggle('alert', b.alarm > 0);
+  } else { setTag('bms-tag', false); }
+
+  // ---- MPPT ----
+  if (frame.mppt) {
+    const m = frame.mppt;
+    setTag('mppt-tag', true, m.fault > 0 ? '故障' : null);
+    setVal('mppt-pvv', fmt(m.pv_v, 'V'));
+    setVal('mppt-pvp', fmt(m.pv_p, 'W'));
+    setVal('mppt-battv', fmt(m.batt_v, 'V'));
+    setVal('mppt-chargei', fmt(m.charge_i, 'A'));
+    setVal('mppt-today', fmt(m.today, 'kWh'));
+    setVal('mppt-total', fmt(m.total, 'kWh'));
+    setVal('mppt-fault-v', m.fault || 0);
+    document.getElementById('mppt-fault').classList.toggle('alert', m.fault > 0);
+  } else { setTag('mppt-tag', false); }
+
+  // ---- DCDC ----
+  if (frame.dcdc) {
+    const d = frame.dcdc;
+    setTag('dcdc-tag', true, d.fault > 0 ? '故障' : null);
+    setVal('dcdc-inv', fmt(d.in_v, 'V'));
+    setVal('dcdc-outv', fmt(d.out_v, 'V'));
+    setVal('dcdc-outi', fmt(d.out_i, 'A'));
+    setVal('dcdc-outp', fmt(d.out_p, 'W'));
+    setVal('dcdc-temp', fmt(d.temp, '℃'));
+    setVal('dcdc-enabled', d.enabled ? '开' : '关');
+    setVal('dcdc-fault-v', d.fault || 0);
+    document.getElementById('dcdc-fault').classList.toggle('alert', d.fault > 0);
+  } else { setTag('dcdc-tag', false); }
+
+  // ---- FC ----
+  if (frame.fc) {
+    const f = frame.fc;
+    setTag('fc-tag', true);
+    setVal('fc-roll', fmt(f.roll, '°'));
+    setVal('fc-pitch', fmt(f.pitch, '°'));
+    setVal('fc-yaw', fmt(f.yaw, '°'));
+    setVal('fc-lat', fmt(f.lat, '', 5));
+    setVal('fc-lon', fmt(f.lon, '', 5));
+    setVal('fc-alt', fmt(f.alt, 'm'));
+    if (f.vx !== undefined) setVal('fc-v', (parseFloat(f.vx).toFixed(1)) + '/' + (parseFloat(f.vy).toFixed(1)) + '/' + (parseFloat(f.vz).toFixed(1)));
+    setVal('fc-mode', f.mode);
+    setVal('fc-armed', f.armed ? '已解锁' : '锁定');
+    setVal('fc-batt', fmt(f.batt_v, 'V') + ' / ' + fmt(f.batt_pct, '%', 0));
+  } else { setTag('fc-tag', false); }
+
+  // ---- LoRa ----
+  if (frame.lora) {
+    const nodes = frame.lora.nodes || [];
+    setTag('lora-tag', true, null);
+    if (nodes.length === 0) {
+      document.getElementById('lora-list').innerHTML = '<div class="empty">无在线节点</div>';
+      return;
+    }
+    // 使用 DOM API + textContent 渲染, 防止 MQTT 注入的节点字段造成 DOM XSS
+    const listEl = document.getElementById('lora-list');
+    listEl.innerHTML = '';
+    for (const n of nodes) {
+      const isPressure = Number(n.pressure) > 0;
+      const val = isPressure ? (Number(n.pressure) / 1000).toFixed(1) + ' kPa'
+                             : Number(n.temp).toFixed(1) + ' ℃';
+      const div = document.createElement('div');
+      div.className = n.alarm !== 0 ? 'lora-node alert' : 'lora-node';
+      const name = document.createElement('span');
+      name.className = 'name';
+      name.textContent = '节点 #' + n.id;
+      const vals = document.createElement('span');
+      vals.className = 'vals';
+      vals.textContent = val + ' · 告警:' + n.alarm;
+      div.appendChild(name);
+      div.appendChild(vals);
+      listEl.appendChild(div);
+    }
+  } else { setTag('lora-tag', false); }
+}
+
+function onMessage(topic, payload) {
+  try {
+    const frame = JSON.parse(payload.toString());
+    render(frame);
+  } catch (e) {
+    console.error('JSON 解析失败:', e);
+  }
+}
+
+function toggleConnect() {
+  if (connected) { client.end(); setStatus('offline', '已断开'); connected = false;
+    document.getElementById('btn-conn').textContent = '连接'; document.getElementById('btn-conn').classList.remove('stop'); return; }
+  const host = document.getElementById('f-host').value.trim();
+  const port = document.getElementById('f-port').value.trim();
+  const topic = document.getElementById('f-topic').value.trim();
+  const user = document.getElementById('f-user').value.trim();
+  const pass = document.getElementById('f-pass').value;
+  const url = 'wss://' + host + ':' + port + '/mqtt';
+  setStatus('connecting', '连接中…');
+  try {
+    client = mqtt.connect(url, {
+      username: user, password: pass,
+      clientId: 'web-dash-' + Math.random().toString(16).slice(2, 10),
+      connectTimeout: 10000, reconnectPeriod: 3000
+    });
+  } catch (e) { setStatus('offline', '连接失败: ' + e.message); return; }
+  client.on('connect', () => {
+    connected = true; setStatus('online', '已连接 · ' + host);
+    document.getElementById('btn-conn').textContent = '断开'; document.getElementById('btn-conn').classList.add('stop');
+    client.subscribe(topic, { qos: 0 });
+  });
+  client.on('reconnect', () => setStatus('connecting', '重连中…'));
+  client.on('close', () => { if (connected) { setStatus('offline', '连接断开'); } });
+  client.on('error', (e) => { setStatus('offline', '错误: ' + e.message); });
+  client.on('message', onMessage);
+}
+</script>
+</body>
+</html>

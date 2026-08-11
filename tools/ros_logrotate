@@ -1,0 +1,22 @@
+# 灵云01号伴飞电脑 — ROS2 日志滚动清理配置
+# 安装到 /etc/logrotate.d/ros 后生效 (需 root):
+#   sudo cp tools/ros_logrotate /etc/logrotate.d/ros
+#   sudo chown root:root /etc/logrotate.d/ros
+#
+# 效果:
+#   - 单文件超过 10MB 时轮转
+#   - 保留最近 5 份历史 (.1 ~ .5)
+#   - copytruncate: 节点持续写文件时也能安全清理(先复制再截断)
+#   - 每日自动执行(logrotate 由系统 cron 调度)
+#   - su: ~/.ros/log 属于普通用户, 需以该用户身份执行轮转(root 无法直接处理)
+/home/lingyun01/.ros/log/*.log {
+    su lingyun01 lingyun01
+    daily
+    size 10M
+    rotate 5
+    copytruncate
+    missingok
+    notifempty
+    compress
+    delaycompress
+}

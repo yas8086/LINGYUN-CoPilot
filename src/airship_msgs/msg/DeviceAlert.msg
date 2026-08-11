@@ -7,6 +7,8 @@ std_msgs/Header header
 uint8 DEVICE_BMS = 1
 uint8 DEVICE_MPPT = 2
 uint8 DEVICE_DCDC = 3
+uint8 DEVICE_LORA = 4
+uint8 DEVICE_BACKUP_BMS = 5
 uint8 device_type            # 设备类型 (DEVICE_*)
 
 # ===== 告警信息 =====

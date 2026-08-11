@@ -5,7 +5,11 @@
 //
 // 参数:
 //   mqtt_host / mqtt_port / mqtt_topic / mqtt_username / mqtt_password
+//   mqtt_tls_enable / mqtt_tls_ca_cert / mqtt_tls_insecure
 //   tx_rate_hz  (打包发送频率)
+// 说明: 当 mqtt_password 参数为空时, 回退读取环境变量 MQTT_PASSWORD,
+//       避免密码经命令行参数暴露在 /proc/<pid>/cmdline。
+#include <cstdlib>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -14,9 +18,11 @@
 
 #include "airship_cloud/mqtt_client.hpp"
 #include "airship_link/json_packer.hpp"
+#include "airship_msgs/msg/backup_bms_status.hpp"
 #include "airship_msgs/msg/bms_status.hpp"
 #include "airship_msgs/msg/dcdc_status.hpp"
 #include "airship_msgs/msg/flight_status.hpp"
+#include "airship_msgs/msg/lo_ra_samples.hpp"
 #include "airship_msgs/msg/mppt_status.hpp"
 
 using std::placeholders::_1;
@@ -32,7 +38,22 @@ public:
     topic_ = this->declare_parameter("mqtt_topic", std::string("lingyun01/telemetry"));
     username_ = this->declare_parameter("mqtt_username", std::string(""));
     password_ = this->declare_parameter("mqtt_password", std::string(""));
+    // 密码参数为空时回退读取环境变量, 避免密码出现在进程 cmdline
+    if (password_.empty()) {
+      const char * env_pwd = std::getenv("MQTT_PASSWORD");
+      if (env_pwd != nullptr) {
+        password_ = env_pwd;
+      }
+    }
+    tls_enable_ = this->declare_parameter("mqtt_tls_enable", false);
+    tls_ca_cert_ = this->declare_parameter("mqtt_tls_ca_cert", std::string(""));
+    tls_insecure_ = this->declare_parameter("mqtt_tls_insecure", false);
     tx_rate_hz_ = this->declare_parameter("tx_rate_hz", 2.0);
+    // 除零防护: 频率必须为正, 否则 1000.0/rate 产生 inf 导致 static_cast<int> 未定义行为
+    if (tx_rate_hz_ <= 0.0) {
+      RCLCPP_WARN(this->get_logger(), "tx_rate_hz 非法值 %.3f, 重置为 2.0", tx_rate_hz_);
+      tx_rate_hz_ = 2.0;
+    }
 
     // 订阅各设备状态
     bms_sub_ = this->create_subscription<airship_msgs::msg::BmsStatus>(
@@ -43,13 +64,18 @@ public:
       "/dcdc/status", rclcpp::QoS(10), std::bind(&CloudNode::on_dcdc, this, _1));
     fc_sub_ = this->create_subscription<airship_msgs::msg::FlightStatus>(
       "/fc/status", rclcpp::QoS(10), std::bind(&CloudNode::on_fc, this, _1));
+    lora_sub_ = this->create_subscription<airship_msgs::msg::LoRaSamples>(
+      "/lora/samples", rclcpp::QoS(10), std::bind(&CloudNode::on_lora, this, _1));
+    backup_sub_ = this->create_subscription<airship_msgs::msg::BackupBmsStatus>(
+      "/backup_bms/status", rclcpp::QoS(10), std::bind(&CloudNode::on_backup, this, _1));
 
     // 初始化 MQTT
     mqtt_ = std::make_unique<airship_cloud::MqttClient>(
-      host_, port_, "lingyun01_onboard", username_, password_);
+      host_, port_, "lingyun01_onboard", username_, password_,
+      tls_enable_, tls_ca_cert_, tls_insecure_);
     if (mqtt_->connect()) {
-      RCLCPP_INFO(this->get_logger(), "MQTT 连接已启动: %s:%d, topic=%s",
-        host_.c_str(), port_, topic_.c_str());
+      RCLCPP_INFO(this->get_logger(), "MQTT 连接已启动: %s:%d, tls=%s, topic=%s",
+        host_.c_str(), port_, tls_enable_ ? "on" : "off", topic_.c_str());
     } else {
       RCLCPP_WARN(this->get_logger(), "MQTT 连接启动失败");
     }
@@ -85,13 +111,25 @@ private:
     fc_ = *msg;
   }
 
+  void on_lora(const airship_msgs::msg::LoRaSamples::SharedPtr msg)
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    lora_ = *msg;
+  }
+
+  void on_backup(const airship_msgs::msg::BackupBmsStatus::SharedPtr msg)
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    backup_ = *msg;
+  }
+
   void tx_callback()
   {
     std::string json;
     {
       std::lock_guard<std::mutex> lock(mutex_);
       json = airship_link::pack_telemetry_json(
-        this->now().seconds(), &bms_, &mppt_, &dcdc_, &fc_);
+        this->now().seconds(), &bms_, &mppt_, &dcdc_, &fc_, &lora_, &backup_);
     }
 
     if (!mqtt_->is_connected()) {
@@ -111,6 +149,9 @@ private:
   std::string topic_;
   std::string username_;
   std::string password_;
+  bool tls_enable_;
+  std::string tls_ca_cert_;
+  bool tls_insecure_;
   double tx_rate_hz_;
 
   std::mutex mutex_;
@@ -118,6 +159,8 @@ private:
   airship_msgs::msg::MpptStatus mppt_;
   airship_msgs::msg::DcdcStatus dcdc_;
   airship_msgs::msg::FlightStatus fc_;
+  airship_msgs::msg::LoRaSamples lora_;
+  airship_msgs::msg::BackupBmsStatus backup_;
 
   std::unique_ptr<airship_cloud::MqttClient> mqtt_;
 
@@ -125,6 +168,8 @@ private:
   rclcpp::Subscription<airship_msgs::msg::MpptStatus>::SharedPtr mppt_sub_;
   rclcpp::Subscription<airship_msgs::msg::DcdcStatus>::SharedPtr dcdc_sub_;
   rclcpp::Subscription<airship_msgs::msg::FlightStatus>::SharedPtr fc_sub_;
+  rclcpp::Subscription<airship_msgs::msg::LoRaSamples>::SharedPtr lora_sub_;
+  rclcpp::Subscription<airship_msgs::msg::BackupBmsStatus>::SharedPtr backup_sub_;
   rclcpp::TimerBase::SharedPtr tx_timer_;
 };
 

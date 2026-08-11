@@ -28,13 +28,19 @@ ament_target_dependencies(dcdc_node
   rclcpp std_msgs airship_msgs airship_can airship_utils)
 target_link_libraries(dcdc_node ${PROJECT_NAME}_protocol)
 
+# ===== DCDC 硬件保活进程 (无 ROS 依赖, 独立 systemd 服务) =====
+add_executable(dcdc_hold src/dcdc_hold.cpp)
+target_compile_features(dcdc_hold PUBLIC cxx_std_17)
+ament_target_dependencies(dcdc_hold airship_can airship_utils)
+target_link_libraries(dcdc_hold ${PROJECT_NAME}_protocol)
+
 install(TARGETS ${PROJECT_NAME}_protocol
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
 install(DIRECTORY include/
   DESTINATION include)
-install(TARGETS dcdc_node
+install(TARGETS dcdc_node dcdc_hold
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)

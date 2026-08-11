@@ -1,0 +1,6 @@
+# 灵云01号伴飞电脑 — 按节点 ID 查询最新 LoRa 采样
+int32 node_id
+---
+bool success
+string message
+LoRaSample sample

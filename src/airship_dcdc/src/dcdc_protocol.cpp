@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #include "airship_utils/can_utils.hpp"
+#include "airship_utils/math_utils.hpp"
 
 namespace airship_dcdc
 {
@@ -21,12 +22,14 @@ CanFrame build_control_frame(bool enabled, float set_voltage, float set_current)
   frame.len = 8;
   // Byte2: Bit5~4 = 01(开机) or 00(关机)
   frame.data[2] = enabled ? kControlOn : kControlOff;
-  // Byte3~4: 输出电压 (0.1V/BIT, 小端)
-  const uint16_t v = static_cast<uint16_t>(set_voltage * 10.0f);
+  // Byte3~4: 输出电压 (0.1V/BIT, 小端), 钳制到 [0,600]V 防负值/超范围转 uint16 UB
+  const uint16_t v = static_cast<uint16_t>(
+    airship_utils::clampf(set_voltage, 0.0f, 600.0f) * 10.0f);
   frame.data[3] = static_cast<uint8_t>(v & 0xFF);
   frame.data[4] = static_cast<uint8_t>((v >> 8) & 0xFF);
-  // Byte5~6: 输出限流 (0.1A/BIT, 小端)
-  const uint16_t i = static_cast<uint16_t>(set_current * 10.0f);
+  // Byte5~6: 输出限流 (0.1A/BIT, 小端), 钳制到 [0,100]A 防负值/超范围转 uint16 UB
+  const uint16_t i = static_cast<uint16_t>(
+    airship_utils::clampf(set_current, 0.0f, 100.0f) * 10.0f);
   frame.data[5] = static_cast<uint8_t>(i & 0xFF);
   frame.data[6] = static_cast<uint8_t>((i >> 8) & 0xFF);
   return frame;
@@ -42,15 +45,21 @@ CanFrame build_analog_query_frame()
 }
 
 // 电源状态帧: Byte0 故障字节, Bit2=输出状态
-void parse_status(const uint8_t * data, DcdcData & out)
+void parse_status(const uint8_t * data, uint32_t len, DcdcData & out)
 {
+  if (len < 1) {
+    return;
+  }
   out.fault_word = data[0];
   out.output_enabled = (data[0] & fault::kOutputOn) != 0;
 }
 
 // 模拟量回应帧: 输入电压(1V)/输出电压(0.1V)/输出电流(0.1A)/温度(1℃,-40)
-void parse_analog(const uint8_t * data, DcdcData & out)
+void parse_analog(const uint8_t * data, uint32_t len, DcdcData & out)
 {
+  if (len < 8) {
+    return;
+  }
   out.input_voltage = scale_u16(get_u16_le(data, 0), 1.0f);
   out.output_voltage = scale_u16(get_u16_le(data, 2), 0.1f);
   out.output_current = scale_u16(get_u16_le(data, 4), 0.1f);

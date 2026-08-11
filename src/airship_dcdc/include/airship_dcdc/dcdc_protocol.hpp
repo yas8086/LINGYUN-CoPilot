@@ -54,10 +54,10 @@ airship_can::CanFrame build_control_frame(bool enabled, float set_voltage, float
 // 构造模拟量查询帧
 airship_can::CanFrame build_analog_query_frame();
 
-// 解析电源状态帧 (0x18FF3247)
-void parse_status(const uint8_t * data, DcdcData & out);
+// 解析电源状态帧 (0x18FF3247), len 为 DLC
+void parse_status(const uint8_t * data, uint32_t len, DcdcData & out);
 // 解析模拟量回应帧 (0x18D84700)
-void parse_analog(const uint8_t * data, DcdcData & out);
+void parse_analog(const uint8_t * data, uint32_t len, DcdcData & out);
 
 }  // namespace airship_dcdc
 

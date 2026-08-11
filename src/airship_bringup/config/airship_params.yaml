@@ -7,6 +7,15 @@ bms_node:
     can_interface: "can0"
     # 电池单体串数 (三元锂 102 串)
     cell_count: 102
+    # 无数据超时 (s): 超过该时长未收到任何有效帧, 兜底发布 online=false
+    link_timeout_s: 3.0
+    # ---- 上报字段说明 (由 bms_protocol 解析 CAN 帧后填充, 非参数) ----
+    # pack_voltage / pack_current / soc / real_soc(真实SOC)
+    # max_cell_voltage / min_cell_voltage / cell_voltage_diff (单体电压与压差)
+    # max_cell_temp / min_cell_temp / avg_cell_temp / temp_diff (温度统计)
+    # pole_temps[8] (极耳温度)
+    # positive_insulation_kohm / negative_insulation_kohm (正负极绝缘电阻)
+    # alarm_level (告警级别: 0正常 1故障 2严重)
 
 mppt_node:
   ros__parameters:
@@ -15,6 +24,24 @@ mppt_node:
     query_rate_hz: 1.0
     # MPPT 从机设备地址
     device_addr: 1
+    # 无数据超时 (s): 超过该时长未收到任何有效帧, 兜底发布 online=false
+    link_timeout_s: 3.0
+
+backup_bms_node:
+  ros__parameters:
+    # 12S 备用电源 BMS 串口 (北辰协议 V1.4, 默认 9600 8N1)
+    # 使用 udev 固定符号链接, 避免 /dev/ttyUSB* 枚举顺序变化串号
+    serial_device: "/dev/airship_backup_bms"
+    baud_rate: 9600
+    # 从机地址 / 主机信息 (上位机 0x10)
+    addr: 255                # 0xFF
+    host: 16                 # 0x10
+    # 轮询周期 (ms)
+    sample_period_ms: 1000
+    # 单次响应超时 (ms)
+    resp_timeout_ms: 200
+    # 串口自动重连周期 (ms)
+    reconnect_ms: 2000
 
 dcdc_node:
   ros__parameters:
@@ -29,6 +56,34 @@ dcdc_node:
     set_current: 80.0
     # 是否开机
     dcdc_enabled: true
+    # 无数据超时 (s): 超过该时长未收到任何有效帧, 兜底发布 online=false
+    link_timeout_s: 3.0
+
+lora_node:
+  ros__parameters:
+    # 集中器 485 串口 (USB-RS485 转换器 = FTDI FT232R)
+    # 使用 udev 固定符号链接, 避免 /dev/ttyUSB* 枚举顺序变化串号
+    serial_device: "/dev/airship_485"
+    baud_rate: 9600
+    # Modbus 从机地址
+    slave_addr: 1
+    # LoRa 节点配置: node_ids 与 node_types 一一对应
+    #   type: "temperature" -> 读温度寄存器
+    #         "pressure"    -> 读温度 + 压力寄存器
+    node_ids: [1, 2, 6]
+    node_types: ["temperature", "temperature", "pressure"]
+    # 采集周期 (ms)
+    sample_period_ms: 2000
+    # 温度/压力寄存器起始地址
+    temp_reg_addr: 30393          # 0x76C1
+    pressure_reg_addr: 36601      # 0x8EF9
+    # 温度报警阈值 (℃)
+    alarm_low: -10.0
+    alarm_high: 60.0
+    # 单次 Modbus 响应超时 (ms)
+    resp_timeout_ms: 200
+    # 串口自动重连周期 (ms): 检测到串口掉线后按此周期尝试重连
+    reconnect_ms: 2000
 
 monitor_node:
   ros__parameters:
@@ -37,14 +92,31 @@ monitor_node:
     # 设备离线判定超时 (s)
     link_timeout_s: 3.0
 
+safety_node:
+  ros__parameters:
+    # 安全状态发布频率 (Hz)
+    pub_rate_hz: 10.0
+    # DCDC 判据超时 (s): 超时未收到 DCDC 状态视为不安全 (fail-safe)
+    dcdc_timeout_s: 3.0
+    # 主 BMS 判据超时 (s)
+    bms_timeout_s: 3.0
+    # 主 BMS 总压下限 (V)
+    bms_min_voltage: 40.0
+    # 12S 备用电源判据超时 (s)
+    backup_bms_timeout_s: 3.0
+    # 12S 备用电源总压下限 (V) (12S 磷酸铁锂 27Ah, 满电 ~43.2V, 过放保护 ~24V)
+    backup_bms_min_voltage: 24.0
+
 link_node:
   ros__parameters:
-    # 数传串口设备
-    serial_device: "/dev/ttyUSB0"
+    # 数传串口设备 (使用 udev 固定符号链接, 见 tools/70-airship-usb.rules)
+    serial_device: "/dev/airship_link"
     # 波特率
     baud_rate: 115200
     # 遥测下传频率 (Hz)
     tx_rate_hz: 5.0
+    # 串口自动重连周期 (ms)
+    reconnect_ms: 2000
 
 fc_monitor_node:
   ros__parameters:
@@ -52,16 +124,27 @@ fc_monitor_node:
     pub_rate_hz: 10.0
     # 飞控掉线判定超时 (s)
     fc_timeout_s: 2.0
+    # 异常告警去抖: 连续 N 次采样超限才触发告警 (防止毛刺误报)
+    alert_debounce_n: 3
+    # 数据日志目录 (空字符串表示禁用 CSV 记录; 需保证目录可写)
+    log_dir: "/home/lingyun01/airship_fc_logs"
 
 cloud_node:
   ros__parameters:
-    # MQTT broker 地址(4G 云服务器, 待定)
-    mqtt_host: "localhost"
-    mqtt_port: 1883
+    # EMQX Cloud Serverless 免费部署 (lingyun01-dev, Europe / AWS eu-central-1)
+    # 控制台: https://cloud-intl.emqx.com/console/projects/42048488/deployments/x99b1c81/overview
+    mqtt_host: "x99b1c81.ala.eu-central-1.emqxsl.com"
+    mqtt_port: 8883  # Serverless 仅支持 TLS 端口
     # 上云遥测 topic
     mqtt_topic: "lingyun01/telemetry"
-    # 认证(可选)
-    mqtt_username: ""
+    # Authentication -> Password-Based
+    mqtt_username: "lingyun01_onboard"
+    # 密码不落明文: 经 MQTT_PASSWORD 环境变量注入 (见 airship-device-monitor.service
+    # 的 EnvironmentFile=/etc/airship/airship.env), 参数留空时 cloud_node 回退读环境变量
     mqtt_password: ""
+    # TLS (EMQX Cloud Serverless 必须开启; CA 采用系统 /etc/ssl/certs 验证公签证书)
+    mqtt_tls_enable: true
+    mqtt_tls_ca_cert: ""
+    mqtt_tls_insecure: false
     # 上云发送频率 (Hz)
     tx_rate_hz: 2.0

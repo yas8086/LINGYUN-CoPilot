@@ -1,0 +1,44 @@
+# 灵云01号伴飞电脑 — USB 串口设备固定命名 udev 规则
+#
+# 问题: /dev/ttyUSB* 由 USB 枚举顺序分配, 插拔/重启顺序变化会串号。
+# 	 例如 FTDI 485 当前是 ttyUSB5, 若 4G 模块先枚举可能变成 ttyUSB6。
+# 解决: 按 VID/PID + 接口号绑定稳定的符号链接, 节点只依赖符号链接。
+#
+# 安装: sudo cp 70-airship-usb.rules /etc/udev/rules.d/
+#       sudo udevadm control --reload-rules && sudo udevadm trigger --action=add --subsystem-match=tty
+#
+# 设备对照(在本机采集):
+#   /dev/airship_485       <- FT232R USB-RS485 (0403:6001), LoRa 集中器
+#   /dev/airship_4g_at0..4 <- SimTech SIM7600 4G (1e0e:9001), 5 个端口
+#   /dev/airship_link      <- 数传电台 (VID/PID 待确认, 见下方占位规则)
+#
+# 注意: SimTech 4G 的 5 个端口 VID/PID 相同, 用 ID_USB_INTERFACE_NUM(接口号) 区分。
+#       ID_USB_INTERFACE_NUM 是 tty 设备自身的 udev 属性, 稳定标识接口号。
+
+# ---- LoRa 485 集中器 (FTDI FT232R) ----
+SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", \
+  SYMLINK+="airship_485", GROUP="dialout", MODE="0660"
+
+# ---- 12S 备用电源 BMS (北辰协议 串口) ----
+# TODO: 待确认 12S 备用电源所用 USB-串口芯片的 VID/PID (常见: FTDI=0403:6001,
+#       CP2102=10c4:ea60, CH340=1a86:7523)。确认后取消下行注释并填入实际 VID/PID:
+# SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="XXXX", ATTRS{idProduct}=="XXXX", \
+#   SYMLINK+="airship_backup_bms", GROUP="dialout", MODE="0660"
+
+# ---- 数传电台 (串口数传, 固定符号链接) ----
+# TODO: 待确认数传电台所用 USB-串口芯片的 VID/PID (常见: CP2102=10c4:ea60,
+#       CH340=1a86:7523, FTDI=0403:6001)。确认后取消下行注释并填入实际 VID/PID:
+# SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="XXXX", ATTRS{idProduct}=="XXXX", \
+#   SYMLINK+="airship_link", GROUP="dialout", MODE="0660"
+
+# ---- SimTech SIM7600 4G 模块: 5 个端口按接口号区分 ----
+SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="1e0e", ATTRS{idProduct}=="9001", \
+  ENV{ID_USB_INTERFACE_NUM}=="00", SYMLINK+="airship_4g_at0", GROUP="dialout", MODE="0660"
+SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="1e0e", ATTRS{idProduct}=="9001", \
+  ENV{ID_USB_INTERFACE_NUM}=="01", SYMLINK+="airship_4g_at1", GROUP="dialout", MODE="0660"
+SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="1e0e", ATTRS{idProduct}=="9001", \
+  ENV{ID_USB_INTERFACE_NUM}=="02", SYMLINK+="airship_4g_at2", GROUP="dialout", MODE="0660"
+SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="1e0e", ATTRS{idProduct}=="9001", \
+  ENV{ID_USB_INTERFACE_NUM}=="03", SYMLINK+="airship_4g_at3", GROUP="dialout", MODE="0660"
+SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="1e0e", ATTRS{idProduct}=="9001", \
+  ENV{ID_USB_INTERFACE_NUM}=="04", SYMLINK+="airship_4g_at4", GROUP="dialout", MODE="0660"

@@ -10,6 +10,11 @@ float32 roll_deg
 float32 pitch_deg
 float32 yaw_deg
 
+# 角速度 (rad/s)
+float32 roll_rate
+float32 pitch_rate
+float32 yaw_rate
+
 # 位置/GPS
 float64 lat        # 纬度 [deg]
 float64 lon        # 经度 [deg]
@@ -24,6 +29,16 @@ float32 vz
 # 飞行状态
 string flight_mode  # 当前飞行模式
 bool armed          # 是否解锁
+uint8 landed_state  # 着陆状态 (0=undefined 1=on_ground 2=in_air ...)
+
+# 空速/地速 (m/s) 与爬升率/油门
+float32 airspeed       # 空速 [m/s]
+float32 groundspeed    # 地速 [m/s]
+float32 climb_rate     # 垂直爬升率 [m/s]
+float32 throttle       # 油门 [%] (MAVROS VfrHud.throttle, 0~100)
+
+# 电机输出 (归一化 0~1, 8 路, 与 M0..M7 对应)
+float32[8] motor_outputs
 
 # 电池
 float32 battery_voltage   # [V]

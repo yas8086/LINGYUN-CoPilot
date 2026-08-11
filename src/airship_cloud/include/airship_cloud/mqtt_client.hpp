@@ -5,6 +5,7 @@
 #ifndef AIRSHIP_CLOUD__MQTT_CLIENT_HPP_
 #define AIRSHIP_CLOUD__MQTT_CLIENT_HPP_
 
+#include <atomic>
 #include <string>
 
 // 前置声明 libmosquitto 句柄类型
@@ -18,11 +19,17 @@ class MqttClient
 {
 public:
   // host: broker 地址(IP或域名); port: 默认 1883
+  // enable_tls: 是否启用 TLS (EMQX Cloud Serverless 必须 true, 端口 8883)
+  // ca_cert: CA 证书路径, 空字符串则使用系统默认 CA 证书
+  // tls_insecure: true=跳过证书主机名校验(仅调试), false=正常校验
   MqttClient(
     const std::string & host, int port,
     const std::string & client_id,
     const std::string & username = "",
-    const std::string & password = "");
+    const std::string & password = "",
+    bool enable_tls = false,
+    const std::string & ca_cert = "",
+    bool tls_insecure = false);
   ~MqttClient();
 
   MqttClient(const MqttClient &) = delete;
@@ -47,7 +54,12 @@ private:
   std::string client_id_;
   std::string username_;
   std::string password_;
-  bool connected_ = false;
+  bool enable_tls_;
+  std::string ca_cert_;
+  bool tls_insecure_;
+  // connected_ 由 libmosquitto 后台 loop 线程写入, 主线程经 is_connected() 读取,
+  // 必须用原子类型避免数据竞争。
+  std::atomic<bool> connected_ = false;
 };
 
 }  // namespace airship_cloud

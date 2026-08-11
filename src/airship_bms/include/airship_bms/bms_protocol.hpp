@@ -56,16 +56,16 @@ struct BmsData
   std::array<float, kMaxPoleTemps> pole_temps = {};  // [℃]
 };
 
-// 解析 BattInfo02: 总压/总电流/SOC/RealSoc
-void parse_batt_info(const uint8_t * data, BmsData & out);
+// 解析 BattInfo02: 总压/总电流/SOC/RealSoc (len 为 DLC, 不足 8 字节时忽略并返回)
+void parse_batt_info(const uint8_t * data, uint32_t len, BmsData & out);
 // 解析 BattInfo01: 运行状态/连接状态/绝缘电阻/报警级别
-void parse_batt_status(const uint8_t * data, BmsData & out);
+void parse_batt_status(const uint8_t * data, uint32_t len, BmsData & out);
 // 解析 CellVoltage_XX: 逐节单体电压, frame_id 用于定位起始节号
-void parse_cell_voltage(uint32_t frame_id, const uint8_t * data, BmsData & out);
+void parse_cell_voltage(uint32_t frame_id, const uint8_t * data, uint32_t len, BmsData & out);
 // 解析 CellTempStatistic: 温度统计
-void parse_cell_temp_statistic(const uint8_t * data, BmsData & out);
+void parse_cell_temp_statistic(const uint8_t * data, uint32_t len, BmsData & out);
 // 解析 PACKTemp: 极耳温度 8 点
-void parse_pack_temp(const uint8_t * data, BmsData & out);
+void parse_pack_temp(const uint8_t * data, uint32_t len, BmsData & out);
 
 }  // namespace airship_bms
 
