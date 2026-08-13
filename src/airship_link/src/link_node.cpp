@@ -16,6 +16,7 @@
 #include "airship_msgs/msg/backup_bms_status.hpp"
 #include "airship_msgs/msg/bms_status.hpp"
 #include "airship_msgs/msg/dcdc_status.hpp"
+#include "airship_msgs/msg/flight_status.hpp"
 #include "airship_msgs/msg/lo_ra_samples.hpp"
 #include "airship_msgs/msg/mppt_status.hpp"
 
@@ -46,6 +47,8 @@ public:
       "/mppt/status", rclcpp::QoS(10), std::bind(&LinkNode::on_mppt, this, _1));
     dcdc_sub_ = this->create_subscription<airship_msgs::msg::DcdcStatus>(
       "/dcdc/status", rclcpp::QoS(10), std::bind(&LinkNode::on_dcdc, this, _1));
+    fc_sub_ = this->create_subscription<airship_msgs::msg::FlightStatus>(
+      "/fc/status", rclcpp::QoS(10), std::bind(&LinkNode::on_fc, this, _1));
     lora_sub_ = this->create_subscription<airship_msgs::msg::LoRaSamples>(
       "/lora/samples", rclcpp::QoS(10), std::bind(&LinkNode::on_lora, this, _1));
     backup_sub_ = this->create_subscription<airship_msgs::msg::BackupBmsStatus>(
@@ -80,6 +83,12 @@ private:
   {
     std::lock_guard<std::mutex> lock(mutex_);
     dcdc_ = *msg;
+  }
+
+  void on_fc(const airship_msgs::msg::FlightStatus::SharedPtr msg)
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    fc_ = *msg;
   }
 
   void on_lora(const airship_msgs::msg::LoRaSamples::SharedPtr msg)
@@ -120,7 +129,7 @@ private:
     {
       std::lock_guard<std::mutex> lock(mutex_);
       json = airship_link::pack_telemetry_json(
-        this->now().seconds(), &bms_, &mppt_, &dcdc_, nullptr, &lora_, &backup_);
+        this->now().seconds(), &bms_, &mppt_, &dcdc_, &fc_, &lora_, &backup_);
     }
 
     if (!serial_.is_open()) {
@@ -156,12 +165,14 @@ private:
   airship_msgs::msg::BmsStatus bms_;
   airship_msgs::msg::MpptStatus mppt_;
   airship_msgs::msg::DcdcStatus dcdc_;
+  airship_msgs::msg::FlightStatus fc_;
   airship_msgs::msg::LoRaSamples lora_;
   airship_msgs::msg::BackupBmsStatus backup_;
 
   rclcpp::Subscription<airship_msgs::msg::BmsStatus>::SharedPtr bms_sub_;
   rclcpp::Subscription<airship_msgs::msg::MpptStatus>::SharedPtr mppt_sub_;
   rclcpp::Subscription<airship_msgs::msg::DcdcStatus>::SharedPtr dcdc_sub_;
+  rclcpp::Subscription<airship_msgs::msg::FlightStatus>::SharedPtr fc_sub_;
   rclcpp::Subscription<airship_msgs::msg::LoRaSamples>::SharedPtr lora_sub_;
   rclcpp::Subscription<airship_msgs::msg::BackupBmsStatus>::SharedPtr backup_sub_;
   rclcpp::TimerBase::SharedPtr tx_timer_;

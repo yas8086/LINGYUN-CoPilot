@@ -1,0 +1,19 @@
+A层字段(协议声称),B层已解析(绿色=是),C层已下传(绿色=是)
+总压 0.01V,GREEN,GREEN
+总电流 0.01A s32,GREEN,GREEN
+SOC 0.1%,GREEN,GREEN
+SOH 0.1%,GREEN,GREEN
+最大单体电压 1mV,GREEN,GREEN
+最小单体电压 1mV,GREEN,GREEN
+单体压差 1mV,GREEN,GREEN
+最高单体温度 0.1℃,GREEN,GREEN
+最低单体温度 0.1℃,GREEN,GREEN
+平均单体温度 0.1℃,GREEN,GREEN
+单体温差 0.1℃,GREEN,GREEN
+MOS/工作温度,,
+告警标志位 32位,GREEN,GREEN
+保护标志位 32位,GREEN,GREEN
+故障标志位 32位,GREEN,GREEN
+系统状态1 32位,GREEN,GREEN
+单节电压(0x08) 数量+逐节,GREEN,GREEN
+单节温度(0x07) 数量+逐点,GREEN,GREEN
