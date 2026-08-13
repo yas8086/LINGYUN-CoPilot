@@ -1,0 +1,92 @@
+# ==============================================================
+# 灵云01号伴飞电脑 — 树莓派5 Ubuntu 24.04 config.txt 配置
+#
+# 包含：
+#   1. 板载 PWM 风扇温控（官方主动散热器）
+#   2. PCIe 启用（给 Mcuzone MPUUART 扩展板用）
+#   3. 板载额外 UART 启用（备用）
+#   4. SPI 总线启用（微雪工业扩展板：SC16IS752 双RS485 + MCP2515 CAN + MCP2518FD CANFD）
+#
+# 安装：
+#   sudo cp tools/rpi5_ubuntu2404_config.txt /boot/firmware/config.txt
+#     —— 或用 sudo nano /boot/firmware/config.txt 追加末尾 [all] 段
+#
+# 注意：
+#   - 修改后必须 sudo reboot 生效
+#   - 本文件假设使用 Waveshare RS232-RS485-CAN-Board 工业扩展板接 40pin GPIO
+#     若该板未接（开发阶段），请注释掉 SPI + CAN 相关 overlay 行，避免影响启动
+# ==============================================================
+
+[all]
+
+# --------------------------------------------------------------
+# 0. 基础：串口硬件使能
+# --------------------------------------------------------------
+enable_uart=1
+
+# --------------------------------------------------------------
+# 1. 板载 PWM 主动散热器（官方）风扇温控
+#    树莓派5 / Ubuntu 24.04 默认不启用 cooling_fan，必须显式打开
+#    树莓派5 固件最多支持 4 档（fan_temp0~3），本配置用满 4 档。
+# --------------------------------------------------------------
+dtparam=cooling_fan=on
+
+# 主动型温控曲线（适应室外高温机载环境）
+# 说明：fan_tempX 单位为毫摄氏度（摄氏度*1000）；hyst 为迟滞(毫摄氏度)，
+#       防止风扇在阈值附近频繁启停（降到阈值-hyst 才降档）。
+# 档位 0：≥35°C 起转 31%（80/255），降到 32°C 才停 —— 高温环境提前散热
+dtparam=fan_temp0=35000,fan_temp0_hyst=3000,fan_temp0_speed=80
+# 档位 1：≥45°C 50%（128/255），降到 42°C 降档
+dtparam=fan_temp1=45000,fan_temp1_hyst=3000,fan_temp1_speed=128
+# 档位 2：≥55°C 75%（191/255），降到 52°C 降档
+dtparam=fan_temp2=55000,fan_temp2_hyst=3000,fan_temp2_speed=191
+# 档位 3：≥65°C 100% 全速（255/255），降到 62°C 降档
+dtparam=fan_temp3=65000,fan_temp3_hyst=3000,fan_temp3_speed=255
+
+# --------------------------------------------------------------
+# 2. PCIe 启用（Mcuzone MPUUART PCIe 转 USB 串口板）
+#    树莓派5 默认可能未开启 PCIe Gen2，显式打开
+# --------------------------------------------------------------
+dtparam=pcie=on
+
+# --------------------------------------------------------------
+# 3. 板载额外 UART（备用）
+#    GPIO14/15 被微雪工业板的 RS232 占用，所以备用 UART 用 UART2(GPIO4/5)
+# --------------------------------------------------------------
+dtoverlay=uart2   # /dev/ttyAMA2 → GPIO4(TX) / GPIO5(RX)，预留调试/备用串口
+
+# --------------------------------------------------------------
+# 4. SPI 总线 + 微雪工业板 overlay
+#    Waveshare RS232-RS485-CAN-Board 使用：
+#      - SC16IS752（SPI 转双 UART → 双路 RS485）
+#      - MCP2515   （SPI 转 CAN 2.0）
+#      - MCP2518FD （SPI 转 CAN FD）
+#
+#  ⚠️ 关键注意：SPI 片选 CE 与中断 IRQ 引脚请根据微雪板实际接线修改。
+#     下列值为 Waveshare 典型/默认配置，若板上 CE/IRQ 不同请按 wiki 更新。
+# --------------------------------------------------------------
+
+# 启用 SPI0（板载标准 SPI 控制器）
+dtparam=spi=on
+
+# RS485：SC16IS752（SPI0，IRQ 接 GPIO25 → 按微雪板标注；若为 GPIO22/24 请替换）
+dtoverlay=sc16is752-spi0,int_pin=25
+
+# CAN：MCP2515（SPI0 第二个片选 CE1，oscillator=16MHz；IRQ 同 SC16IS752 或独立 GPIO，示例 GPIO24）
+dtoverlay=mcp2515-can1,oscillator=16000000,interrupt=24,spimaxfrequency=1000000
+
+# CAN FD：MCP2518FD（SPI0-0/CE0 之前被 SC16IS752 占用 → 这里用 spidev0.2 CE2；IRQ 用 GPIO23，示例）
+# 如果没有 CAN FD 设备，可注释本行
+dtoverlay=mcp251xfd,spi0-2,interrupt=23
+
+# --------------------------------------------------------------
+# 5. 其它工程化设置
+# --------------------------------------------------------------
+# 禁用蓝牙（树莓派5 蓝牙走 USB，不影响；但禁用可省资源且避免 console 冲突）
+# dtoverlay=disable-bt
+
+# 开机强制 HDMI（机载无显示器时，某些 Ubuntu 版本默认无输出导致一些应用异常）
+hdmi_force_hotplug=1
+
+# 开机不自检串口控制台（避免飞控/外设串口被 console 占用；cmdline.txt 也要对应改）
+# （见配套手册的 cmdline.txt 修改步骤）

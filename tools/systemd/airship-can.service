@@ -1,0 +1,13 @@
+[Unit]
+Description=Lingyun01 CAN interface bring-up (RS232-RS485-CAN-Board)
+After=network.target
+Wants=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/airship-can-up.sh up
+ExecStop=/usr/local/bin/airship-can-up.sh down
+
+[Install]
+WantedBy=multi-user.target

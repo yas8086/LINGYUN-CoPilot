@@ -16,8 +16,11 @@
 #       ID_USB_INTERFACE_NUM 是 tty 设备自身的 udev 属性, 稳定标识接口号。
 
 # ---- LoRa 485 集中器 (FTDI FT232R) ----
-SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", \
-  SYMLINK+="airship_485", GROUP="dialout", MODE="0660"
+# 注: 集中器已改接微雪 RS232-RS485-CAN-Board 的 RS485_1 (/dev/ttySC0),
+#     /dev/airship_485 现由 71-airship-extboards.rules 绑定到 ttySC0。
+#     此旧 FTDI 规则注释掉, 避免与 ttySC0 的 airship_485 符号链接冲突。
+# SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", \
+#   SYMLINK+="airship_485", GROUP="dialout", MODE="0660"
 
 # ---- 12S 备用电源 BMS (北辰协议 串口) ----
 # TODO: 待确认 12S 备用电源所用 USB-串口芯片的 VID/PID (常见: FTDI=0403:6001,

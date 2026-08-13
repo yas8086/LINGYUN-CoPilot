@@ -1,0 +1,22 @@
+# 灵云01号伴飞电脑 — CAN FD (can1) systemd-networkd 配置
+#
+# 路径：/etc/systemd/network/81-airship-canfd.network
+# 同目录参见 80-airship-can.network（can0 / CAN 2.0 250kbps）
+#
+# 安装：
+#   sudo cp tools/81-airship-canfd.network /etc/systemd/network/81-airship-canfd.network
+#   sudo systemctl restart systemd-networkd
+#
+# 若无 CAN FD 设备，可忽略本文件（也可不复制）；
+# 或把 BitRate/DataBitRate 降为 125k/250k 以兼容老设备。
+
+[Match]
+Name=can1
+
+[CAN]
+# CAN FD：仲裁段 500k、数据段 2Mbps（按实际 CAN FD 节点需求调整）
+BitRate=500000
+DataBitRate=2000000
+FDMode=yes
+RestartSec=100ms
+ControlMode=normal

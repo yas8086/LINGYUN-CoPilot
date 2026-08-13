@@ -1,0 +1,29 @@
+# 灵云01号伴飞电脑 — CAN 接口 systemd-networkd 开机自启配置
+#
+# 路径：/etc/systemd/network/80-airship-can.network
+#
+# 作用：开机时由 systemd-networkd 自动拉起 can0/can1 并设置波特率，
+#       替代在 launch ExecStartPre 中的 `ip link set ...` 兜底逻辑。
+#
+# 安装：
+#   sudo cp tools/80-airship-can.network /etc/systemd/network/80-airship-can.network
+#   sudo systemctl enable systemd-networkd   # 若未启用
+#   sudo systemctl restart systemd-networkd
+#
+#   然后用下列命令查看状态：
+#     networkctl status can0
+#     ip -d link show can0
+#
+# 说明：
+#   - can0：BMS + MPPT + DCDC 共线，波特率 250kbps（厂家协议要求）
+#   - can1：CAN FD 备用，波特率 500kbps + 数据相位 2Mbps（若设备不支持CANFD，可把 Control.Mode 改成 "normal"）
+#   - 若硬件未插入 CAN 控制器（例如开发阶段只有 vcan），这两份配置会自动跳过不报错
+
+[Match]
+Name=can0
+
+[CAN]
+BitRate=250000
+RestartSec=100ms
+RestartUs=0
+ControlMode=normal

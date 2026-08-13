@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)https://www.waveshare.net/wiki/RS232-RS485-CAN-Board -->
+<html class="client-js" lang="zh-Hans-CN" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>RS232 RS485 CAN Board - Waveshare Wiki</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":!1,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"zh","wgMonthNames":["","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],"wgRequestId":"9e6ae776698958a82a0abf6f","wgCSPNonce":!1,"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":!1,"wgNamespaceNumber":0,"wgPageName":"RS232-RS485-CAN-Board","wgTitle":"RS232-RS485-CAN-Board","wgCurRevisionId":141579,"wgRevisionId":141579,"wgArticleId":23201,"wgIsArticle":!0,"wgIsRedirect":!1,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["RS485接口","调用重复模板参数的页面","模块","树莓派","树莓派扩展板","RS232接口","CAN(FD)接口"],"wgPageContentLanguage":"zh-cn","wgPageContentModel":"wikitext","wgRelevantPageName":"RS232-RS485-CAN-Board","wgRelevantArticleId":23201,"wgIsProbablyEditable":!1,"wgRelevantPageIsProbablyEditable":
+!1,"wgRestrictionEdit":[],"wgRestrictionMove":[]};RLSTATE={"ext.gadget.tabber":"ready","site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","jquery.makeCollapsible.styles":"ready","mediawiki.toc.styles":"ready","skins.tweeki.styles":"ready","skins.tweeki.bootstraptheme.styles":"ready","skins.tweeki.externallinks.styles":"ready","skins.tweeki.awesome.styles":"ready"};RLPAGEMODULES=["site","mediawiki.page.startup","mediawiki.page.ready","jquery.makeCollapsible","mediawiki.toc","ext.FancyBoxThumbs","ext.gadget.subnavber","ext.gadget.slidenav","ext.HighlightjsIntegration","skins.tweeki.messages","skins.tweeki.scripts"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.implement("user.options@1hzgi",function($,jQuery,require,module){/*@nomin*/mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});mw.user.options.set({"variant":"zh-cn"});
+});});</script>
+<link rel="stylesheet" href="./RS232 RS485 CAN Board - Waveshare Wiki_files/load.php">
+<script async="" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/load(1).php"></script>
+<style>
+.mw-collapsible-toggle{float:right;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none}.mw-collapsible-toggle-default:before{content:'['}.mw-collapsible-toggle-default:after{content:']'}.mw-customtoggle,.mw-collapsible-toggle{cursor:pointer} caption .mw-collapsible-toggle,.mw-content-ltr caption .mw-collapsible-toggle,.mw-content-rtl caption .mw-collapsible-toggle,.mw-content-rtl .mw-content-ltr caption .mw-collapsible-toggle,.mw-content-ltr .mw-content-rtl caption .mw-collapsible-toggle{float:none}
+pre.code2highlight,pre.nohighlight{  padding:0.5em}code.code2highlight.hljs{  padding:1px 4px}.hljs{display:block;overflow-x:auto;padding:0.5em;background:#1E1E1E;color:#DCDCDC}.hljs-keyword,.hljs-literal,.hljs-symbol,.hljs-name{color:#569CD6}.hljs-link{color:#569CD6;text-decoration:underline}.hljs-built_in,.hljs-type{color:#4EC9B0}.hljs-number,.hljs-class{color:#B8D7A3}.hljs-string,.hljs-meta-string{color:#D69D85}.hljs-regexp,.hljs-template-tag{color:#9A5334}.hljs-subst,.hljs-function,.hljs-title,.hljs-params,.hljs-formula{color:#DCDCDC}.hljs-comment,.hljs-quote{color:#57A64A;font-style:italic}.hljs-doctag{color:#608B4E}.hljs-meta,.hljs-meta-keyword,.hljs-tag{color:#9B9B9B}.hljs-variable,.hljs-template-variable{color:#BD63C5}.hljs-attr,.hljs-attribute,.hljs-builtin-name{color:#9CDCFE}.hljs-section{color:gold}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:bold}.hljs-bullet,.hljs-selector-tag,.hljs-selector-id,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo{color:#D7BA7D}.hljs-addition{background-color:#144212;display:inline-block;width:100%}.hljs-deletion{background-color:#600;display:inline-block;width:100%}
+.fancybox-wrap,.fancybox-skin,.fancybox-outer,.fancybox-inner,.fancybox-image,.fancybox-wrap iframe,.fancybox-wrap object,.fancybox-nav,.fancybox-nav span,.fancybox-tmp{padding:0;margin:0;border:0;outline:none;vertical-align:top}.fancybox-wrap{position:absolute;top:0;left:0;z-index:8020}.fancybox-skin{position:relative;background:#f9f9f9;color:#444;text-shadow:none;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}.fancybox-opened{z-index:8030}.fancybox-opened .fancybox-skin{-webkit-box-shadow:0 10px 25px rgba(0,0,0,0.5);-moz-box-shadow:0 10px 25px rgba(0,0,0,0.5);box-shadow:0 10px 25px rgba(0,0,0,0.5)}.fancybox-outer,.fancybox-inner{position:relative}.fancybox-inner{overflow:hidden}.fancybox-type-iframe .fancybox-inner{-webkit-overflow-scrolling:touch}.fancybox-error{color:#444;font:14px/20px "Helvetica Neue",Helvetica,Arial,sans-serif;margin:0;padding:15px;white-space:nowrap}.fancybox-image,.fancybox-iframe{display:block;width:100%;height:100%}.fancybox-image{max-width:100%;max-height:100%}#fancybox-loading,.fancybox-close,.fancybox-prev span,.fancybox-next span{background-image:url(/w/extensions/FancyBoxThumbs/modules/fancyBox/source/fancybox_sprite.png?783d4)}#fancybox-loading{position:fixed;top:50%;left:50%;margin-top:-22px;margin-left:-22px;background-position:0 -108px;opacity:0.8;cursor:pointer;z-index:8060}#fancybox-loading div{width:44px;height:44px;background:url(/w/extensions/FancyBoxThumbs/modules/fancyBox/source/fancybox_loading.gif?c6f1a) center center no-repeat}.fancybox-close{position:absolute;top:-18px;right:-18px;width:36px;height:36px;cursor:pointer;z-index:8040}.fancybox-nav{position:absolute;top:0;width:40%;height:100%;cursor:pointer;text-decoration:none;background:transparent url(/w/extensions/FancyBoxThumbs/modules/fancyBox/source/blank.gif?32547); -webkit-tap-highlight-color:rgba(0,0,0,0);z-index:8040}.fancybox-prev{left:0}.fancybox-next{right:0}.fancybox-nav span{position:absolute;top:50%;width:36px;height:34px;margin-top:-18px;cursor:pointer;z-index:8040;visibility:hidden}.fancybox-prev span{left:10px;background-position:0 -36px}.fancybox-next span{right:10px;background-position:0 -72px}.fancybox-nav:hover span{visibility:visible}.fancybox-tmp{position:absolute;top:-99999px;left:-99999px;visibility:hidden;max-width:99999px;max-height:99999px;overflow:visible !important} .fancybox-lock{overflow:hidden}.fancybox-overlay{position:absolute;top:0;left:0;overflow:hidden;display:none;z-index:8010;background:url(/w/extensions/FancyBoxThumbs/modules/fancyBox/source/fancybox_overlay.png?77aea)}.fancybox-overlay-fixed{position:fixed;bottom:0;right:0}.fancybox-lock .fancybox-overlay{overflow:auto;overflow-y:scroll} .fancybox-title{visibility:hidden;font:normal 13px/20px "Helvetica Neue",Helvetica,Arial,sans-serif;position:relative;text-shadow:none;z-index:8050}.fancybox-opened .fancybox-title{visibility:visible}.fancybox-title-float-wrap{position:absolute;bottom:0;right:50%;margin-bottom:-35px;z-index:8050;text-align:center}.fancybox-title-float-wrap .child{display:inline-block;margin-right:-100%;padding:2px 20px;background:transparent; background:rgba(0,0,0,0.8);-webkit-border-radius:15px;-moz-border-radius:15px;border-radius:15px;text-shadow:0 1px 2px #222;color:#FFF;font-weight:bold;line-height:24px;white-space:nowrap}.fancybox-title-outside-wrap{position:relative;margin-top:10px;color:#fff}.fancybox-title-inside-wrap{padding-top:10px}.fancybox-title-over-wrap{position:absolute;bottom:0;left:0;color:#fff;padding:10px;background:#000;background:rgba(0,0,0,.8)}
+.subnavberlive .subnavbertabhide{display:none}.subnavberlive{margin-top:0px;min-width:260px}.subnavberlive .subnavbertab{padding:5px} .subnavberlive#tab2 .subnavbertab{height:200px;overflow:auto}ul.subnavbernav{ display:block;padding:0 0 0 1px!important;margin:0 0 10px 0!important; height:50px;list-style:none;line-height:1.4;color:#333; }ul.subnavbernav li{ margin:0px;height:50px;text-align:center; float:none;display:table-cell;width:1%}ul.subnavbernav li a{ display:block;margin:0 0 0 -1px;height:50px;padding:0px 5px;line-height:50px;border:solid 2px #fff;border-width:2px 2px 2px 2px; color:#333;background:#f7f7f7; text-decoration:none;overflow:hidden}ul.subnavbernav li a:link{color:#333}ul.subnavbernav li a:visited{color:#667}ul.subnavbernav li a:hover{color:#000;background:#FFF; }ul.subnavbernav li.subnavberactive a{background-color:#fff;position:relative;height:50px; font-weight:bold} .pink-color ul.subnavbernav li.subnavberactive a{background-color:#bc1d46;color:#fff}.black-color ul.subnavbernav li.subnavberactive a{background-color:#2c2c2c;color:#fff}.deep-grey ul.subnavbernav li.subnavberactive a{background-color:#4f5f79;color:#fff}.blue-color ul.subnavbernav li.subnavberactive a{background-color:#36A5E8;color:#fff}.jet-green-color ul.subnavbernav li.subnavberactive a{background-color:#7eb128;color:#fff}.arduino-green-color ul.subnavbernav li.subnavberactive a{background-color:#00989d;color:#fff}.subnavberlive{  width:100%;top:20px;z-index:9; }.subnavberlive a{ border-radius:7px; background:rgba(255,255,255,0.5);-webkit-transition:all 0.2s ease-out;-moz-transition:all 0.2s ease-out;-ms-transition:all 0.2s ease-out;-o-transition:all 0.2s ease-out;transition:all 0.2s ease-out;text-decoration:none;color:black;font-family:sans-serif,arial;font-weight:100}.subnavberlive a.active{background:rgba(0,0,0,0.5);color:white}.subnavberlive a:hover{background:rgba(255,255,255,0.7)}
+.nav-link{ border-radius:2em;transition:all .4s} .blue-color ul.tabbernav li a.active{background-color:#36A5E8;color:#fff!important;font-weight:bold}.blue-color ul.tabbernav li a{color:#36A5E8 !important;font-weight:500}.pink-color ul.tabbernav li a.active{background-color:#bc1d46;color:#fff!important;font-weight:bold}.pink-color ul.tabbernav li a{color:#bc1d46 !important;font-weight:500}.jet-green-color ul.tabbernav li a.active{background-color:#7eb128;color:#fff!important;font-weight:bold}.jet-green-color ul.tabbernav li a{color:#7eb128 !important;font-weight:500}.arduino-green-color ul.tabbernav li a.active{background-color:#00989d;color:#fff!important;font-weight:bold}.arduino-green-color ul.tabbernav li a{color:#00989d !important;font-weight:500}.black-color ul.tabbernav li a.active{background-color:#2c2c2c;color:#fff!important;font-weight:bold}.black-color ul.tabbernav li a{color:#2c2c2c !important;font-weight:500}
+@media screen {
+	.toctoggle{-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none;font-size:94%}}</style><meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="./RS232 RS485 CAN Board - Waveshare Wiki_files/load(2).php">
+<link rel="stylesheet" href="./RS232 RS485 CAN Board - Waveshare Wiki_files/load(3).php">
+<meta name="generator" content="MediaWiki 1.35.5">
+<meta property="og:image" content="https://www.waveshare.net/w/upload/0/0a/RS232-RS485-CAN-Board-details-1.jpg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="https://www.waveshare.net/favicon.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="https://www.waveshare.net/w/opensearch_desc.php" title="Waveshare Wiki (zh-cn)">
+<link rel="EditURI" type="application/rsd+xml" href="https://www.waveshare.net/w/api.php?action=rsd">
+<link rel="alternate" type="application/atom+xml" title="Waveshare Wiki的Atom feed" href="https://www.waveshare.net/w/index.php?title=%E7%89%B9%E6%AE%8A:%E6%9C%80%E8%BF%91%E6%9B%B4%E6%94%B9&amp;feed=atom">
+<!--[if lt IE 9]><script src="/w/resources/lib/html5shiv/html5shiv.js"></script><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject page-RS232-RS485-CAN-Board rootpage-RS232-RS485-CAN-Board skin-tweeki action-view tweeki-animateLayout tweeki-non-advanced tweeki-user-anon" style="margin-bottom: 0px; position: relative;">			<!-- navbar -->
+			<div id="mw-navigation" class="navbar navbar-default navbar-fixed-top navbar-expand-lg fixed-top navbar-light bg-light" role="navigation">
+				<h2>导航菜单</h2>
+				<div id="mw-head" class="navbar-inner">
+					<div class="container">
+
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+
+							<a href="https://www.waveshare.net/wiki/Main_Page" class="navbar-brand"><img src="./RS232 RS485 CAN Board - Waveshare Wiki_files/Waveshare-logo.png" alt="Waveshare Wiki"></a>
+						</div>
+
+						<div id="navbar" class="navbar-collapse collapse">
+													<ul class="nav navbar-nav">
+							<li class="nav"><a href="https://www.waveshare.net/" id="n-https.253A.252F.252Fwww.waveshare.net" rel="nofollow" target="_blank">微雪商城</a></li><li class="nav"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#" id="n-raspberry-pi" class="dropdown-toggle" data-toggle="dropdown">Raspberry Pi <b class="caret"></b></a><ul class="dropdown-menu " role="menu"><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-boards-.25E4.25B8.25BB.25E6.259D.25BF.252F.25E5.25A5.2597.25E4.25BB.25B6.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Boards%20%E4%B8%BB%E6%9D%BF/%E5%A5%97%E4%BB%B6]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Boards">主板/套件</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-displays-.25E6.2598.25BE.25E7.25A4.25BA.25E5.25B1.258F.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Displays%20%E6%98%BE%E7%A4%BA%E5%B1%8F]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Displays">显示屏</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-cameras-.25E6.2591.2584.25E5.2583.258F.25E5.25A4.25B4.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Cameras%20%E6%91%84%E5%83%8F%E5%A4%B4]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Cameras">摄像头</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-expansions-.25E6.2589.25A9.25E5.25B1.2595.25E6.259D.25BF.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Expansions%20%E6%89%A9%E5%B1%95%E6%9D%BF]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Expansions">扩展板</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-laptops-.25E7.25AC.2594.25E8.25AE.25B0.25E6.259C.25AC.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Laptops%20%E7%AC%94%E8%AE%B0%E6%9C%AC]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Laptops">笔记本</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-robots-.25E6.259C.25BA.25E5.2599.25A8.25E4.25BA.25BA.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Robots%20%E6%9C%BA%E5%99%A8%E4%BA%BA]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Robots">机器人</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523rpi-games-.25E6.25B8.25B8.25E6.2588.258F.25E6.259C.25BA.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#RPi-Games%20%E6%B8%B8%E6%88%8F%E6%9C%BA]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#RPi-Games">游戏机</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523android-linux-boards-android.252Flinux.25E4.25B8.25BB.25E6.259D.25BF.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Android-Linux-Boards%20Android/Linux%E4%B8%BB%E6%9D%BF]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Android-Linux-Boards">Android/Linux主板</a></li></ul></li><li class="nav"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#" id="n-.25E4.25BA.25BA.25E5.25B7.25A5.25E6.2599.25BA.25E8.2583.25BD" class="dropdown-toggle" data-toggle="dropdown">人工智能 <b class="caret"></b></a><ul class="dropdown-menu " role="menu"><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523jetson-ai-boards-.25E4.25B8.25BB.25E6.259D.25BF.252F.25E5.25A5.2597.25E4.25BB.25B6.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Boards%20%E4%B8%BB%E6%9D%BF/%E5%A5%97%E4%BB%B6]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Boards">主板/套件</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523jetson-ai-displays-.25E6.2598.25BE.25E7.25A4.25BA.25E5.25B1.258F.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Displays%20%E6%98%BE%E7%A4%BA%E5%B1%8F]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Displays">显示屏</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523jetson-ai-cameras-.25E6.2591.2584.25E5.2583.258F.25E5.25A4.25B4.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Cameras%20%E6%91%84%E5%83%8F%E5%A4%B4]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Cameras">摄像头</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523jetson-ai-hat-.25E6.2589.25A9.25E5.25B1.2595.25E6.259D.25BF.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Jetson-AI-HAT%20%E6%89%A9%E5%B1%95%E6%9D%BF]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Jetson-AI-HAT">扩展板</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523jetson-ai-robots-.25E6.259C.25BA.25E5.2599.25A8.25E4.25BA.25BA.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Robots%20%E6%9C%BA%E5%99%A8%E4%BA%BA]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Jetson-AI-Robots">机器人</a></li></ul></li><li class="nav"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#" id="n-.25E6.2598.25BE.25E7.25A4.25BA.25E5.25B1.258F" class="dropdown-toggle" data-toggle="dropdown">显示屏 <b class="caret"></b></a><ul class="dropdown-menu " role="menu"><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523display-lcd-oleds-lcd.252Foled.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Display-LCD-OLEDs%20LCD/OLED]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Display-LCD-OLEDs">LCD/OLED</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523display-e-paper-e-paper.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Display-e-Paper%20e-Paper]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Display-e-Paper">e-Paper</a></li></ul></li><li class="nav"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#" id="n-.25E6.25A8.25A1.25E5.259D.2597" class="dropdown-toggle" data-toggle="dropdown">模块 <b class="caret"></b></a><ul class="dropdown-menu " role="menu"><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523long-range-wireless-comm-.25E8.25BF.259C.25E8.25B7.259D.25E7.25A6.25BB.25E6.2597.25A0.25E7.25BA.25BF.25E9.2580.259A.25E4.25BF.25A1.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Long-range-wireless-comm%20%E8%BF%9C%E8%B7%9D%E7%A6%BB%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Long-range-wireless-comm">远距离无线通信</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523short-range-wireless-comm-.25E8.25BF.2591.25E8.25B7.259D.25E7.25A6.25BB.25E6.2597.25A0.25E7.25BA.25BF.25E9.2580.259A.25E4.25BF.25A1.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Short-range-wireless-comm%20%E8%BF%91%E8%B7%9D%E7%A6%BB%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Short-range-wireless-comm">近距离无线通信</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523wired-communication-.25E6.259C.2589.25E7.25BA.25BF.25E9.2580.259A.25E4.25BF.25A1.252F.25E6.258E.25A5.25E5.258F.25A3.25E8.25BD.25AC.25E6.258D.25A2.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Wired-communication%20%E6%9C%89%E7%BA%BF%E9%80%9A%E4%BF%A1/%E6%8E%A5%E5%8F%A3%E8%BD%AC%E6%8D%A2]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Wired-communication">有线通信/接口转换</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523misc-cameras-av-.25E6.2591.2584.25E5.2583.258F.25E5.25A4.25B4.252F.25E9.259F.25B3.25E8.25A7.2586.25E9.25A2.2591.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Misc-cameras-av%20%E6%91%84%E5%83%8F%E5%A4%B4/%E9%9F%B3%E8%A7%86%E9%A2%91]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Misc-cameras-av">摄像头/音视频</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523misc-sensor-modules-.25E4.25BC.25A0.25E6.2584.259F.25E5.2599.25A8.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Misc-sensor-modules%20%E4%BC%A0%E6%84%9F%E5%99%A8]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Misc-sensor-modules">传感器</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523misc-servos-motors-.25E7.2594.25B5.25E6.259C.25BA.252F.25E8.2588.25B5.25E6.259C.25BA.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Misc-servos-motors%20%E7%94%B5%E6%9C%BA/%E8%88%B5%E6%9C%BA]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Misc-servos-motors">电机/舵机</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523misc-other-modules-.25E5.25A4.25A7.25E6.259D.2582.25E7.2583.25A9.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Misc-other-modules%20%E5%A4%A7%E6%9D%82%E7%83%A9]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Misc-other-modules">大杂烩</a></li></ul></li><li class="nav"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#" id="n-.25E6.259C.25BA.25E5.2599.25A8.25E4.25BA.25BA" class="dropdown-toggle" data-toggle="dropdown">机器人 <b class="caret"></b></a><ul class="dropdown-menu " role="menu"><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523robotics-cars-.25E6.2599.25BA.25E8.2583.25BD.25E8.25BD.25A6.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Robotics-cars%20%E6%99%BA%E8%83%BD%E8%BD%A6]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Robotics-cars">智能车</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523robotics-drivers-sensors-.25E9.25A9.25B1.25E5.258A.25A8.25E5.2599.25A8.252F.25E4.25BC.25A0.25E6.2584.259F.25E5.2599.25A8.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Robotics-drivers-sensors%20%E9%A9%B1%E5%8A%A8%E5%99%A8/%E4%BC%A0%E6%84%9F%E5%99%A8]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Robotics-drivers-sensors">驱动器/传感器</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523robotics-robot-arms-.25E6.259C.25BA.25E6.25A2.25B0.25E6.2589.258B.252F.25E4.25BA.2591.25E5.258F.25B0.25E6.258E.25A7.25E5.2588.25B6.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Robotics-robot-arms%20%E6%9C%BA%E6%A2%B0%E6%89%8B/%E4%BA%91%E5%8F%B0%E6%8E%A7%E5%88%B6]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Robotics-robot-arms">机械手/云台控制</a></li></ul></li><li class="nav"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#" id="n-mcu.252Ffpga" class="dropdown-toggle" data-toggle="dropdown">MCU/FPGA <b class="caret"></b></a><ul class="dropdown-menu " role="menu"><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523arduino-main-boards-arduino.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#Arduino-main-boards%20Arduino]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#Arduino-main-boards">Arduino</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523micro.253Abit-micro.253Abit.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#micro:bit%20micro:bit]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#micro:bit">micro:bit</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523mcu.2farm-stm32" class="PIC"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#MCU.2FARM%20STM32" tabindex="-1">LPC</a></li><li id="n-.255Bhttps.253A.252F.252F.257B.257Bservername.257D.257D.252Fwiki.252Fmain_page.2523fpga-fpga.255D"><a href="invalid-title:[https://www.waveshare.net/wiki/Main_Page#FPGA%20FPGA]" tabindex="-1"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/wiki/Main_Page#FPGA">FPGA</a></li></ul></li>							</ul>
+						
+													<ul class="nav navbar-nav navbar-right">
+							</ul>
+				<form class="navbar-form navbar-right" action="https://www.waveshare.net/w/index.php" id="searchform">
+					<div class="form-group"><input type="search" name="search" placeholder="搜索" title="搜索Waveshare Wiki[alt-shift-f]" accesskey="f" id="searchInput" class="search-query form-control"><input type="submit" name="go" value="前往" title="若相同标题存在，则直接前往该页面" id="mw-searchButton" class="searchButton btn hidden">
+					</div>
+				</form><ul class="nav navbar-nav navbar-right"><li class="nav"><a href="https://docs.waveshare.net/" id="n-https.253A.252F.252Fdocs.waveshare.net" rel="nofollow" target="_blank">微雪文档</a></li>							</ul>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<!-- /navbar -->
+					<div id="mw-page-base"></div>
+			<div id="mw-head-base"></div>
+			<a id="top"></a>
+
+			<!-- content -->
+			<div id="contentwrapper" class="user-loggedout not-editable container with-navbar with-navbar-fixed">
+
+				
+				<div class="row">
+					<div class="col-md-offset-2 col-md-10" role="main">
+								<div class="mw-body" id="content">
+			<div id="mw-js-message" style="display:none;"></div>
+									<h1 id="firstHeading" class="firstHeading page-header" lang="zh-Hans-CN"><span dir="auto">RS232 RS485 CAN Board</span></h1>
+									<!-- bodyContent -->
+			<div id="bodyContent">
+								<div id="siteSub">来自Waveshare Wiki</div>
+								<div id="contentSub"></div>
+												<div id="jump-to-nav" class="mw-jump">
+					跳转至：					<a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#mw-navigation">导航</a>、					<a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#p-search">搜索</a>
+				</div>
+				<div id="mw-content-text" lang="zh-Hans-CN" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><div class="wiki-pages blue-color">
+<div class="tabber">
+<table id="infotable" class="a-r at-c roundy bgd-blue bl-blue" style="margin-left: 5px; margin-bottom: 5px;">
+
+<tbody><tr>
+<td colspan="2">
+<table class="at-c roundy" style="background: transparent;width:100%;">
+
+<tbody><tr>
+<td class="at-c textwhite" style="display: none;"><span style="font-size:1.5em; line-height: 36px;"><b>RS232 RS485 CAN Board</b></span>
+</td></tr>
+<tr>
+<td class="at-c bgwhite" style="margin:5px;"><div class="subnavberlive"><ul class="subnavbernav"><li class="subnavberactive"><a href="javascript:void(null);" title="RS232 RS485 CAN Board">RS232 RS485 CAN Board</a></li></ul>
+<div class="subnavbertab " title="">
+<p><a href="https://www.waveshare.net/shop/RS232-RS485-CAN-Board.htm" title="RS232 RS485 CAN Board" target="_blank" rel="nofollow noreferrer noopener"><img alt="2-CH-CAN-HAT+" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/360px-RS232-RS485-CAN-Board-details-1.jpg" decoding="async" loading="lazy" width="360" height="300" srcset="/w/upload/thumb/0/0a/RS232-RS485-CAN-Board-details-1.jpg/540px-RS232-RS485-CAN-Board-details-1.jpg 1.5x, /w/upload/thumb/0/0a/RS232-RS485-CAN-Board-details-1.jpg/720px-RS232-RS485-CAN-Board-details-1.jpg 2x"></a>
+</p>
+</div></div>
+</td></tr></tbody></table>
+</td></tr>
+<tr style="display:none;">
+<td colspan="2">
+<table class="roundy" style="background: transparent;width:100%;">
+
+<tbody><tr>
+<td class="at-c textwhite"><b>{{{name2}}}</b>
+</td></tr>
+<tr>
+<td class="at-c bgwhite" style="margin:5px;">
+</td></tr></tbody></table>
+</td></tr>
+<tr style="display:none;">
+<td>
+<table class="roundy" style="background: transparent;width:100%;">
+
+<tbody><tr>
+<td class="at-c textwhite"><b>{{{name3}}}</b>
+</td></tr>
+<tr>
+<td class="at-c bgwhite" style="margin:5px;">
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td colspan="2">
+<table class="roundy" style="background: transparent; border-collapse:collapse;width:100%;display: none;">
+<tbody><tr>
+<td style="width:2%;">
+</td>
+<td style="width:3%;">
+</td>
+<th colspan="2" width="90%" class="alignt-center roundytop bgl-white">基本信息
+</th>
+<td style="width:3%;">
+</td>
+<td style="width:2%;">
+</td></tr>
+<tr>
+<th colspan="3" width="90px" class="alignt-right roundytl bgwhite b-blue" style="border-width: 0 0 1px 0;">分类：
+</th>
+<td colspan="3" class="at-l roundytr b-blue bgwhite" style="border-width: 0 0 1px 0;">模块模块
+</td></tr>
+<tr style="display:none;">
+<th colspan="3" width="90px" class="alignt-right bgwhite b-blue" style="border-width: 0 0 1px 0;">{{{userDefinedInfo1}}}：
+</th>
+<td colspan="3" class="at-l b-blue bgwhite" style="border-width: 0 0 1px 0;">{{{userdefinedvalue1}}}
+</td></tr>
+<tr style="display:none;">
+<th colspan="3" width="90px" class="alignt-right bgwhite b-blue" style="border-width: 0 0 1px 0;">{{{userDefinedInfo2}}}：
+</th>
+<td colspan="3" class="at-l b-blue bgwhite" style="border-width: 0 0 1px 0;">{{{userdefinedvalue2}}}
+</td></tr>
+<tr style="display:none;">
+<th colspan="3" width="90px" class="alignt-right bgwhite b-blue" style="border-width: 0 0 1px 0;">{{{userDefinedInfo3}}}：
+</th>
+<td colspan="3" class="at-l b-blue bgwhite" style="border-width: 0 0 1px 0;">{{{userdefinedvalue3}}}
+</td></tr>
+<tr>
+<th colspan="3" width="90px" class="alignt-right roundybl bgwhite">品牌：
+</th>
+<td colspan="3" class="at-l roundybr bgwhite">Waveshare
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td colspan="2">
+<table class="align-right roundy" style="background: transparent; border-collapse:collapse;width:100%;">
+<tbody><tr>
+<td style="width:2%;">
+</td>
+<td style="width:3%;">
+</td>
+<th colspan="2" width="90%" class="alignt-center roundytop"><font color="white">功能简介</font>
+</th>
+<td style="width:3%;">
+</td>
+<td style="width:2%;">
+</td></tr>
+<tr>
+<td colspan="6" class="at-c">
+<table class="roundy bd-未知 bgl-未知 textblack bw-1 fulltable">
+
+<tbody><tr>
+<td>
+<table class="roundy bgwhite fulltable" style="text-align:center">
+
+<tbody><tr>
+<td class="roundyleft textwhite bgd-blue bl-blue bw-1" style="width:25%;opacity: 0.8;padding-bottom: 5px;"><small><b>特性</b></small>
+</td>
+<td class="roundyright bl-blue bw-1" colspan="3" style="width:75%;padding-bottom: 5px;color: #666;"><small>树莓派传感器扩展</small>
+</td></tr>
+<tr style="display:none;">
+<td class="roundyleft textwhite bgd-blue bl-blue bw-1" style="width:25%;opacity: 0.8;padding-bottom: 5px;"><small>'<b><i></i></b></small>
+</td>
+<td class="roundyright bl-blue bw-1" colspan="3" style="width:75%;padding-bottom: 5px;color: #666;"><small>无特性，不解释</small>
+</td></tr>
+<tr style="display:none;">
+<td class="roundyleft textwhite bgd-blue bl-blue bw-1" style="width:25%;opacity: 0.8;padding-bottom: 5px;"><small>'<b><i></i></b></small>
+</td>
+<td class="roundyright bl-blue bw-1" colspan="3" style="width:75%;padding-bottom: 5px;color: #666;"><small>无特性，不解释</small>
+</td></tr>
+<tr style="display:none;">
+<td class="roundyleft textwhite bgd-blue bl-blue bw-1" style="width:25%;opacity: 0.8;padding-bottom: 5px;"><small>'<b><i></i></b></small>
+</td>
+<td class="roundyright bl-blue bw-1" colspan="3" style="width:75%;padding-bottom: 5px;color: #666;"><small>无特性，不解释</small>
+</td></tr>
+<tr style="display:none;">
+<td class="roundyleft textwhite bgd-blue bl-blue bw-1" style="width:25%;opacity: 0.8;padding-bottom: 5px;"><small>'<b><i></i></b></small>
+</td>
+<td class="roundyright bl-blue bw-1" colspan="3" style="width:75%;padding-bottom: 5px;color: #666;"><small>无特性，不解释</small>
+</td></tr>
+<tr>
+<td class="roundyleft textwhite bgd-blue bl-blue bw-1" style="width:25%;opacity: 0.8;padding-bottom: 5px;"><small><b>接口</b></small>
+</td>
+<td class="roundyright bl-blue bw-1" style="width:25%;padding-bottom: 5px;color: #666;"><small><a href="https://www.waveshare.net/wiki/%E5%88%86%E7%B1%BB:RS485%E6%8E%A5%E5%8F%A3" title="分类:RS485接口">RS485</a></small>
+</td>
+<td class="roundyright bl-blue bw-1" style="width:25%;padding-bottom: 5px;color: #666;"><small><a href="https://www.waveshare.net/wiki/%E5%88%86%E7%B1%BB:RS232%E6%8E%A5%E5%8F%A3" title="分类:RS232接口">RS232</a></small>
+</td>
+<td class="roundyright bl-blue bw-1" style="width:25%;padding-bottom: 5px;color: #666;"><small><a href="https://www.waveshare.net/w/index.php?title=%E5%88%86%E7%B1%BB:CAN(FD)%E6%8E%A5%E5%8F%A3&amp;action=edit&amp;redlink=1" class="new" title="分类:CAN(FD)接口（页面不存在）">CAN(FD)</a></small>
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td colspan="2">
+<table class="align-right roundy" style="background: transparent; border-collapse:collapse;width:100%;display:none;">
+<tbody><tr>
+<td style="width:2%;">
+</td>
+<td style="width:3%;">
+</td>
+<th colspan="2" width="90%" class="alignt-center roundytop bgl-white">相关产品
+</th>
+<td style="width:3%;">
+</td>
+<td style="width:2%;">
+</td></tr>
+<tr>
+<td colspan="6" class="at-c">
+<table class="roundy bw-1 fulltable table table-striped table-bordered mw-collapsed align-left">
+
+<tbody><tr>
+<th>
+</th></tr>
+<tr style="display:none;">
+<th>♦   {{{Product1}}}
+</th></tr>
+<tr style="display:none;">
+<th>♦   {{{Product2}}}
+</th></tr>
+<tr style="display:none;">
+<th>♦   {{{Product3}}}
+</th></tr>
+<tr style="display:none;">
+<th>♦   {{{Product4}}}
+</th></tr>
+<tr style="display:none;">
+<th>♦   {{{Product5}}}
+</th></tr>
+<tr style="display:none;">
+<td>—— <span style="font-size:14px;text-align: left;font-weight: bold;">类目1</span> ——
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr style="display:none;">
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:14px;text-align: left;color: #0645ad;font-weight: bold;">♦   类目1</span>
+</td></tr>
+<tr style="font-size: 13px; text-align: left; display: none;">
+<td>
+<p>列表1
+</p>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr style="display:none;">
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:14px;text-align: left;color: #0645ad;font-weight: bold;">♦   类目2</span>
+</td></tr>
+<tr style="font-size: 13px; text-align: left; display: none;">
+<td>
+<p>列表2
+</p>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr style="display:none;">
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:14px;text-align: left;color: #0645ad;font-weight: bold;">♦   类目3</span>
+</td></tr>
+<tr style="font-size: 13px; text-align: left; display: none;">
+<td>
+<p>列表3
+</p>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr style="display:none;">
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:14px;text-align: left;color: #0645ad;font-weight: bold;">♦   类目4</span>
+</td></tr>
+<tr style="font-size: 13px; text-align: left; display: none;">
+<td>
+<p>列表4
+</p>
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td>
+<table class="mw-collapsible mw-collapsed align-left mw-made-collapsible">
+
+<tbody><tr style="display:none;">
+<td><span class="mw-collapsible-toggle mw-collapsible-toggle-default mw-collapsible-toggle-collapsed" role="button" tabindex="0" aria-expanded="false"><a class="mw-collapsible-text">展开</a></span><span style="font-size:14px;text-align: left;color: #0645ad;font-weight: bold;">♦   类目5</span>
+</td></tr>
+<tr style="font-size: 13px; text-align: left; display: none;">
+<td>
+<p>列表5
+</p>
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+<div class="tabbertab" title="说明" id="myintro">
+
+
+<h1><span id="说明"></span><span class="mw-headline" id=".E8.AF.B4.E6.98.8E">说明</span></h1>
+<h2><span id="产品简介"></span><span class="mw-headline" id=".E4.BA.A7.E5.93.81.E7.AE.80.E4.BB.8B">产品简介</span></h2>
+<p>RS232-RS485-CAN-Board 是微雪 (Waveshare) 专为 Raspberry Pi 4B 和 Raspberry Pi 5 设计的一款隔离型工业接口扩展板。这款扩展板提供了多种工业通信接口，包括 2 路 RS485、1 路 RS232、1 路 CAN FD 和 1 路 CAN，每个接口都具备电气隔离保护。它采用了 SC16IS752 与 SP485、MCP2515 与 SN65HVD230 以及 MCP2518FD 与 MCP2562FD 等组合方案，通过 SPI 和 UART 接口轻松扩展多种通信功能。板载的 TVS 管、自恢复保险丝、保护二极管、数字隔离芯片以及一体式电源隔离设计，确保了电路的防雷、防静电、防过流、防过压和抗干扰能力。扩展板支持 7~36V 宽电压供电，配合定制的工业导轨外壳，方便在工业控制应用中集成。同时，预留的 PCIe 扩展接口和充足的内部空间，满足用户未来的功能扩展需求。产品还附带了丰富的配套资料和示例代码，助力用户轻松实现工业通信应用。
+</p>
+<h2><span id="产品特点"></span><span class="mw-headline" id=".E4.BA.A7.E5.93.81.E7.89.B9.E7.82.B9">产品特点</span></h2>
+<ul><li><b>兼容性广</b>
+<ul><li>适用于 Raspberry Pi 4B 和 Raspberry Pi 5，基于 Raspberry Pi 40pin GPIO 接口。</li></ul></li>
+<li><b>多种工业通信接口</b>
+<ul><li>提供 2 路 RS485、1 路 RS232、1 路 CAN FD 和 1 路 CAN 通信接口。</li></ul></li>
+<li><b>电气隔离保护</b>
+<ul><li>每个接口均具备电气隔离，确保通信的安全性和可靠性。</li></ul></li>
+<li><b>扩展灵活</b>
+<ul><li>采用 SC16IS752 与 SP485 组合方案，通过 SPI 接口扩展两路 RS485。</li>
+<li>采用 MCP2515 与 SN65HVD230 组合方案，通过 SPI 接口扩展一路 CAN。</li>
+<li>采用 MCP2518FD 与 MCP2562FD 组合方案，通过 SPI 接口扩展一路 CAN FD。</li>
+<li>采用 Raspberry UART 与 SP3232EEN 组合方案，通过 UART 接口扩展一路 RS232。</li></ul></li>
+<li><b>防护功能强</b>
+<ul><li>板载 TVS (瞬态电压抑制管)，防雷、防静电。</li>
+<li>板载自恢复保险丝和保护二极管，防过流、过压，提高抗冲击能力。</li></ul></li>
+<li><b>电源隔离</b>
+<ul><li>板载一体式电源隔离，无需额外供电，确保 RS232、RS485、CAN、CAN FD 的电流和电压稳定输出，增强抗干扰能力。</li></ul></li>
+<li><b>信号隔离</b>
+<ul><li>板载数字隔离芯片，提升信号隔离的安全性、稳定性和抗干扰性。</li></ul></li>
+<li><b>灵活供电</b>
+<ul><li>支持 7~36V 宽电压供电，可结合 Pi5 Connector Adapter (B) 同时为树莓派和扩展板供电。</li></ul></li>
+<li><b>终端电阻可调</b>
+<ul><li>板载 120Ω 终端电阻，可通过跳线帽设置使能。</li></ul></li>
+<li><b>中断电阻预留</b>
+<ul><li>预留中断电阻焊盘，支持灵活切换中断引脚，避免占用特殊性引脚。</li></ul></li>
+<li><b>扩展与安装</b>
+<ul><li>针对 Raspberry Pi 5 预留 PCIe 扩展板接口，支持进一步功能扩展。</li>
+<li>提供定制的工业导轨外壳，内部预留空间，支持堆叠扩展自定义功能。</li></ul></li>
+<li><b>配套资料完善</b>
+<ul><li>提供完整的配套资料，包括 Raspberry Python 和 C 示例程序以及用户手册等。</li></ul></li></ul>
+<h2><span id="产品参数"></span><span class="mw-headline" id=".E4.BA.A7.E5.93.81.E5.8F.82.E6.95.B0">产品参数</span></h2>
+<table border="1;" style="width:900px;">
+
+<tbody><tr style="background:#464646; color:#fff;" align="center">
+<td>产品类型
+</td>
+<td colspan="4">树莓派隔离型工业接口扩展板
+</td></tr>
+<tr>
+<th>适配主板
+</th>
+<td colspan="4">Raspberry Pi 4B、Raspberry Pi 5
+</td></tr>
+<tr>
+<th>通信接口
+</th>
+<td colspan="4">SPI + UART
+</td></tr>
+<tr>
+<th rowspan="6">工业接口
+</th></tr>
+<tr>
+<th style="width:25%;">接口说明
+</th>
+<th>芯片方案
+</th>
+<th>通信速率
+</th></tr>
+<tr>
+<td>1路隔离CAN FD
+</td>
+<td>MCP2518FD + MCP2562FD
+</td>
+<td>5kbps - 8 Mbps
+</td></tr>
+<tr>
+<td>1路隔离CAN
+</td>
+<td>MCP2515 + SN65HVD230
+</td>
+<td>5kbps - 1 Mbps
+</td></tr>
+<tr>
+<td>2路隔离RS485
+</td>
+<td>SC16IS752 + SP485
+</td>
+<td rowspan="2">300 bps - 921600 bps
+</td></tr>
+<tr>
+<td>1路隔离RS232
+</td>
+<td>SP3232EEN
+</td></tr>
+<tr>
+<th rowspan="2">可扩展性
+</th>
+<td colspan="3">Pi5 可通过 PCIe 扩展 NVME、ETH、USB、4G/5G 等
+</td></tr>
+<tr>
+<td colspan="3">Pi 4B/5 可通过 40PIN GPIO 堆叠部分 HAT 扩展板 (须引脚和尺寸不冲突)
+</td></tr>
+<tr>
+<th rowspan="2">供电方式 (二选一)
+</th>
+<td colspan="3">转接板 Type-C 电源口 5V 供电
+</td></tr>
+<tr>
+<td colspan="4">外部接线端子 DC 7-36V 宽电压供电
+</td></tr>
+<tr>
+<th>产品尺寸
+</th>
+<td colspan="4">154.6 × 83.7 × 59 mm
+</td></tr>
+<tr>
+<th>外壳
+</th>
+<td colspan="4">环保塑料外壳，支持导轨和挂壁安装
+</td></tr></tbody></table>
+<p><br>
+</p>
+<h2><span id="接口说明"></span><span class="mw-headline" id=".E6.8E.A5.E5.8F.A3.E8.AF.B4.E6.98.8E">接口说明</span></h2>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:RS232-RS485-CAN-Board-details-11.jpg" class="image fancybox"><img alt="RS232-RS485-CAN-Board-details-11.jpg" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/900px-RS232-RS485-CAN-Board-details-11.jpg" decoding="async" loading="lazy" width="900" height="848" srcset="/w/upload/3/32/RS232-RS485-CAN-Board-details-11.jpg 1.5x"></a>
+</p>
+<h3><span id="引脚分配"></span><span class="mw-headline" id=".E5.BC.95.E8.84.9A.E5.88.86.E9.85.8D">引脚分配</span></h3>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:RS232-RS485-CAN-Board-details-inter.jpg" class="image fancybox"><img alt="RS232-RS485-CAN-Board-details-inter.jpg" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/900px-RS232-RS485-CAN-Board-details-inter.jpg" decoding="async" loading="lazy" width="900" height="856" srcset="/w/upload/5/5c/RS232-RS485-CAN-Board-details-inter.jpg 1.5x"></a>
+</p>
+<h3><span id="CAN总线"></span><span class="mw-headline" id="CAN.E6.80.BB.E7.BA.BF">CAN总线</span></h3>
+<p>CAN 模块的功能是处理所有 CAN 总线上的报文接收和发送。报文发送时，首先将报文装载到正确的报文缓冲器和控制寄存器中。通过 SPI 接口设置控制寄存器中的相应位或使用发送使能引脚均可启动发送操作。通过读取相应的寄存器可以检查通讯状态和错误。 会对在 CAN总线上检测到的任何报文进行错误检查，然后与用户定义的滤波器进行匹配，以确定是否将报文移到两个接收缓冲器中的一个。<br>
+<font color="#FF0000">
+由于树莓派本身并不支持CAN总线，因此使用SPI接口的CAN控制器，搭配一个收发器完成CAN功能。<br>
+</font>
+Microchip 的 <b>MCP2515</b> 是一款CAN协议控制器，完全支持 CAN V2.0B 技术规范。该器件能发送和接收标准和扩展数据帧以及远程帧。 MCP2515 自带的两个验收屏蔽寄存器和六个验收滤波寄存器可以过滤掉不想要的报文，因此减少了主单片机（MCU）的开销。MCU通过SPI接口与该器件连接,即树莓派通过SPI接口连接芯片，对于树莓派使用该芯片不需要编写驱动，只需要打开设备树中的内核驱动即可使用。可以与MCP2518FD使用通一通道，只需片选脚不同即可<br><br>
+<b>MCP2518FD</b>是Microchip公司生产的一款CAN FD(灵活数据速率)控制器，完全支持经典格式(CAN2.0)和CAN灵活数据速率(CAN FD)格式的CAN成帧。仲裁比特率高达1Mbps，数据波特率也突破传统CAN2.0的1Mbps限制，SPI时钟速度高达20MHz符合ISO11898-1:2015标准。该器件能发送和接收标准和扩展数据帧以及远程帧。 MCP2518FD 自带的32个灵活的滤波器和屏蔽对象可以过滤掉不想要的报文，因此减少了主单片机（MCU）的开销。MCU通过SPI接口与该器件连接，即树莓派通过SPI接口连接芯片，对于树莓派使用该芯片，可以通过已编写好的设备树文件来驱动该器件。<br>
+<a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:RS485_CAN_HAT_MCP2515.png" class="image fancybox"><img alt="RS485 CAN HAT MCP2515.png" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/RS485_CAN_HAT_MCP2515.png" decoding="async" loading="lazy" width="450" height="327"></a><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Hardware_station.png" class="image fancybox"><img alt="Hardware station.png" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/450px-Hardware_station.png" decoding="async" loading="lazy" width="450" height="321" srcset="/w/upload/7/7b/Hardware_station.png 1.5x"></a><br>
+更多详细请参考数据手册；<br>
+</p>
+<h3><span id="RS-485总线"></span><span class="mw-headline" id="RS-485.E6.80.BB.E7.BA.BF">RS-485总线</span></h3>
+<h4><span id="控制器"></span><span class="mw-headline" id=".E6.8E.A7.E5.88.B6.E5.99.A8">控制器</span></h4>
+<p>本产品采用SC16IS752作为控制芯片，SC16IS752是双通道高性能的UART扩展芯片，支持SPI和I2C两种接口通信，本模块使用SPI接口。板载电源隔离、ADI磁耦隔离、板载TVS(瞬态电压抑制管)、自恢复保险丝和保护二极管和自动收发转换电路。可有效抑制电路中的浪涌电压和瞬态尖峰电压，防雷防静电，防过流过压，提高抗冲击能力，可进行信号隔离，具有靠性高、抗干扰强、功耗低等优点。
+</p>
+<h4><span id="通信协议"></span><span class="mw-headline" id=".E9.80.9A.E4.BF.A1.E5.8D.8F.E8.AE.AE">通信协议</span></h4>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:RS485_HAT.png" class="image fancybox"><img alt="RS485 HAT.png" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/900px-RS485_HAT.png" decoding="async" loading="lazy" width="900" height="330" srcset="/w/upload/4/4a/RS485_HAT.png 1.5x"></a><br>
+</p><p>CS：从机片选，当CS为低电平的时候，芯片使能   <br>
+SCLK： SPI通信时钟  <br>
+MOSI/SI：SPI通信主机发送，从机接收 <br>
+MIS0/SO：SPI通信主机接收，从机发送 <br>
+</p>
+<h3><span id="RS-232总线"></span><span class="mw-headline" id="RS-232.E6.80.BB.E7.BA.BF">RS-232总线</span></h3>
+<p>本产品使用SP3232作为收发器使用，SP3232E 系列是一款 RS-232 收发器解决方案，适用于笔记本电脑或掌上电脑等便携式或手持式应用。 SP3232E 系列具有高效电荷泵电源，在 3.3V 工作电压下仅需要 0.1μF 电容器。该电荷泵使 SP3232E 系列能够通过 +3.3V 至 +5.0V 的单电源提供真正的 RS-232 性能。 SP3232E 是 2 个驱动器/2 个接收器设备。关断期间，电源电流降至 1μA 以下。更多详细请参考数据手册；
+</p>
+<h2><span id="产品尺寸"></span><span class="mw-headline" id=".E4.BA.A7.E5.93.81.E5.B0.BA.E5.AF.B8">产品尺寸</span></h2>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:RS232-RS485-CAN-Board-details-size.jpg" class="image fancybox"><img alt="RS232-RS485-CAN-Board-details-size.jpg" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/900px-RS232-RS485-CAN-Board-details-size.jpg" decoding="async" loading="lazy" width="900" height="725" srcset="/w/upload/7/7b/RS232-RS485-CAN-Board-details-size.jpg 1.5x"></a>
+</p><p><br>
+</p>
+<h2><span id="组装说明"></span><span class="mw-headline" id=".E7.BB.84.E8.A3.85.E8.AF.B4.E6.98.8E">组装说明</span></h2>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:RS232-RS485-CAN-Board-details-13.jpg" class="image fancybox"><img alt="RS232-RS485-CAN-Board-details-13.jpg" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/900px-RS232-RS485-CAN-Board-details-13.jpg" decoding="async" loading="lazy" width="900" height="933" srcset="/w/upload/6/6e/RS232-RS485-CAN-Board-details-13.jpg 1.5x"></a>
+</p><p><br>
+</p>
+<h2><span id="安装必要的函数库"></span><span class="mw-headline" id=".E5.AE.89.E8.A3.85.E5.BF.85.E8.A6.81.E7.9A.84.E5.87.BD.E6.95.B0.E5.BA.93">安装必要的函数库</span></h2>
+<ul><li>安装BCM2835， 打开树莓派终端，并运行一下指令</li></ul>
+<pre>wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.60.tar.gz
+tar zxvf bcm2835-1.60.tar.gz 
+cd bcm2835-1.60/
+sudo ./configure
+sudo make
+sudo make check
+sudo make install
+# 更多的可以参考官网：http://www.airspayce.com/mikem/bcm2835/
+</pre>
+<ul><li>安装wiringPi</li></ul>
+<h3><span class="mw-headline" id="wiringPi">wiringPi</span></h3>
+<h4><span id="树莓派系统为32位"></span><span class="mw-headline" id=".E6.A0.91.E8.8E.93.E6.B4.BE.E7.B3.BB.E7.BB.9F.E4.B8.BA32.E4.BD.8D">树莓派系统为32位</span></h4>
+<pre>#打开树莓派终端，并运行以下指令
+cd
+sudo apt-get install wiringpi
+#对于树莓派2019年5月之后的系统（早于之前的可不用执行），可能需要进行升级：
+wget https://project-downloads.drogon.net/wiringpi-latest.deb
+sudo dpkg -i wiringpi-latest.deb
+gpio -v
+# 运行gpio -v会出现2.52版本，如果没有出现说明安装出错
+
+#Bullseye分支系统使用如下命令：
+git clone https://github.com/WiringPi/WiringPi
+cd WiringPi
+./build
+sudo gpio -v
+# 运行gpio -v会出现2.70版本，如果没有出现说明安装出错
+</pre>
+<h4><span id="树莓派系统为64位"></span><span class="mw-headline" id=".E6.A0.91.E8.8E.93.E6.B4.BE.E7.B3.BB.E7.BB.9F.E4.B8.BA64.E4.BD.8D">树莓派系统为64位</span></h4>
+<p>使用指令拷贝资源包到树莓派<br>
+</p>
+<pre>wget <a target="_blank" rel="nofollow noreferrer noopener" class="external free" href="https://www.waveshare.net/w/upload/8/8c/WiringPi-master.zip">https://www.waveshare.net/w/upload/8/8c/WiringPi-master.zip</a>
+</pre>
+<p>（可选，使用过解压指令可跳过这一步）安装解压环境
+</p>
+<pre>sudo apt-get install unzip
+</pre>
+<p>进入文件位置，执行解压指令<br>
+</p>
+<pre>unzip WiringPi-master.zip
+</pre>
+<p>进入文件目录（进到“WiringPi-master”文件夹中）<br>
+</p>
+<pre>cd WiringPi-master/
+</pre>
+<p>执行sudo ./build<br>
+</p>
+<pre>sudo ./build 
+</pre>
+<p>（可选，出现错误参考第4点）如果执行./build不成功就执行“chmod +x ./build”再执行“sudo ./build”<br>
+</p>
+<pre>chmod +x ./build
+</pre>
+<p>执行示例：<br>
+<a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:64-bit_wiringPi%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%851.png" class="image fancybox"><img alt="64-bit wiringPi环境安装1.png" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/1000px-64-bit_wiringPi环境安装1.png" decoding="async" loading="lazy" width="1000" height="329" srcset="/w/upload/e/e7/64-bit_wiringPi%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%851.png 1.5x"></a><br><br>
+</p><p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:64-bit_wiringPi%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%852.png" class="image fancybox"><img alt="64-bit wiringPi环境安装2.png" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/1000px-64-bit_wiringPi环境安装2.png" decoding="async" loading="lazy" width="1000" height="100" srcset="/w/upload/c/cb/64-bit_wiringPi%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%852.png 1.5x"></a>
+</p>
+<ul><li>安装Python函数库</li></ul>
+<pre>#python2
+sudo apt-get update
+sudo apt-get install python-pip
+sudo apt-get install python-pil
+sudo apt-get install python-numpy
+sudo pip install RPi.GPIO
+sudo pip install spidev
+sudo pip install python-can
+#python3
+sudo apt-get update
+sudo apt-get install python3-pip
+sudo apt-get install python3-pil
+sudo apt-get install python3-numpy
+sudo pip3 install RPi.GPIO
+sudo pip3 install spidev 
+sudo pip3 install python-can
+</pre>
+<ul><li>在官网上找到对应产品，在产品资料打开下载路径，在wiki中下载示例程序：<br></li>
+<li>得到解压包，解压并将程序复制到树莓派中。</li></ul>
+<h3><span id="前置工作"></span><span class="mw-headline" id=".E5.89.8D.E7.BD.AE.E5.B7.A5.E4.BD.9C">前置工作</span></h3>
+<h4><span id="开启接口"></span><span class="mw-headline" id=".E5.BC.80.E5.90.AF.E6.8E.A5.E5.8F.A3">开启接口</span></h4>
+<ul><li>打开树莓派终端，输入以下指令进入配置界面</li></ul>
+<pre>sudo raspi-config
+Interfacing Options -&gt;Serial -&gt;no -&gt; yes，关闭串口调试功能。
+</pre>
+<div class="center"><div class="floatnone"><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:L76X_GPS_Module_rpi_serial.png" class="image fancybox"><img alt="L76X GPS Module rpi serial.png" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/L76X_GPS_Module_rpi_serial.png" decoding="async" loading="lazy" width="1200" height="412"></a></div></div><br>
+<ul><li>选择</li></ul>
+<pre>Interfacing Options -&gt; SPI -&gt; Yes 开启SPI接口
+</pre>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:RPI_open_spi.png" class="image fancybox"><img alt="RPI open spi.png" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/RPI_open_spi.png" decoding="async" loading="lazy" width="900" height="838"></a><br>
+</p><p><br>
+然后重启树莓派：<br>
+</p>
+<pre>sudo reboot
+</pre>
+<p>请确保SPI没有被其他的设备占用，你可以在/boot/config.txt中间检查<br>
+</p>
+<h4><span id="修改脚本config.txt"></span><span class="mw-headline" id=".E4.BF.AE.E6.94.B9.E8.84.9A.E6.9C.ACconfig.txt">修改脚本config.txt</span></h4>
+<p>将模块插在树莓派上，然后修改开机脚本config.txt<br>
+</p>
+<pre>sudo nano /boot/firmware/config.txt  # 24年之前的系统是/boot/config.txt
+</pre>
+<style data-mw-deduplicate="TemplateStyles:r75601">.mw-parser-output .note{background-position:left 7px top 50%;padding:0.5em 0.5em 0.5em 40px;margin:0.5em 0;overflow:hidden;background-color:#f8f9fa;background-repeat:no-repeat;border:1px solid #ddd}.mw-parser-output .note-inline{display:inline-block;vertical-align:middle}.mw-parser-output .note-info{background-color:#f6efe5;background-size:25px;border-color:#ac6600;padding-left:40px;min-height:28px}.mw-parser-output .note-reminder{background-color:#fff9ea;background-size:25px;border-color:#fc3;min-height:28px}.mw-parser-output .note-warn{background-color:#fff9ea;background-size:25px;border-color:#fc3;min-height:28px}.mw-parser-output .note-error{background-color:#fee7e6;background-size:25px;border-color:#c33;min-height:28px}</style><div role="note" class="note note-warn">如果是用在Ubuntu系统下，则对应的配置文件路径，须修改，一般是: /boot/firmware/config.txt</div>
+<p>在最后一行加入如下：
+</p>
+<pre>dtparam=spi=on
+dtoverlay=i2c0 
+dtoverlay=spi1-3cs
+dtoverlay=sc16is752-spi1,int_pin=25
+dtoverlay=mcp2515,spi0-0,oscillator=16000000,interrupt=23
+dtoverlay=mcp251xfd,spi0-1,interrupt=24
+</pre>
+<ul><li>重启树莓派以应用所有设置：</li></ul>
+<pre>sudo reboot
+</pre>
+<ul><li>待树莓派重启后，查看SPI信息：<br></li></ul>
+<pre>dmesg | grep spi1
+</pre>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Rs232_rs485_can_board_01.png" class="image fancybox"><img alt="Rs232 rs485 can board 01.png" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/900px-Rs232_rs485_can_board_01.png" decoding="async" loading="lazy" width="900" height="162" srcset="/w/upload/6/6a/Rs232_rs485_can_board_01.png 1.5x"></a>
+</p>
+<ul><li>开启CAN：<br></li></ul>
+<pre>sudo ip link set can0 up type can bitrate 1000000
+sudo ip link set can1 up type can bitrate 1000000
+sudo ifconfig can0 txqueuelen 65536
+sudo ifconfig can1 txqueuelen 65536
+</pre>
+<ul><li>更多相关CAN内核指令可以查看：<br></li></ul>
+<pre><a target="_blank" rel="nofollow noreferrer noopener" class="external free" href="https://www.kernel.org/doc/Documentation/networking/can.txt">https://www.kernel.org/doc/Documentation/networking/can.txt</a>
+</pre>
+<ul><li>查看ifconfig：<br></li></ul>
+<pre>ifconfig
+</pre>
+<p><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:2-CH-CAN-HAT-ifconfig.jpg" class="image fancybox"><img alt="2-CH-CAN-HAT-ifconfig.jpg" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/700px-2-CH-CAN-HAT-ifconfig.jpg" decoding="async" loading="lazy" width="700" height="217" srcset="/w/upload/thumb/2/2a/2-CH-CAN-HAT-ifconfig.jpg/1050px-2-CH-CAN-HAT-ifconfig.jpg 1.5x, /w/upload/2/2a/2-CH-CAN-HAT-ifconfig.jpg 2x"></a>
+</p>
+<ul><li>关掉CAN设备：<br></li></ul>
+<pre>sudo ifconfig can0 down
+sudo ifconfig can1 down
+</pre>
+<h2><span id="CAN总线例程"></span><span class="mw-headline" id="CAN.E6.80.BB.E7.BA.BF.E4.BE.8B.E7.A8.8B">CAN总线例程</span></h2>
+<ul><li>浏览目录：</li>
+<li>接收端运行receive.py：</li></ul>
+<pre>sudo python reveive.py
+</pre>
+<ul><li>发送端运行send.py：</li></ul>
+<pre>sudo python send.py
+</pre>
+<p><b>需注意的是这里的发送端是使用CAN1发送，接收端则是CAN0，具体修改可以参照下面的代码分析。</b>
+</p>
+<h3><span id="代码分析"></span><span class="mw-headline" id=".E4.BB.A3.E7.A0.81.E5.88.86.E6.9E.90">代码分析</span></h3>
+<h4><span id="【Python例程】"></span><span class="mw-headline" id=".E3.80.90Python.E4.BE.8B.E7.A8.8B.E3.80.91">【Python例程】</span></h4>
+<p>本例程是基于python平台，确保以及安装了python-can库<br>
+在发送之前要先创建一个can设备，因为前面只是启用MCP2515内核：
+</p>
+<pre>os.system('sudo&nbsp;ip&nbsp;link&nbsp;set&nbsp;can0&nbsp;type&nbsp;can&nbsp;bitrate&nbsp;100000')
+os.system('sudo ifconfig can0 up')
+</pre>
+<p>上面这条则是通过对CAN0的配置初始化并启用，且指定CAN0作为发送/接收接口。如需改成CAN1，则代码如下：<br>
+</p>
+<pre>os.system('sudo&nbsp;ip&nbsp;link&nbsp;set&nbsp;can1&nbsp;type&nbsp;can&nbsp;bitrate&nbsp;100000')
+os.system('sudo ifconfig can1 up')
+</pre>
+<h5><span id="第一步：连接到CAN总线"></span><span class="mw-headline" id=".E7.AC.AC.E4.B8.80.E6.AD.A5.EF.BC.9A.E8.BF.9E.E6.8E.A5.E5.88.B0CAN.E6.80.BB.E7.BA.BF">第一步：连接到CAN总线</span></h5>
+<pre>can0 = can.interface.Bus(channel = 'can0', bustyp = 'socketcan_ctypes')
+</pre>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r75601"><div role="note" class="note note-warn">因python-can版本升级为4.0.0后，对应代码改动如下，否则会报错：
+<pre class="code2highlight lang-text">can1 = can.interface.Bus(channel = 'can0', bustype = 'socketcan')</pre>
+</div>
+<ul><li>需改成CAN1，则代码如下：<br></li></ul>
+<pre>can0 = can.interface.Bus(channel = 'can1', bustyp = 'socketcan')
+</pre>
+<h5><span id="第二步：创建信息"></span><span class="mw-headline" id=".E7.AC.AC.E4.BA.8C.E6.AD.A5.EF.BC.9A.E5.88.9B.E5.BB.BA.E4.BF.A1.E6.81.AF">第二步：创建信息</span></h5>
+<pre>msg&nbsp;=&nbsp;can.Message(arbitration_id=0x123,&nbsp;data=[0,&nbsp;1,&nbsp;2,&nbsp;3,&nbsp;4,&nbsp;5,&nbsp;6,&nbsp;7],&nbsp;extended_id=False)
+</pre>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r75601"><div role="note" class="note note-warn">因python-can版本升级为4.0.0后，对应代码改动如下，否则会报错
+<pre class="code2highlight lang-text">msg = can.Message(is_extended_id=False, arbitration_id=0x123, data=[0, 1, 2, 3, 4, 5, 6, 7])</pre>
+</div>
+<h5><span id="第三步：发送信息"></span><span class="mw-headline" id=".E7.AC.AC.E4.B8.89.E6.AD.A5.EF.BC.9A.E5.8F.91.E9.80.81.E4.BF.A1.E6.81.AF">第三步：发送信息</span></h5>
+<pre>can0.send(msg)
+</pre>
+<ul><li>需改成CAN1，则代码如下：<br></li></ul>
+<pre>can1.send(msg)
+</pre>
+<ul><li>最后同样要关闭can设备</li></ul>
+<pre>os.system('sudo&nbsp;ifconfig&nbsp;can0&nbsp;down')
+</pre>
+<ul><li>需改成CAN1，则代码如下：</li></ul>
+<pre>os.system('sudo&nbsp;ifconfig&nbsp;can1&nbsp;down')
+</pre>
+<ul><li>接收数据：</li></ul>
+<pre>msg&nbsp;=&nbsp;can0.recv(10.0)
+</pre>
+<p>recv()中定义超时接收时间。<br>
+<b>更多请参考：<a target="_blank" rel="nofollow noreferrer noopener" class="external free" href="https://python-can.readthedocs.io/en/stable/interfaces/socketcan.html">https://python-can.readthedocs.io/en/stable/interfaces/socketcan.html</a><br></b>
+<br>
+</p>
+<h4><span id="【WringPi例程】"></span><span class="mw-headline" id=".E3.80.90WringPi.E4.BE.8B.E7.A8.8B.E3.80.91">【WringPi例程】</span></h4>
+<ul><li>阻塞接收，树莓派打开终端，运行：</li></ul>
+<pre>cd 2-CH_CAN_HAT_Code/wiringPi/receive/
+make clean
+sudo make
+sudo ./can_receive
+</pre>
+<ul><li>发送，树莓派打开终端，运行：</li></ul>
+<pre>cd 2-CH_CAN_HAT_Code/ wiringPi/receive/
+make clean
+sudo make
+sudo ./can_send
+</pre>
+<h2><span id="RS-485总线例程"></span><span class="mw-headline" id="RS-485.E6.80.BB.E7.BA.BF.E4.BE.8B.E7.A8.8B">RS-485总线例程</span></h2>
+<ul><li>下载并运行测试例程</li></ul>
+<pre>sudo apt-get install p7zip-full
+wget http://www.waveshare.net/w/upload/4/44/2-CH_RS485_HAT_code.7z
+7z x 2-CH_RS485_HAT_code.7z
+sudo chmod 777 -R  2-CH_RS485_HAT
+cd 2-CH_RS485_HAT/
+</pre>
+<ul><li>另外也可以下载我们Github上面的工程：</li></ul>
+<pre>sudo git clone https://github.com/waveshare/2-CH-RS485-HAT
+cd 2-CH-RS485-HAT/
+</pre>
+<p><font color="#FF0000">
+<b>*注意目录稍微有些不一样</b>
+</font>
+</p>
+<ul><li>C 程序</li></ul>
+<pre>cd c
+make clean
+make
+sudo ./main
+</pre>
+<ul><li>PYTHON 程序</li></ul>
+<pre>cd python 
+cd examples
+sudo python3 main.py
+#或者
+sudo python3 test.py
+</pre>
+<h2><span id="RS-232总线_2"></span><span class="mw-headline" id="RS-232.E6.80.BB.E7.BA.BF_2">RS-232总线</span></h2>
+<p>RS-232使用较为方便，打开树莓派UART功能后可以直接使用<b>/dev/ttyAMA0</b>当做串口通信使用
+</p>
+</div>
+<div class="tabbertab" title="资料" id="myresources">
+<h1><span id="资料"></span><span class="mw-headline" id=".E8.B5.84.E6.96.99">资料</span></h1>
+<h2><span id="文档"></span><span class="mw-headline" id=".E6.96.87.E6.A1.A3">文档</span></h2>
+<ul><li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/9/9e/RS232_RS485_CAN_Board.pdf">原理图</a></li></ul>
+<h2><span id="程序"></span><span class="mw-headline" id=".E7.A8.8B.E5.BA.8F">程序</span></h2>
+<ul><li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/9/97/2-CH-CAN-HAT%2B-Demo.zip">CAN示例程序</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/4/44/2-CH_RS485_HAT_code.7z">RS-485示例程序</a></li></ul>
+<h2><span id="相关资料"></span><span class="mw-headline" id=".E7.9B.B8.E5.85.B3.E8.B5.84.E6.96.99">相关资料</span></h2>
+<ul><li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/8/82/SN65HVD230.pdf">SN65HVD230</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/8/83/MCP2515.pdf">MCP2515</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/c/c3/MCP2518FDT.pdf">MCP2518FD数据手册</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/a/ad/SC16IS752_datasheet.pdf">SC16IS752</a></li>
+<li><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/w/upload/3/36/SP3481_SP3485.pdf">SP3485</a></li></ul>
+</div>
+<div class="tabbertab" title="FAQ" id="myfaq">
+<h1><span class="mw-headline" id="FAQ">FAQ</span></h1>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion1">
+								<b>问题：</b> 树莓派安装了20241028发布的Raspbian OS镜像版本，或者升级为内核6.6.51版本后，开启CAN FD会报段错误？<br></a><a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:CAN-FD-error.png" class="image fancybox"><img alt="CAN-FD-error.png" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/CAN-FD-error.png" decoding="async" loading="lazy" width="655" height="104"></a>
+							
+						</h4>
+					</div>
+					<div id="accordion1" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+是的，该版本目前确实存在<a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://github.com/linux-can/can-utils/issues/561">bug</a>，如果遇到此问题，建议重新烧录或降级为<a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://downloads.raspberrypi.com/raspios_arm64/images/raspios_arm64-2024-07-04/2024-07-04-raspios-bookworm-arm64.img.xz">20240724</a>或更早之前发布的版本，即可解决问题。</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion2">
+								<b>问题：</b> 树莓派新版镜像配置好后，使用can dump收发指令，要发送好几次，candump才能收到数据是什么问题？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion2" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>这似乎也是raspbian os新版本的一个bug（请见：<a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://github.com/raspberrypi/linux/issues/6407">https://github.com/raspberrypi/linux/issues/6407</a>），可降级为20240724或更早之前发布的镜像版本，或尝试执行指令修复：。
+</p>
+<pre class="code2highlight lang-shell hljs">sudo rpi-update pulls/6466</pre>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion3">
+								<b>问题：</b>还可以向板子上堆叠SPI驱动的拓展板吗？SPI1-1、SPI1-2是否还支持接入其他设备？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion3" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>本产品已经使用了全部的树莓派SPI接口和UART口，不支持堆叠其他SPI驱动的拓展板，RS485会占用SPI1整个通道，无法接入更多。
+</p>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion4">
+								<b>问题：</b> 可以一路CAN接口接多个设备吗
+							</a>
+						</h4>
+					</div>
+					<div id="accordion4" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+可以。CAN总线是可以并联多个CAN从机，但地址不能冲突，另外需要考虑实际数据通信量和干扰，以实测为准。</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion5">
+								<b>问题：</b> 模块的CAN接口的除了CAN_H，CAN_L，还有GND，请问GND地线是干什么用的？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion5" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+接地引脚，共地可以确保信号的稳定性和可靠性，避免信号干扰和噪声。本身CAN是差分信号线，如果客户的CAN设备没有GND引脚，也可以不接。</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p><p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion6">
+								<b>问题：</b> CAN初始化失败？？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion6" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+如果出现初始化失败，可以重启树莓派或者其他主控平台开发板，确保连线是否正确，参考wiki仔细检查下配置是否有漏操作的，及逻辑电压跳帽引脚是否选择正确。</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion7">
+								<b>问题：</b>CAN接口的G引脚是否连接？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion7" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+G为信号地，也称隔离地。在工业环境当中，CAN受周围环境多变，为确保稳定性，两通信模块的G需要相连接。</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion8">
+								<b>问题：</b>CAN通信速度达不到最高值？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion8" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+芯片受周围所测环境、通信距离、线材、软件等多因素的影响。在高速通信时，数据波特率可能达不到所所标称的最高速率，用户需根据实际测量，确保稳定，选择适合的通信速度。</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion9">
+								<b>问题：</b>485通信不正常,怎么办？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion9" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<ol><li>确定485的A,B是否与控制的485设备A,B一一对应；</li>
+<li>可以先使用USB to 485设备与模块通信，保证树莓派的设置没有问题；</li>
+<li>检察串口通信参数的奇数偶数位校验的设置。</li></ol>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion10">
+								<b>问题：</b>树莓派装了ubuntu系统可以使用么，为什么在boot文件夹找不到config.txt文件？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion10" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<ol><li>树莓派装了主流的ubuntu系统可以使用；</li>
+<li>Ubuntu 的config.txt文件通常在/boot/firmware 文件夹</li>
+<li>树莓派版本的ubuntu 系统一般是64位的，可以用以下指令安装wringpi 库</li></ol>
+<pre>下载64位Arm wiringpi
+wget <a target="_blank" rel="nofollow noreferrer noopener" class="external free" href="https://gitee.com/LJYSCIENTIST/raspberry-pi-software-storage/raw/master/wiringpi-2.60-1_arm64.deb">https://gitee.com/LJYSCIENTIST/raspberry-pi-software-storage/raw/master/wiringpi-2.60-1_arm64.deb</a> 
+安装64 位Arm wiringpi
+sudo dpkg -i wiringpi-2.60-1_arm64.deb 
+</pre>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion11">
+								<b>问题：</b>将传感器接到RS485后，运行对应程序没有收到数据？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion11" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>传感器那边发送过来的可能是hex数据(有时候还需要先发送hex数据给传感器请求数据)，按照以下步骤收发hex数据：
+</p>
+<pre>wget <a target="_blank" rel="nofollow noreferrer noopener" class="external free" href="https://www.waveshare.net/w/upload/0/00/RS485-CAN-HAT-For-Hex.zip">https://www.waveshare.net/w/upload/0/00/RS485-CAN-HAT-For-Hex.zip</a>
+unzip RS485-CAN-HAT-For-Hex.zip 
+sudo chmod 777 RS485-CAN-HAT-For-Hex.zip
+cd RS485-CAN-HAT-For-Hex
+sudo python3 RS485-CAN-HAT-send-hex.py  
+</pre>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion12">
+								<b>问题：</b> 为什么会收到发送的数据？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion12" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<ul><li>DE/RE 切换延迟，建议程序加内容对比，清空缓存区还有延时</li>
+<li>请使用这个<a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://files.waveshare.com/wiki/RS232-RS485-CAN-Board/delay-485-modbus.zip">清除缓存的程序</a>，可以避免数据缓存</li></ul>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion13">
+								<b>问题：</b> 怎么快速测试can0 和 can1？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion13" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<ul><li>开启CAN：</li></ul>
+<pre>sudo ip link set can0 up type can bitrate 1000000
+sudo ip link set can1 up type can bitrate 1000000
+sudo ifconfig can0 txqueuelen 65536
+sudo ifconfig can1 txqueuelen 65536
+</pre>
+<ul><li>安装can-utils:</li></ul>
+<pre>sudo apt-get install can-utils
+</pre>
+<ul><li>接收：</li></ul>
+<p>终端输入接收数据指令：
+</p>
+<pre>candump can0
+</pre>
+<p>该接收工具是阻塞的，不加参数时运行该工具会一直处于接收状态，使用Ctrl+C退出。<br>
+</p>
+<ul><li>发送</li></ul>
+<p>终端输入发送数据指令：
+</p>
+<pre>cansend can1 000#11.22.33.44
+</pre>
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+<div class="panel-group">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#accordion14">
+								<b>问题：</b> 重启后，can0 can1 跳变怎么办？
+							</a>
+						</h4>
+					</div>
+					<div id="accordion14" class="panel-collapse collapse in">
+						<div class="panel-body">
+<div>
+<p>如果使用时发现 CAN 接口的系统设备号和板卡接口名称对不上，可以使用以下方法固定设备号：<br>
+</p>
+<ul><li>在 /etc/udev/rules.d 目录下个创建一个 rules 文件：<br></li></ul>
+<pre> sudo nano /etc/udev/rules.d/80-can.rules </pre>
+<ul><li>将下面的内容添加到文件中：<br></li></ul>
+<pre>  
+ACTION=="add", SUBSYSTEM=="net", DEVPATH=="/devices/platform/soc/*/spi0.0/net/can?", NAME="can0"
+ACTION=="add", SUBSYSTEM=="net", DEVPATH=="/devices/platform/soc/*/spi1.0/net/can?", NAME="can1" 
+</pre> 
+</div>
+<div style="display:none;"></div>
+<div style="display:none;"></div>
+<p><font color="red" style="display:none;"></font>
+</p>
+						</div>
+					</div>
+				</div>
+</div>
+<p><br>
+</p>
+</div>
+<div class="tabbertab" title="售后" id="mysupport">
+<h1><span id="售后"></span><span class="mw-headline" id=".E5.94.AE.E5.90.8E">售后</span></h1>
+<p><br>联系人：黄康信<br>
+EMAIL：3005423122@qq.com<br>
+电话：0755-83040712<br>
+QQ：3005763927<br>
+微信：扫下方二维码添加<br>
+<a href="https://www.waveshare.net/wiki/%E6%96%87%E4%BB%B6:Hkx-wx.jpg" class="image fancybox"><img alt="Hkx-wx.jpg" src="./RS232 RS485 CAN Board - Waveshare Wiki_files/200px-Hkx-wx.jpg" decoding="async" loading="lazy" width="200" height="200" srcset="/w/upload/thumb/4/49/Hkx-wx.jpg/300px-Hkx-wx.jpg 1.5x, /w/upload/4/49/Hkx-wx.jpg 2x"></a><br>
+</p>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r75601"><div role="note" class="note note-error">说明：进行售后服务前，请准备好客户信息（定货单位、定货人等），以供验证</div></div>
+</div></div>
+<!-- 
+NewPP limit report
+Cached time: 20260813033056
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.096 seconds
+Real time usage: 0.115 seconds
+Preprocessor visited node count: 1149/1000000
+Post‐expand include size: 25926/2097152 bytes
+Template argument size: 10568/2097152 bytes
+Highest expansion depth: 7/40
+Expensive parser function count: 1/100
+Unstrip recursion depth: 1/20
+Unstrip post‐expand size: 20014/5000000 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   50.999      1 -total
+ 41.75%   21.293      1 模板:RS232-RS485-CAN-Board_Manual
+ 40.00%   20.401     14 模板:FAQ
+ 23.66%   12.068      4 模板:Note
+ 12.01%    6.127      1 模板:外围模块
+  3.84%    1.958      1 模板:Service18
+-->
+
+<!-- Saved in parser cache with key ws_wiki_135_cn:pcache:idhash:23201-0!canonical!groups=* and timestamp 20260813033056 and revision id 141579
+ -->
+</div></div>								<div class="printfooter">
+				取自“<a dir="ltr" href="https://www.waveshare.net/w/index.php?title=RS232-RS485-CAN-Board&amp;oldid=141579">https://www.waveshare.net/w/index.php?title=RS232-RS485-CAN-Board&amp;oldid=141579</a>”				</div>
+												<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="https://www.waveshare.net/wiki/%E7%89%B9%E6%AE%8A:%E9%A1%B5%E9%9D%A2%E5%88%86%E7%B1%BB" title="特殊:页面分类">分类</a>：<ul><li><a href="https://www.waveshare.net/w/index.php?title=%E5%88%86%E7%B1%BB:%E8%B0%83%E7%94%A8%E9%87%8D%E5%A4%8D%E6%A8%A1%E6%9D%BF%E5%8F%82%E6%95%B0%E7%9A%84%E9%A1%B5%E9%9D%A2&amp;action=edit&amp;redlink=1" class="new" title="分类:调用重复模板参数的页面（页面不存在）">调用重复模板参数的页面</a></li><li><a href="https://www.waveshare.net/wiki/%E5%88%86%E7%B1%BB:%E6%A8%A1%E5%9D%97" title="分类:模块">模块</a></li><li><a href="https://www.waveshare.net/wiki/%E5%88%86%E7%B1%BB:%E6%A0%91%E8%8E%93%E6%B4%BE" title="分类:树莓派">树莓派</a></li><li><a href="https://www.waveshare.net/wiki/%E5%88%86%E7%B1%BB:%E6%A0%91%E8%8E%93%E6%B4%BE%E6%89%A9%E5%B1%95%E6%9D%BF" title="分类:树莓派扩展板">树莓派扩展板</a></li><li><a href="https://www.waveshare.net/wiki/%E5%88%86%E7%B1%BB:RS232%E6%8E%A5%E5%8F%A3" title="分类:RS232接口">RS232接口</a></li><li><a href="https://www.waveshare.net/w/index.php?title=%E5%88%86%E7%B1%BB:CAN(FD)%E6%8E%A5%E5%8F%A3&amp;action=edit&amp;redlink=1" class="new" title="分类:CAN(FD)接口（页面不存在）">CAN(FD)接口</a></li></ul></div><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">隐藏分类：<ul><li><a href="https://www.waveshare.net/wiki/%E5%88%86%E7%B1%BB:RS485%E6%8E%A5%E5%8F%A3" title="分类:RS485接口">RS485接口</a></li></ul></div></div>												<div class="visualClear"></div>
+							</div>
+			<!-- /bodyContent -->
+		</div>
+						</div>
+				</div>
+			</div>
+			<!-- /content -->
+
+			<!-- sidebar-left -->
+			<div class="sidebar-wrapper sidebar-left-wrapper">
+				<div class="sidebar-container container">
+					<div class="row">
+						<div id="sidebar-left" class="col-md-2 col-md-offset-0">
+							<div id="tweekiTOC"><div class="toctitle" lang="zh-Hans-CN" dir="ltr"><h2 id="mw-toc-heading">目录</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div><div id="toc" class="toc" role="navigation" aria-labelledby="mw-toc-heading" style="display: table;"><input type="checkbox" role="button" id="toctogglecheckbox" class="toctogglecheckbox" style="display:none">
+<ul class="nav">
+<li class="toclevel-1 tocsection-1 active"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E8.AF.B4.E6.98.8E"><span class="tocnumber">1</span> <span class="toctext">说明</span></a>
+<ul class="nav">
+<li class="toclevel-2"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E4.BA.A7.E5.93.81.E7.AE.80.E4.BB.8B"><span class="tocnumber">1.1</span> <span class="toctext">产品简介</span></a></li>
+<li class="toclevel-2"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E4.BA.A7.E5.93.81.E7.89.B9.E7.82.B9"><span class="tocnumber">1.2</span> <span class="toctext">产品特点</span></a></li>
+<li class="toclevel-2"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E4.BA.A7.E5.93.81.E5.8F.82.E6.95.B0"><span class="tocnumber">1.3</span> <span class="toctext">产品参数</span></a></li>
+<li class="toclevel-2 active"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E6.8E.A5.E5.8F.A3.E8.AF.B4.E6.98.8E"><span class="tocnumber">1.4</span> <span class="toctext">接口说明</span></a>
+<ul class="nav">
+<li class="toclevel-3"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E5.BC.95.E8.84.9A.E5.88.86.E9.85.8D"><span class="tocnumber">1.4.1</span> <span class="toctext">引脚分配</span></a></li>
+<li class="toclevel-3 active"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#CAN.E6.80.BB.E7.BA.BF"><span class="tocnumber">1.4.2</span> <span class="toctext">CAN总线</span></a></li>
+<li class="toclevel-3"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#RS-485.E6.80.BB.E7.BA.BF"><span class="tocnumber">1.4.3</span> <span class="toctext">RS-485总线</span></a>
+<ul class="nav">
+<li class="toclevel-4"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E6.8E.A7.E5.88.B6.E5.99.A8"><span class="tocnumber">1.4.3.1</span> <span class="toctext">控制器</span></a></li>
+<li class="toclevel-4"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E9.80.9A.E4.BF.A1.E5.8D.8F.E8.AE.AE"><span class="tocnumber">1.4.3.2</span> <span class="toctext">通信协议</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#RS-232.E6.80.BB.E7.BA.BF"><span class="tocnumber">1.4.4</span> <span class="toctext">RS-232总线</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E4.BA.A7.E5.93.81.E5.B0.BA.E5.AF.B8"><span class="tocnumber">1.5</span> <span class="toctext">产品尺寸</span></a></li>
+<li class="toclevel-2"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E7.BB.84.E8.A3.85.E8.AF.B4.E6.98.8E"><span class="tocnumber">1.6</span> <span class="toctext">组装说明</span></a></li>
+<li class="toclevel-2"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E5.AE.89.E8.A3.85.E5.BF.85.E8.A6.81.E7.9A.84.E5.87.BD.E6.95.B0.E5.BA.93"><span class="tocnumber">1.7</span> <span class="toctext">安装必要的函数库</span></a>
+<ul class="nav">
+<li class="toclevel-3"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#wiringPi"><span class="tocnumber">1.7.1</span> <span class="toctext">wiringPi</span></a>
+<ul class="nav">
+<li class="toclevel-4"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E6.A0.91.E8.8E.93.E6.B4.BE.E7.B3.BB.E7.BB.9F.E4.B8.BA32.E4.BD.8D"><span class="tocnumber">1.7.1.1</span> <span class="toctext">树莓派系统为32位</span></a></li>
+<li class="toclevel-4"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E6.A0.91.E8.8E.93.E6.B4.BE.E7.B3.BB.E7.BB.9F.E4.B8.BA64.E4.BD.8D"><span class="tocnumber">1.7.1.2</span> <span class="toctext">树莓派系统为64位</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E5.89.8D.E7.BD.AE.E5.B7.A5.E4.BD.9C"><span class="tocnumber">1.7.2</span> <span class="toctext">前置工作</span></a>
+<ul class="nav">
+<li class="toclevel-4"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E5.BC.80.E5.90.AF.E6.8E.A5.E5.8F.A3"><span class="tocnumber">1.7.2.1</span> <span class="toctext">开启接口</span></a></li>
+<li class="toclevel-4"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E4.BF.AE.E6.94.B9.E8.84.9A.E6.9C.ACconfig.txt"><span class="tocnumber">1.7.2.2</span> <span class="toctext">修改脚本config.txt</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#CAN.E6.80.BB.E7.BA.BF.E4.BE.8B.E7.A8.8B"><span class="tocnumber">1.8</span> <span class="toctext">CAN总线例程</span></a>
+<ul class="nav">
+<li class="toclevel-3"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E4.BB.A3.E7.A0.81.E5.88.86.E6.9E.90"><span class="tocnumber">1.8.1</span> <span class="toctext">代码分析</span></a>
+<ul class="nav">
+<li class="toclevel-4"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E3.80.90Python.E4.BE.8B.E7.A8.8B.E3.80.91"><span class="tocnumber">1.8.1.1</span> <span class="toctext">【Python例程】</span></a>
+<ul class="nav">
+<li class="toclevel-5"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E7.AC.AC.E4.B8.80.E6.AD.A5.EF.BC.9A.E8.BF.9E.E6.8E.A5.E5.88.B0CAN.E6.80.BB.E7.BA.BF"><span class="tocnumber">1.8.1.1.1</span> <span class="toctext">第一步：连接到CAN总线</span></a></li>
+<li class="toclevel-5"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E7.AC.AC.E4.BA.8C.E6.AD.A5.EF.BC.9A.E5.88.9B.E5.BB.BA.E4.BF.A1.E6.81.AF"><span class="tocnumber">1.8.1.1.2</span> <span class="toctext">第二步：创建信息</span></a></li>
+<li class="toclevel-5"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E7.AC.AC.E4.B8.89.E6.AD.A5.EF.BC.9A.E5.8F.91.E9.80.81.E4.BF.A1.E6.81.AF"><span class="tocnumber">1.8.1.1.3</span> <span class="toctext">第三步：发送信息</span></a></li>
+</ul>
+</li>
+<li class="toclevel-4"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E3.80.90WringPi.E4.BE.8B.E7.A8.8B.E3.80.91"><span class="tocnumber">1.8.1.2</span> <span class="toctext">【WringPi例程】</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#RS-485.E6.80.BB.E7.BA.BF.E4.BE.8B.E7.A8.8B"><span class="tocnumber">1.9</span> <span class="toctext">RS-485总线例程</span></a></li>
+<li class="toclevel-2"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#RS-232.E6.80.BB.E7.BA.BF_2"><span class="tocnumber">1.10</span> <span class="toctext">RS-232总线</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E8.B5.84.E6.96.99"><span class="tocnumber">2</span> <span class="toctext">资料</span></a>
+<ul class="nav">
+<li class="toclevel-2 tocsection-2"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E6.96.87.E6.A1.A3"><span class="tocnumber">2.1</span> <span class="toctext">文档</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E7.A8.8B.E5.BA.8F"><span class="tocnumber">2.2</span> <span class="toctext">程序</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E7.9B.B8.E5.85.B3.E8.B5.84.E6.96.99"><span class="tocnumber">2.3</span> <span class="toctext">相关资料</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#FAQ"><span class="tocnumber">3</span> <span class="toctext">FAQ</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="https://www.waveshare.net/wiki/RS232-RS485-CAN-Board#.E5.94.AE.E5.90.8E"><span class="tocnumber">4</span> <span class="toctext">售后</span></a></li>
+</ul>
+<div id="toctotop"><a href="javascript:scrollTo(0,0);"> 回到顶部</a></div></div></div>						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /sidebar-left -->
+					<!-- footer -->
+			<div id="footer" role="contentinfo" class="footer container footer-sticky bg-light" style="margin-top: 0px; opacity: 1;">
+			<ul id="footer-custom"><li class="dropup"><a href="https://www.waveshare.net/w/index.php?title=%E7%89%B9%E6%AE%8A:%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95&amp;returnto=RS232-RS485-CAN-Board" title="我们鼓励您登录；然而，这不是强制性的[alt-shift-o]" accesskey="o">Login / Create Account</a></li><li class="dropup"><a href="invalid-title:[https://www.waveshare.net Copyright %C2%A9 2022 %E6%B7%B1%E5%9C%B3%E5%B8%82%E5%BE%AE%E9%9B%AA%E7%94%B5%E5%AD%90%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8 %E7%89%88%E6%9D%83%E6%89%80%E6%9C%89]" id="n-.255Bhttps.253A.252F.252Fwww.waveshare.net-copyright-.25C2.25A9-2022-.25E6.25B7.25B1.25E5.259C.25B3.25E5.25B8.2582.25E5.25BE.25AE.25E9.259B.25AA.25E7.2594.25B5.25E5.25AD.2590.25E6.259C.2589.25E9.2599.2590.25E5.2585.25AC.25E5.258F.25B8-.25E7.2589.2588.25E6.259D.2583.25E6.2589.2580.25E6.259C.2589.255D"></a><a target="_blank" rel="nofollow noreferrer noopener" class="external text" href="https://www.waveshare.net/">Copyright © 2022 深圳市微雪电子有限公司 版权所有</a></li></ul><div style="clear:both"></div>			</div>
+			<!-- /footer -->
+		
+<script>
+var fbtFancyBoxOptions = {"openEffect":"elastic","closeEffect":"elastic","helpers":{"title":{"type":"inside"}}};
+</script>
+
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.096","walltime":"0.115","ppvisitednodes":{"value":1149,"limit":1000000},"postexpandincludesize":{"value":25926,"limit":2097152},"templateargumentsize":{"value":10568,"limit":2097152},"expansiondepth":{"value":7,"limit":40},"expensivefunctioncount":{"value":1,"limit":100},"unstrip-depth":{"value":1,"limit":20},"unstrip-size":{"value":20014,"limit":5000000},"timingprofile":["100.00%   50.999      1 -total"," 41.75%   21.293      1 模板:RS232-RS485-CAN-Board_Manual"," 40.00%   20.401     14 模板:FAQ"," 23.66%   12.068      4 模板:Note"," 12.01%    6.127      1 模板:外围模块","  3.84%    1.958      1 模板:Service18"]},"cachereport":{"timestamp":"20260813033056","ttl":86400,"transientcontent":false}}});mw.config.set({"wgBackendResponseTime":93});});</script>	
+
+</body></html>
