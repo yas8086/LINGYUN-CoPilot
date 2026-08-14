@@ -15,5 +15,5 @@ MOS/工作温度,,
 保护标志位 32位,GREEN,GREEN
 故障标志位 32位,GREEN,GREEN
 系统状态1 32位,GREEN,GREEN
-单节电压(0x08) 数量+逐节,GREEN,GREEN
-单节温度(0x07) 数量+逐点,GREEN,GREEN
+单节电压(0x08) 数量+逐节,GREEN,
+单节温度(0x07) 数量+逐点,GREEN,

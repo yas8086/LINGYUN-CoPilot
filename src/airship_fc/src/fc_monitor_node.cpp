@@ -13,8 +13,11 @@
 //   /mavros/global_position/global   -> 经纬度/海拔
 //   /mavros/global_position/local    -> 相对高度/速度 (ENU)
 //   /mavros/actuator_control         -> 电机输出 (8 路)
-//   /mavros/vfr_hud                  -> 空速/地速/爬升率/油门
+//   /mavros/vfr_hud                  -> 空速(真空速)/地速/爬升率/油门/航向角
 //   /mavros/battery                  -> 电压/电流/剩余电量
+//
+// 注: 安装版 mavros_msgs 无 Airspeed.msg, 真空速暂以 VfrHud.airspeed 填充;
+//     升级 mavros_msgs 后可改订阅 /mavros/airspeed 分离指示空速(IAS)与真空速(TAS)。
 //
 // online 状态: 综合 MAVROS connected 标志与最近收到消息的心跳看门狗。
 #include <array>
@@ -232,10 +235,13 @@ private:
   void on_vfr(const mavros_msgs::msg::VfrHud::SharedPtr msg)
   {
     std::lock_guard<std::mutex> lock(mutex_);
+    // VfrHud.airspeed 即真实/真空速(MAVROS 2.14); 安装版无 Airspeed.msg, 指示空速/真空速同源填充
     airspeed_ = msg->airspeed;
+    true_airspeed_ = msg->airspeed;
     groundspeed_ = msg->groundspeed;
     climb_rate_ = msg->climb;
     throttle_ = msg->throttle;
+    heading_deg_ = msg->heading;
     last_msg_stamp_ = this->now();
   }
 
@@ -367,9 +373,11 @@ private:
       msg.vy = vy_;
       msg.vz = vz_;
       msg.airspeed = airspeed_;
+      msg.true_airspeed = true_airspeed_;
       msg.groundspeed = groundspeed_;
       msg.climb_rate = climb_rate_;
       msg.throttle = throttle_;
+      msg.heading_deg = heading_deg_;
       msg.motor_outputs = motor_outputs_;
       msg.battery_voltage = battery_voltage_;
       msg.battery_current = battery_current_;
@@ -444,11 +452,13 @@ private:
   float vx_ = 0.0f;
   float vy_ = 0.0f;
   float vz_ = 0.0f;
-  // 空速/地速/爬升/油门
-  float airspeed_ = 0.0f;
+  // 空速/真空速/地速/爬升/油门/航向 (安装版 mavros_msgs 无 Airspeed.msg, 指示/真空速同源 VfrHud)
+  float airspeed_ = 0.0f;       // 空速/指示空速 [m/s] (VfrHud.airspeed)
+  float true_airspeed_ = 0.0f;  // 真空速 TAS [m/s] (VfrHud.airspeed)
   float groundspeed_ = 0.0f;
   float climb_rate_ = 0.0f;
   float throttle_ = 0.0f;
+  float heading_deg_ = 0.0f;    // 航向角 [deg] (/mavros/vfr_hud.heading)
   // 电机输出
   std::array<float, 8> motor_outputs_{0.0f};
   // 状态/电池

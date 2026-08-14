@@ -2,9 +2,9 @@ A层字段(协议声称),B层已解析(绿色=是),C层已下传(绿色=是)
 输入电压 1V/BIT,GREEN,GREEN
 输出电压 0.1V/BIT,GREEN,GREEN
 输出电流 0.1A/BIT,GREEN,GREEN
-环境温度 1℃(-40偏移),GREEN,GREEN
+环境温度 1℃(-40偏移),GREEN,
 散热器温度 1℃(-40偏移),GREEN,GREEN
-输出功率 W(计算),,GREEN
+输出功率 W(计算),GREEN,GREEN
 输出状态 Bit2(故障帧),GREEN,GREEN
 输入欠压 Bit0(故障帧),,GREEN(整字节下发,按位解析)
 输入过压 Bit1(故障帧),,GREEN(整字节下发,按位解析)
@@ -12,5 +12,5 @@ CAN中断 Bit3(故障帧),,GREEN(整字节下发,按位解析)
 过热 Bit4(故障帧),,GREEN(整字节下发,按位解析)
 短路 Bit5(故障帧),,GREEN(整字节下发,按位解析)
 总故障 Bit7(故障帧),,GREEN(整字节下发,按位解析)
-输出电压设定值(下行),,GREEN(静态设定,非实测)
-输出电流限流值(下行),,GREEN(静态设定,非实测)
+输出电压设定值(下行),GREEN,
+输出电流限流值(下行),GREEN,

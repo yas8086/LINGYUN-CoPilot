@@ -71,7 +71,8 @@ private:
       publish_alert(airship_msgs::msg::DeviceAlert::DEVICE_BMS,
         msg->alarm_level >= 2 ? airship_msgs::msg::DeviceAlert::SEVERITY_CRITICAL :
         airship_msgs::msg::DeviceAlert::SEVERITY_WARNING,
-        msg->fault_word1,
+        // DeviceAlert.code 为 16 位, 仅携带故障字低 16 位(系统故障位); 完整 32 位经 BmsStatus/JSON 下传
+        static_cast<uint16_t>(msg->fault_word1),
         "BMS 告警级别变化: " + std::to_string(msg->alarm_level),
         msg->alarm_level != 0);
       last_bms_alarm_ = msg->alarm_level;
@@ -188,8 +189,8 @@ private:
         airship_msgs::msg::DeviceAlert::SEVERITY_INFO,
         static_cast<uint16_t>(msg->fault_word & 0xFFFF),
         abnormal ? ("备用电源异常: alarm=0x" + std::to_string(msg->alarm_word) +
-          " protect=0x" + std::to_string(msg->protect_word) +
-          " fault=0x" + std::to_string(msg->fault_word)) :
+        " protect=0x" + std::to_string(msg->protect_word) +
+        " fault=0x" + std::to_string(msg->fault_word)) :
         "备用电源异常已解除",
         abnormal);
       last_backup_abnormal_ = abnormal;

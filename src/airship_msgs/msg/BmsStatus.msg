@@ -30,8 +30,11 @@ uint16 negative_insulation_kohm   # 负极绝缘电阻 [kΩ]
 float32[] cell_voltages      # 单体电压 [V]
 float32[] cell_temps         # 单体温度 [℃]
 
-# ===== 故障与告警 (位映射, 见 BMS 协议 BMS_alarmLevel) =====
-uint16 fault_word1          # 一级故障字
-uint16 fault_word2          # 二级故障字
-uint16 fault_word3          # 三级故障字
+# ===== 故障与告警 (ErrorCode 帧 64 位故障/告警字, 见 BMS 协议 ErrorCode) =====
+#   fault_word1: bit0-31 = 系统故障位(bit0-15) | 一级报警 Warn(bit16-31)
+#   fault_word2: bit32-47 = 二级报警 Alarm
+#   fault_word3: bit48-63 = 三级报警 CriticalAlarm
+uint32 fault_word1          # 一级故障字 (32 位: 系统故障位 + 一级报警)
+uint16 fault_word2          # 二级故障字 (16 位)
+uint16 fault_word3          # 三级故障字 (16 位)
 uint8 alarm_level           # 当前告警级别: 0正常 1故障 2严重

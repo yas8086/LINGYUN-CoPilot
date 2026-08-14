@@ -17,7 +17,7 @@ SOC,BatteryInfo02,GREEN
 就绪(Ready),,
 工作模式(BmsMode),,
 充电状态(BattChrgState),,
-逐节电压 CellVoltage_XX,,GREEN
+逐节电压 CellVoltage_XX,CellVoltage_XX,
 第81~102节单体电压,,
 最高单体温度,CellTempStatistic,GREEN
 最低单体温度,CellTempStatistic,GREEN
@@ -25,20 +25,20 @@ SOC,BatteryInfo02,GREEN
 单体温差,CellTempStatistic,GREEN
 最高温索引(MaxCellTempIndex),,
 最低温索引(MinCellTempIndex),,
-极耳温度 PACKTemp,CellPoleTempStatistic,GREEN
-SOH,,
-电池总容量(Pack_TotalCap),,
-循环次数(Statistic_ChargeTimes),,
-额定电压(Pack_RatedVoltage),,
-一级故障字(ErrorCode),,
-二级故障字(ErrorCode),,
-三级故障字(ErrorCode),,
-最大充电电流(SOP MaxChargeCurrent),,
-最大放电电流(SOP MaxDischargeCurrent),,
-充电单节电压上限(SOP),,
-放电单节电压下限(SOP),,
-平均单体电压(CellVoltStatistic),,
-最高单体电压统计(CellVoltStatistic),,
-最低单体电压统计(CellVoltStatistic),,
+极耳温度 PACKTemp,CellPoleTempStatistic,
+SOH,SOH,GREEN
+电池总容量(Pack_TotalCap),SOH,
+循环次数(Statistic_ChargeTimes),SOH,
+额定电压(Pack_RatedVoltage),SOH,
+一级故障字(ErrorCode),ErrorCode,GREEN
+二级故障字(ErrorCode),ErrorCode,GREEN
+三级故障字(ErrorCode),ErrorCode,GREEN
+最大充电电流(SOP MaxChargeCurrent),SOP,
+最大放电电流(SOP MaxDischargeCurrent),SOP,
+充电单节电压上限(SOP),SOP,
+放电单节电压下限(SOP),SOP,
+平均单体电压(CellVoltStatistic),CellVoltStatistic,
+最高单体电压统计(CellVoltStatistic),CellVoltStatistic,
+最低单体电压统计(CellVoltStatistic),CellVoltStatistic,
 PACK极值(PACKVolt/PACKVTemp),,
 电芯极耳温度(CellPoleTemp T1~T6),,

@@ -86,7 +86,12 @@ std::string bms_to_json(const airship_msgs::msg::BmsStatus & msg)
   s += "\"diff_t\":" + fmt_float(msg.temp_diff) + ",";
   s += "\"riso_p\":" + std::to_string(msg.positive_insulation_kohm) + ",";
   s += "\"riso_n\":" + std::to_string(msg.negative_insulation_kohm) + ",";
-  s += "\"alarm\":" + std::to_string(msg.alarm_level);
+  s += "\"alarm\":" + std::to_string(msg.alarm_level) + ",";
+  s += "\"soh\":" + fmt_float(msg.soh) + ",";
+  // ErrorCode 64 位故障/告警字: fault1=系统故障位+一级报警(32位), fault2=二级报警, fault3=三级报警
+  s += "\"fault1\":" + std::to_string(msg.fault_word1) + ",";
+  s += "\"fault2\":" + std::to_string(msg.fault_word2) + ",";
+  s += "\"fault3\":" + std::to_string(msg.fault_word3);
   s += "}";
   return s;
 }
@@ -159,6 +164,13 @@ std::string fc_to_json(const airship_msgs::msg::FlightStatus & msg)
   s += "\"vz\":" + fmt_float(msg.vz) + ",";
   s += "\"mode\":\"" + escape_json_string(msg.flight_mode) + "\",";
   s += "\"armed\":" + std::string(msg.armed ? "true" : "false") + ",";
+  // 航向角/空速/真空速/地速/爬升率/油门 (来自 VfrHud; 安装版无 Airspeed.msg, airspd 与 tas 同源)
+  s += "\"hdg\":" + fmt_float(msg.heading_deg) + ",";
+  s += "\"airspd\":" + fmt_float(msg.airspeed) + ",";
+  s += "\"tas\":" + fmt_float(msg.true_airspeed) + ",";
+  s += "\"gs\":" + fmt_float(msg.groundspeed) + ",";
+  s += "\"climb\":" + fmt_float(msg.climb_rate) + ",";
+  s += "\"thr\":" + fmt_float(msg.throttle) + ",";
   s += "\"batt_v\":" + fmt_float(msg.battery_voltage) + ",";
   s += "\"batt_pct\":" + fmt_float(msg.battery_remaining);
   s += "}";

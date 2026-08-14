@@ -7,6 +7,7 @@
 
 using airship_link::bms_to_json;
 using airship_link::dcdc_to_json;
+using airship_link::fc_to_json;
 using airship_link::mppt_to_json;
 using airship_link::pack_telemetry_json;
 
@@ -26,6 +27,10 @@ TEST(JsonPackerTest, BmsOnline)
   msg.positive_insulation_kohm = 1000;
   msg.negative_insulation_kohm = 1100;
   msg.alarm_level = 1;
+  msg.soh = 95.0f;
+  msg.fault_word1 = 0x00010001;  // 系统故障位 bit0 + 一级报警 Warn bit16
+  msg.fault_word2 = 0x0002;
+  msg.fault_word3 = 0x0004;
 
   const std::string s = bms_to_json(msg);
   EXPECT_NE(s.find("\"bms\""), std::string::npos);
@@ -39,6 +44,43 @@ TEST(JsonPackerTest, BmsOnline)
   EXPECT_NE(s.find("\"riso_p\":1000"), std::string::npos);
   EXPECT_NE(s.find("\"riso_n\":1100"), std::string::npos);
   EXPECT_NE(s.find("\"alarm\":1"), std::string::npos);
+  EXPECT_NE(s.find("\"soh\":95"), std::string::npos);
+  EXPECT_NE(s.find("\"fault1\":65537"), std::string::npos);  // 0x00010001
+  EXPECT_NE(s.find("\"fault2\":2"), std::string::npos);
+  EXPECT_NE(s.find("\"fault3\":4"), std::string::npos);
+}
+
+// ===== 飞控 =====
+TEST(JsonPackerTest, FcOnline)
+{
+  airship_msgs::msg::FlightStatus msg;
+  msg.online = true;
+  msg.roll_deg = 5.5f;
+  msg.pitch_deg = 2.0f;
+  msg.yaw_deg = 90.0f;
+  msg.heading_deg = 90.0f;
+  msg.airspeed = 10.0f;
+  msg.true_airspeed = 10.5f;
+  msg.groundspeed = 9.8f;
+  msg.climb_rate = 1.2f;
+  msg.throttle = 50.0f;
+  msg.battery_voltage = 48.0f;
+  msg.battery_remaining = 0.85f;
+  msg.flight_mode = "AUTO.LOITER";
+  msg.armed = true;
+
+  const std::string s = fc_to_json(msg);
+  EXPECT_NE(s.find("\"fc\""), std::string::npos);
+  EXPECT_NE(s.find("\"roll\":5.5"), std::string::npos);
+  EXPECT_NE(s.find("\"yaw\":90"), std::string::npos);
+  EXPECT_NE(s.find("\"hdg\":90"), std::string::npos);
+  EXPECT_NE(s.find("\"airspd\":10"), std::string::npos);
+  EXPECT_NE(s.find("\"tas\":10.5"), std::string::npos);
+  EXPECT_NE(s.find("\"gs\":9.8"), std::string::npos);
+  EXPECT_NE(s.find("\"climb\":1.2"), std::string::npos);
+  EXPECT_NE(s.find("\"thr\":50"), std::string::npos);
+  EXPECT_NE(s.find("\"mode\":\"AUTO.LOITER\""), std::string::npos);
+  EXPECT_NE(s.find("\"armed\":true"), std::string::npos);
 }
 
 TEST(JsonPackerTest, MpptOnline)

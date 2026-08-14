@@ -87,4 +87,87 @@ void parse_pack_temp(const uint8_t * data, uint32_t len, BmsData & out)
   }
 }
 
+// ErrorCode: 64 个 1-bit 故障/告警位 (Intel 小端, bit0=byte0.bit0 ... bit63=byte7.bit7)
+//   一级报警 Warn (bit16-31) + 系统故障位 (bit0-15) -> fault_word1
+//   二级报警 Alarm (bit32-47)                        -> fault_word2
+//   三级报警 CriticalAlarm (bit48-63)                -> fault_word3
+void parse_error_code(const uint8_t * data, uint32_t len, BmsData & out)
+{
+  if (len < 8) {
+    return;
+  }
+  uint64_t word = 0;
+  for (uint32_t i = 0; i < 8; ++i) {
+    word |= static_cast<uint64_t>(data[i]) << (i * 8);
+  }
+  out.fault_word1 = static_cast<uint32_t>(word & 0xFFFFFFFF);         // bit0-31
+  out.fault_word2 = static_cast<uint32_t>((word >> 32) & 0xFFFF);     // bit32-47
+  out.fault_word3 = static_cast<uint32_t>(word >> 48);                // bit48-63
+}
+
+// SOH: 总容量(0.1AH)/循环次数(1)/额定电压(0.1V)/SOH(0.1%) u16 小端
+void parse_soh(const uint8_t * data, uint32_t len, BmsData & out)
+{
+  if (len < 8) {
+    return;
+  }
+  out.pack_total_cap = airship_utils::scale_u16(get_u16_le(data, 0), 0.1f);
+  out.charge_times = get_u16_le(data, 2);
+  out.pack_rated_voltage = airship_utils::scale_u16(get_u16_le(data, 4), 0.1f);
+  out.soh = airship_utils::scale_u16(get_u16_le(data, 6), 0.1f);
+}
+
+// SOP: 最大充电单体电压(0.1V)/最大放电电流(0.1A)/最小放电单体电压(0.1V)/最大充电电流(0.1A)
+void parse_sop(const uint8_t * data, uint32_t len, BmsData & out)
+{
+  if (len < 8) {
+    return;
+  }
+  out.charge_max_cell_volt = airship_utils::scale_u16(get_u16_le(data, 0), 0.1f);
+  out.max_discharge_current = airship_utils::scale_u16(get_u16_le(data, 2), 0.1f);
+  out.discharge_min_cell_volt = airship_utils::scale_u16(get_u16_le(data, 4), 0.1f);
+  out.max_charge_current = airship_utils::scale_u16(get_u16_le(data, 6), 0.1f);
+}
+
+// CellVoltStatistic: 平均/最大/最小单体电压 (12-bit Intel 小端紧凑交错, 0.001V@+1V)
+//   信号起始位: MaxCellVoltIndex=7, MaxCellVolt=11, MinCellVoltIndex=35,
+//               MinCellVolt=31, AvgCellVolt=51, Slave_Version=55
+// 12-bit Intel 布局需按位提取, 从起始位(含)取 12 位
+namespace
+{
+// 小端位序: 从绝对位索引 start(含)起取 12 位 (Intel 小端, 逐位拼接)
+uint16_t extract_12bit_intel(const uint8_t * data, uint8_t start)
+{
+  uint32_t v = 0;
+  for (uint32_t i = 0; i < 12; ++i) {
+    const uint32_t bit = start + i;
+    const uint8_t byte = data[bit / 8];
+    const uint8_t val = static_cast<uint8_t>((byte >> (bit % 8)) & 0x01);
+    v |= static_cast<uint32_t>(val) << i;
+  }
+  return static_cast<uint16_t>(v);
+}
+}  // namespace
+
+void parse_cell_volt_statistic(const uint8_t * data, uint32_t len, BmsData & out)
+{
+  if (len < 8) {
+    return;
+  }
+  out.stat_avg_cell_volt = static_cast<float>(extract_12bit_intel(data, 51)) * 0.001f + 1.0f;
+  out.stat_max_cell_volt = static_cast<float>(extract_12bit_intel(data, 11)) * 0.001f + 1.0f;
+  out.stat_min_cell_volt = static_cast<float>(extract_12bit_intel(data, 31)) * 0.001f + 1.0f;
+}
+
+// PoleTempStatistic: 极柱最高温(1℃,-50)/最高温序号/最低温(1℃,-50)/最低温序号/温差(0.001V)
+void parse_pole_temp_statistic(const uint8_t * data, uint32_t len, BmsData & out)
+{
+  if (len < 8) {
+    return;
+  }
+  out.pole_max_temp = static_cast<float>(data[0]) - 50.0f;
+  out.pole_min_temp = static_cast<float>(data[3]) - 50.0f;
+  out.pole_temp_diff = airship_utils::scale_u16(get_u16_le(data, 6), 0.001f);
+}
+
 }  // namespace airship_bms

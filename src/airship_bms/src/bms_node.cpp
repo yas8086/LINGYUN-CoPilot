@@ -115,6 +115,16 @@ private:
         parse_cell_temp_statistic(frame.data, frame.len, bms_data_);
       } else if (frame.id == kPackTemp) {
         parse_pack_temp(frame.data, frame.len, bms_data_);
+      } else if (frame.id == kErrorCode) {
+        parse_error_code(frame.data, frame.len, bms_data_);
+      } else if (frame.id == kSoh) {
+        parse_soh(frame.data, frame.len, bms_data_);
+      } else if (frame.id == kSop) {
+        parse_sop(frame.data, frame.len, bms_data_);
+      } else if (frame.id == kCellVoltStatistic) {
+        parse_cell_volt_statistic(frame.data, frame.len, bms_data_);
+      } else if (frame.id == kPoleTempStatistic) {
+        parse_pole_temp_statistic(frame.data, frame.len, bms_data_);
       } else if ((frame.id >= kCellVoltageBase) &&
         (frame.id < kCellVoltageBase + 0x100))
       {
@@ -140,7 +150,10 @@ private:
     msg.cell_voltages.assign(
       bms_data_.cell_voltages.begin(),
       bms_data_.cell_voltages.begin() + cell_count_);
-    msg.fault_word1 = 0;
+    msg.fault_word1 = bms_data_.fault_word1;
+    msg.fault_word2 = bms_data_.fault_word2;
+    msg.fault_word3 = bms_data_.fault_word3;
+    msg.soh = bms_data_.soh;
     msg.alarm_level = bms_data_.alarm_level;
 
     // 绝缘电阻与极耳温度
