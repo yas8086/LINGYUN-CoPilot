@@ -27,12 +27,15 @@ void run_cmd(const char * cmd)
   (void)rc;
 }
 
-// 创建并 up 一个 vcan 接口 (需 root/sudo)
-void setup_vcan()
+// 创建并 up 一个 vcan 接口 (需 root/sudo)。
+// 返回接口是否可用: 无 NET_ADMIN 权限(GitHub Actions 等容器化 runner)时创建失败,
+// 调用方应 GTEST_SKIP 跳过依赖 vcan 的用例。
+bool setup_vcan()
 {
   run_cmd("sudo modprobe vcan 2>/dev/null");
   run_cmd("sudo ip link add dev vcan_test type vcan 2>/dev/null");
   run_cmd("sudo ip link set up vcan_test 2>/dev/null");
+  return std::system("ip link show vcan_test >/dev/null 2>&1") == 0;
 }
 
 void teardown_vcan()
@@ -45,7 +48,9 @@ void teardown_vcan()
 // (使用两个独立 socket: sender 发, receiver 收, vcan 帧回环到接收 socket)
 TEST(SocketCanThreadSafe, ConcurrentSendReceive)
 {
-  setup_vcan();
+  if (!setup_vcan()) {
+    GTEST_SKIP() << "无法创建 vcan 接口(需 root/NET_ADMIN 权限), 跳过";
+  }
 
   SocketCanInterface send_can(kIface);
   SocketCanInterface recv_can(kIface);
@@ -97,7 +102,9 @@ TEST(SocketCanThreadSafe, ConcurrentSendReceive)
 // 并发 ensure_open + send 不崩溃 (模拟 control/receive 双线程同时重连)
 TEST(SocketCanThreadSafe, ConcurrentEnsureOpenAndSend)
 {
-  setup_vcan();
+  if (!setup_vcan()) {
+    GTEST_SKIP() << "无法创建 vcan 接口(需 root/NET_ADMIN 权限), 跳过";
+  }
 
   SocketCanInterface can(kIface);
   ASSERT_TRUE(can.open());
@@ -145,7 +152,9 @@ TEST(SocketCanThreadSafe, ConcurrentEnsureOpenAndSend)
 // 移动语义: 移动后旧对象不可用, 新对象可用 (线程安全保证 fd 正确转移)
 TEST(SocketCanThreadSafe, MoveSemantics)
 {
-  setup_vcan();
+  if (!setup_vcan()) {
+    GTEST_SKIP() << "无法创建 vcan 接口(需 root/NET_ADMIN 权限), 跳过";
+  }
 
   SocketCanInterface can(kIface);
   ASSERT_TRUE(can.open());
@@ -170,7 +179,9 @@ TEST(SocketCanThreadSafe, MoveSemantics)
 // 并发 is_open + ensure_open (常量访问线程安全)
 TEST(SocketCanThreadSafe, ConcurrentIsOpenEnsureOpen)
 {
-  setup_vcan();
+  if (!setup_vcan()) {
+    GTEST_SKIP() << "无法创建 vcan 接口(需 root/NET_ADMIN 权限), 跳过";
+  }
 
   SocketCanInterface can(kIface);
   ASSERT_TRUE(can.open());
@@ -223,7 +234,9 @@ TEST(SocketCanThreadSafe, NonexistentInterfaceFailsGracefully)
 // 重复 open: 不应泄漏 fd (第二次 open 应成功且接口仍可用)
 TEST(SocketCanThreadSafe, DoubleOpenIsIdempotent)
 {
-  setup_vcan();
+  if (!setup_vcan()) {
+    GTEST_SKIP() << "无法创建 vcan 接口(需 root/NET_ADMIN 权限), 跳过";
+  }
 
   SocketCanInterface can(kIface);
   ASSERT_TRUE(can.open());
@@ -244,7 +257,9 @@ TEST(SocketCanThreadSafe, DoubleOpenIsIdempotent)
 // close 后直接操作: send/receive 安全失败; ensure_open 会重新打开(自动重连语义)
 TEST(SocketCanThreadSafe, OperationsAfterCloseFailGracefully)
 {
-  setup_vcan();
+  if (!setup_vcan()) {
+    GTEST_SKIP() << "无法创建 vcan 接口(需 root/NET_ADMIN 权限), 跳过";
+  }
 
   SocketCanInterface can(kIface);
   ASSERT_TRUE(can.open());
@@ -269,7 +284,9 @@ TEST(SocketCanThreadSafe, OperationsAfterCloseFailGracefully)
 // ensure_open 自动重连: 接口被删除后失效, 恢复后自动重连
 TEST(SocketCanThreadSafe, EnsureOpenReconnectsAfterInterfaceDeleted)
 {
-  setup_vcan();
+  if (!setup_vcan()) {
+    GTEST_SKIP() << "无法创建 vcan 接口(需 root/NET_ADMIN 权限), 跳过";
+  }
 
   SocketCanInterface can(kIface);
   ASSERT_TRUE(can.open());
@@ -292,7 +309,9 @@ TEST(SocketCanThreadSafe, EnsureOpenReconnectsAfterInterfaceDeleted)
 // 移动后原对象再操作: 应安全失败 (不崩溃, 不误用被转移的 fd)
 TEST(SocketCanThreadSafe, OperationOnMovedFromObjectFailsGracefully)
 {
-  setup_vcan();
+  if (!setup_vcan()) {
+    GTEST_SKIP() << "无法创建 vcan 接口(需 root/NET_ADMIN 权限), 跳过";
+  }
 
   SocketCanInterface can(kIface);
   ASSERT_TRUE(can.open());
