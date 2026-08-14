@@ -28,7 +28,7 @@ jobs:
   lint:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Setup ROS 2 Jazzy
         uses: ros-tooling/setup-ros@0.7.19
@@ -72,7 +72,7 @@ jobs:
             arch: arm64
     runs-on: ${{ matrix.runs-on }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Setup ROS 2 Jazzy
         uses: ros-tooling/setup-ros@0.7.19
@@ -105,7 +105,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: test-results-${{ matrix.arch }}
           path: |
