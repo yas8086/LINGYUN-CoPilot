@@ -110,7 +110,9 @@ safety_node:
 link_node:
   ros__parameters:
     # 数传串口设备 (使用 udev 固定符号链接, 见 tools/70-airship-usb.rules)
-    serial_device: "/dev/airship_link"
+    # 【临时调试】指向微雪板 RS232 (ttyAMA0), 供电脑 232 线监听下传 JSON;
+    # 数传电台接好后恢复为 "/dev/airship_link"。
+    serial_device: "/dev/ttyAMA0"
     # 波特率
     baud_rate: 115200
     # 遥测下传频率 (Hz)

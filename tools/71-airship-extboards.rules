@@ -28,9 +28,9 @@
 #    官方说明：
 #      ttyACM0 和 ttyACM3 = RS232（可改 TTL）
 #      ttyACM1 和 ttyACM2 = RS485（带隔离）
-#    本项目映射：
+#    本项目映射（12S 备用电源 BMS 已改接微雪板 RS485_2=/dev/ttySC1, 见下方微雪节）：
 #      RS485_1 (ttyACM0) → 温度压力集中器 (9600bps)
-#      RS485_2 (ttyACM1) → 12S 备用电源 BMS
+#      RS485_2 (ttyACM1) → 麦克松板 485_2（规则已注释；12S BMS 走微雪板 ttySC1, 防符号链接冲突）
 #      UART0_TTL (ttyACM2) → 数传 L33 (接飞控+树莓派冗余)
 #      UART1_TTL (ttyACM3) → 数传 L39
 # ==============================================================
@@ -44,9 +44,13 @@ SUBSYSTEM=="tty", ACTION=="add", KERNEL=="ttyACM[0-9]*", \
   SYMLINK+="airship_485_concentrator", GROUP="dialout", MODE="0660"
 
 # ---- 485_2（12S 备用电源 BMS）- 预计对应 ttyACM1 / 接口 1 ----
-SUBSYSTEM=="tty", ACTION=="add", KERNEL=="ttyACM[0-9]*", \
-  ENV{ID_USB_INTERFACE_NUM}=="01", \
-  SYMLINK+="airship_backup_bms", GROUP="dialout", MODE="0660"
+# 注: 12S 备用电源 BMS 实际接在微雪工业扩展板 RS485_2 (/dev/ttySC1),
+#     /dev/airship_backup_bms 由下方"微雪板 ttySC1"规则绑定。
+#     若保留本规则, 麦克松板(ttyACM1)与微雪板(ttySC1)会同时抢占同名符号链接,
+#     导致 /dev/airship_backup_bms 指向不确定设备(udev 后匹配者胜), 故注释禁用。
+# SUBSYSTEM=="tty", ACTION=="add", KERNEL=="ttyACM[0-9]*", \
+#   ENV{ID_USB_INTERFACE_NUM}=="01", \
+#   SYMLINK+="airship_backup_bms", GROUP="dialout", MODE="0660"
 
 # ---- TTL1（数传 L33）- 预计对应 ttyACM2 / 接口 2 ----
 SUBSYSTEM=="tty", ACTION=="add", KERNEL=="ttyACM[0-9]*", \
