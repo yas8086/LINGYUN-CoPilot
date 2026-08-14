@@ -82,6 +82,7 @@ colcon test-result --verbose
 | [伴飞电脑开发指南](docs/00_伴飞电脑开发指南.md) | 系统定位、环境、快速上手 |
 | [设备监控架构](docs/01_设备监控架构.md) | 软硬件架构、节点拓扑、消息定义、数传协议 |
 | [CAN协议汇总](docs/02_CAN协议汇总.md) | BMS/MPPT/DCDC 厂家 CAN 协议速查 |
+| [高价值字段补齐报告](docs/lingyun01/0字段补齐报告.md) | 字段补齐详情、CSV 对照表核对结果、待补下传字段清单 |
 | 厂家协议原文 | [docs/lingyun01/](docs/lingyun01/) 各设备厂家协议文件 (含 [12S备用电源](docs/lingyun01/BMS/12S备用电源/)) |
 
 ## 工程规范
@@ -98,6 +99,14 @@ colcon test-result --verbose
 - **Phase-2（规划）**：接入飞控与飞行控制
 
 ## 变更与优化记录
+
+### 高价值字段补齐 (2026-08-13)
+- **BMS 故障字 ErrorCode(0x001FE0)**：解析 64 位故障/告警字 -> `fault_word1/2/3`；`BmsStatus.msg` `fault_word1` 由 uint16 修正为 uint32(原会截断 bit16-31 一级报警)；monitor 告警 code 显式 cast 低 16 位；JSON 下传 `fault1/fault2/fault3`
+- **BMS SOH(0x005FF0)**：soh 健康状态补 JSON 下传(容量/循环次数/额定电压留在协议层, 见报告)
+- **FC 航向角**：`/mavros/vfr_hud.heading` 采集 -> `FlightStatus.heading_deg`, JSON 下传 `hdg`
+- **FC 真空速**：以 `VfrHud.airspeed` 填充 `true_airspeed`(安装版 mavros_msgs 无 Airspeed.msg, 暂未分离 IAS/TAS), JSON 下传 `tas/airspd/gs/climb/thr`
+- **单测**：bms_protocol 新增 ParseErrorCode/ParseSoh/ParseSop/ParseCellVoltStatistic/ParsePoleTempStatistic + 短帧用例; json_packer 新增 BMS 故障字/SOH 与 FC 新字段断言
+- **CSV 字段对照表核对**：`docs/lingyun01/0字段解析详情/` 下 6 个 CSV 逐行对照代码修正(01/02/03/04/06), 详见 [0字段补齐报告](docs/lingyun01/0字段补齐报告.md)
 
 ### 全面代码审查修复·低优先级 (2026-08-11)
 - **MPPT 查询帧注释澄清**：`build_query_frame` 当前按 8 字节数据帧发送, 修正头文件注释不再称"远程帧", 并标注现场如无响应需按设备改为 RTR(见 docs/02)
@@ -168,4 +177,4 @@ colcon test-result --verbose
 - **airship_can package.xml**：移除多余 `rclcpp` 依赖，补 `ament_cmake_gtest` test_depend
 - **Dashboard 安全提示**：`index.html` 注明默认公共 broker 仅限联调，生产须用私有+鉴权 broker
 
-> 测试覆盖：`colcon test` 共 **1081 个用例，0 失败**（含新增 Modbus 从机地址校验用例）。
+> 测试覆盖：`colcon test` 共 **1192 个用例，0 失败**（含本次新增 BMS 故障字/SOH/SOP/统计类解析与 JSON 下传用例）。
