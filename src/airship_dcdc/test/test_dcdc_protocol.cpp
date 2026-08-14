@@ -46,8 +46,8 @@ TEST(DcdcProtocol, ParseStatus)
   airship_dcdc::parse_status(d.data(), 8, out);
   EXPECT_EQ(out.fault_word, 0xA4);
   EXPECT_TRUE(out.output_enabled);
-  EXPECT_TRUE((out.fault_word & airship_dcdc::fault::kShortCircuit) != 0);
-  EXPECT_TRUE((out.fault_word & airship_dcdc::fault::kFault) != 0);
+  EXPECT_NE(out.fault_word & airship_dcdc::fault::kShortCircuit, 0u);
+  EXPECT_NE(out.fault_word & airship_dcdc::fault::kFault, 0u);
 }
 
 TEST(DcdcProtocol, ParseStatusOutputOff)
@@ -57,7 +57,7 @@ TEST(DcdcProtocol, ParseStatusOutputOff)
   DcdcData out;
   airship_dcdc::parse_status(d.data(), 8, out);
   EXPECT_FALSE(out.output_enabled);
-  EXPECT_TRUE((out.fault_word & airship_dcdc::fault::kInputUndervolt) != 0);
+  EXPECT_NE(out.fault_word & airship_dcdc::fault::kInputUndervolt, 0u);
 }
 
 TEST(DcdcProtocol, ParseAnalog)

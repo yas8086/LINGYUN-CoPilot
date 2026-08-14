@@ -65,7 +65,7 @@ int env_int(const char * name, int def)
     return def;
   }
   char * end = nullptr;
-  const long val = std::strtol(v, &end, 10);
+  const int64_t val = std::strtol(v, &end, 10);
   if (end == v || *end != '\0') {
     fprintf(stderr, "[dcdc_hold] 环境变量 %s='%s' 非法, 使用默认值 %d\n", name, v, def);
     return def;

@@ -125,12 +125,14 @@ private:
         parse_cell_volt_statistic(frame.data, frame.len, bms_data_);
       } else if (frame.id == kPoleTempStatistic) {
         parse_pole_temp_statistic(frame.data, frame.len, bms_data_);
-      } else if ((frame.id >= kCellVoltageBase) &&
-        (frame.id < kCellVoltageBase + 0x100))
-      {
-        parse_cell_voltage(frame.id, frame.data, frame.len, bms_data_);
       } else {
-        continue;
+        const bool in_cell_range = frame.id >= kCellVoltageBase &&
+          frame.id < kCellVoltageBase + 0x100;
+        if (in_cell_range) {
+          parse_cell_voltage(frame.id, frame.data, frame.len, bms_data_);
+        } else {
+          continue;
+        }
       }
       publish_status(true);
     }

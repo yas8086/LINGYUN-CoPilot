@@ -5,7 +5,14 @@
 
 #include "airship_safety/safety_logic.hpp"
 
-using namespace airship_safety;
+using airship_safety::aggregate;
+using airship_safety::backup_battery_judge;
+using airship_safety::backup_battery_reason;
+using airship_safety::battery_reason;
+using airship_safety::dcdc_judge;
+using airship_safety::dcdc_reason;
+using airship_safety::kDcdcFaultMask;
+using airship_safety::kDcdcOutputStatusBit;
 
 // ===== DCDC 判据 =====
 TEST(SafetyLogic, DcdcJudgeOnlineNoFault)
@@ -45,7 +52,8 @@ TEST(SafetyLogic, DcdcJudgeAllFaultBits)
   // 遍历除输出状态位外的所有单个故障位, 均应判不安全
   const uint8_t fault_bits[] = {0x01, 0x02, 0x08, 0x10, 0x20, 0x80};
   for (const uint8_t bit : fault_bits) {
-    EXPECT_FALSE(dcdc_judge(true, bit)) << "故障位 0x" << std::hex << (int)bit << " 应判不安全";
+    EXPECT_FALSE(dcdc_judge(true, bit))
+      << "故障位 0x" << std::hex << static_cast<int>(bit) << " 应判不安全";
   }
 }
 

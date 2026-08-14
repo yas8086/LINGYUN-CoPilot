@@ -126,7 +126,8 @@ private:
         static_cast<float>(backup_bms_min_voltage_));
     }
 
-    const auto decision = airship_safety::aggregate(dcdc_judged, battery_judged, backup_battery_judged);
+    const auto decision = airship_safety::aggregate(dcdc_judged, battery_judged,
+      backup_battery_judged);
 
     msg.dcdc_ok = decision.dcdc_ok;
     msg.battery_ok = battery_judged;

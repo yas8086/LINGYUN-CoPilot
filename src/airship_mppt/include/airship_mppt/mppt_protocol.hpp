@@ -25,7 +25,8 @@ constexpr uint32_t kReadType = 0x14U;
 constexpr uint8_t kTargetAddr = 0xA1;
 
 // 只读地址段报文代码 (code)
-enum ReadCode : uint8_t {
+enum ReadCode : uint8_t
+{
   kCodeRated = 0x02,        // 额定参数: 电池额定电压/充电额定电流
   kCodeRealtime = 0x03,     // 实时: 光伏电压/电池电压/充电电流
   kCodeState = 0x04,        // 充电状态/故障状态
@@ -36,7 +37,8 @@ enum ReadCode : uint8_t {
 };
 
 // 充电状态码 (充电状态表)
-enum ChargeState : uint16_t {
+enum ChargeState : uint16_t
+{
   kChargeBoot = 0,      // 启动阶段 (开机软起动)
   kChargeBoost = 1,     // 快充阶段 (SPC: PWM, SMC: MPPT/恒流)
   kChargeEqualize = 2,  // 均充阶段 (定时恒压)
@@ -57,7 +59,8 @@ constexpr uint16_t kModuleDamage = 0x0040;      // BIT6 模块损坏
 }  // namespace fault
 
 // 设备控制模式码 (设备控制模式表)
-enum ControlMode : uint16_t {
+enum ControlMode : uint16_t
+{
   kModeStandalone = 0,     // 独立运行(默认, 开机自动充电)
   kModeEmsRs485 = 1,       // EMS控制-RS485 (开机不充电)
   kModeEmsCan = 2,         // EMS控制-CAN (开机不充电)

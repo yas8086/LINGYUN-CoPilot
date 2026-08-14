@@ -56,29 +56,31 @@ TEST(SocketCanThreadSafe, ConcurrentSendReceive)
   std::atomic<bool> stop{false};
   std::atomic<int> sent_count{0};
   std::thread sender([&]() {
-    CanFrame f;
-    f.id = 0x123;
-    f.extended = true;
-    f.len = 8;
-    for (int i = 0; i < 8; ++i) {f.data[i] = static_cast<uint8_t>(i);}
-    while (!stop) {
-      if (send_can.send(f)) {
-        ++sent_count;
+      CanFrame f;
+      f.id = 0x123;
+      f.extended = true;
+      f.len = 8;
+      for (int i = 0; i < 8; ++i) {
+        f.data[i] = static_cast<uint8_t>(i);
       }
-    }
-  });
+      while (!stop) {
+        if (send_can.send(f)) {
+          ++sent_count;
+        }
+      }
+    });
 
   // 接收线程: 持续接收 (模拟 DCDC receive_loop)
   std::atomic<int> recv_count{0};
   std::thread receiver([&]() {
-    CanFrame f;
-    while (!stop) {
-      if (recv_can.receive(f, 10)) {
-        EXPECT_EQ(f.id, 0x123U);
-        ++recv_count;
+      CanFrame f;
+      while (!stop) {
+        if (recv_can.receive(f, 10)) {
+          EXPECT_EQ(f.id, 0x123U);
+          ++recv_count;
+        }
       }
-    }
-  });
+    });
 
   // 让并发跑一段时间
   std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -106,26 +108,28 @@ TEST(SocketCanThreadSafe, ConcurrentEnsureOpenAndSend)
 
   // 线程1: 反复 ensure_open (模拟控制线程)
   std::thread t1([&]() {
-    while (!stop) {
-      if (can.ensure_open()) {
-        ++ensure_ok;
+      while (!stop) {
+        if (can.ensure_open()) {
+          ++ensure_ok;
+        }
       }
-    }
-  });
+    });
 
   // 线程2: 反复 send (模拟接收线程或另一控制线程)
   std::thread t2([&]() {
-    CanFrame f;
-    f.id = 0x456;
-    f.extended = true;
-    f.len = 8;
-    for (int i = 0; i < 8; ++i) {f.data[i] = 0;}
-    while (!stop) {
-      if (can.send(f)) {
-        ++send_ok;
+      CanFrame f;
+      f.id = 0x456;
+      f.extended = true;
+      f.len = 8;
+      for (int i = 0; i < 8; ++i) {
+        f.data[i] = 0;
       }
-    }
-  });
+      while (!stop) {
+        if (can.send(f)) {
+          ++send_ok;
+        }
+      }
+    });
 
   std::this_thread::sleep_for(std::chrono::milliseconds(300));
   stop = true;
@@ -155,7 +159,9 @@ TEST(SocketCanThreadSafe, MoveSemantics)
   f.id = 0x789;
   f.extended = true;
   f.len = 8;
-  for (int i = 0; i < 8; ++i) {f.data[i] = 0;}
+  for (int i = 0; i < 8; ++i) {
+    f.data[i] = 0;
+                                             }
   EXPECT_TRUE(moved.send(f));
 
   teardown_vcan();
@@ -174,15 +180,15 @@ TEST(SocketCanThreadSafe, ConcurrentIsOpenEnsureOpen)
   std::atomic<int> ensure_count{0};
 
   std::thread t1([&]() {
-    while (!stop) {
-      if (can.is_open()) {++is_open_count;}
-    }
-  });
+      while (!stop) {
+        if (can.is_open()) {++is_open_count;}
+      }
+    });
   std::thread t2([&]() {
-    while (!stop) {
-      if (can.ensure_open()) {++ensure_count;}
-    }
-  });
+      while (!stop) {
+        if (can.ensure_open()) {++ensure_count;}
+      }
+    });
 
   std::this_thread::sleep_for(std::chrono::milliseconds(200));
   stop = true;
