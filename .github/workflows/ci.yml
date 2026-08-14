@@ -83,7 +83,9 @@ jobs:
         run: |
           source /opt/ros/jazzy/setup.bash
           sudo apt-get update -qq
-          sudo apt-get install -y -qq --no-install-recommends ros-jazzy-ament-lint-common
+          # libmosquitto-dev 无 rosdep 规则(不在 rosdistro),必须显式安装;airship_cloud 依赖它
+          sudo apt-get install -y -qq --no-install-recommends \
+            ros-jazzy-ament-lint-common libmosquitto-dev
           rosdep update -q
           rosdep install --from-paths src --ignore-src -y --rosdistro jazzy
 

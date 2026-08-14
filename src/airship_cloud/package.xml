@@ -12,6 +12,7 @@
   <depend>rclcpp</depend>
   <depend>airship_msgs</depend>
   <depend>airship_link</depend>
+  <!-- 系统依赖 libmosquitto-dev(无 rosdep 规则),由 CI 显式 apt 安装 -->
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
