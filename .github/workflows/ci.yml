@@ -4,9 +4,12 @@
 #   lint        快速静态检查(不编译、不装运行依赖)
 #   build-test  矩阵 [x86_64, arm64]:colcon build + colcon test
 #
-# arm64 runner 使用 ubuntu-24.04-arm(GitHub 2024 起提供免费 arm64 runner);
-# 若你的仓库不可用 arm64 runner,可将 matrix 中 arm64 项删除。
-# 闭源代码:不调用 ament_copyright(各包 CMakeLists 已跳过)。
+# 说明:
+#   - 不使用容器镜像(osrf/ros),避免 GitHub 共享 runner 的 Docker Hub 匿名拉取
+#     限流导致 "Docker pull failed"。改为在 runner 上经 ros-tooling/setup-ros
+#     apt 安装 ROS 2 Jazzy(与 ubuntu-24.04/24.04-arm 的 noble 完全匹配)。
+#   - arm64 runner 使用 ubuntu-24.04-arm(GitHub 2024 起提供免费 arm64 runner)。
+#   - 闭源代码:不调用 ament_copyright(各包 CMakeLists 已跳过)。
 
 name: CI
 
@@ -24,14 +27,19 @@ jobs:
   # ==================== 快速静态检查 ====================
   lint:
     runs-on: ubuntu-24.04
-    container: osrf/ros:jazzy-ros-base
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup ROS 2 Jazzy
+        uses: ros-tooling/setup-ros@0.7.19
+        with:
+          required-ros-distributions: jazzy
+
       - name: Install ament linters
         run: |
-          apt-get update -qq
-          apt-get install -y -qq --no-install-recommends ros-jazzy-ament-lint-common
+          source /opt/ros/jazzy/setup.bash
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends ros-jazzy-ament-lint-common
 
       - name: Run linters
         run: |
@@ -62,17 +70,20 @@ jobs:
             arch: x86_64
           - runs-on: ubuntu-24.04-arm   # GitHub arm64 runner
             arch: arm64
-    # arm64 runner 使用 ubuntu-24.04-arm(GitHub 2024 起提供免费 arm64 runner)
     runs-on: ${{ matrix.runs-on }}
-    container: osrf/ros:jazzy-ros-base
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup ROS 2 Jazzy
+        uses: ros-tooling/setup-ros@0.7.19
+        with:
+          required-ros-distributions: jazzy
 
       - name: Install dependencies
         run: |
           source /opt/ros/jazzy/setup.bash
-          apt-get update -qq
-          apt-get install -y -qq --no-install-recommends ros-jazzy-ament-lint-common
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends ros-jazzy-ament-lint-common
           rosdep update -q
           rosdep install --from-paths src --ignore-src -y --rosdistro jazzy
 
