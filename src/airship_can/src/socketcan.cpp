@@ -13,6 +13,8 @@
 #include <cstring>
 #include <utility>
 
+#include <fcntl.h>
+
 namespace airship_can
 {
 
@@ -82,10 +84,10 @@ bool SocketCanInterface::ensure_open()
   return open_unlocked();
 }
 
-bool SocketCanInterface::send(const CanFrame & frame)
+bool SocketCanInterface::send(const CanFrame & frame, int timeout_ms)
 {
   std::lock_guard<std::mutex> lock(mutex_);
-  return send_unlocked(frame);
+  return send_unlocked(frame, timeout_ms);
 }
 
 bool SocketCanInterface::receive(CanFrame & frame, int timeout_ms)
@@ -132,6 +134,14 @@ bool SocketCanInterface::open_unlocked()
     return false;
   }
 
+  // 非阻塞模式: 配合 send 的 poll 超时, 防止 CAN 接口异常(ERROR-PASSIVE/断线)时
+  // 阻塞 socket 的 write 无限阻塞(sock_alloc_send_pskb)卡死调用方(如 dcdc_hold)。
+  const int flags = ::fcntl(fd_, F_GETFL, 0);
+  if (flags < 0 || ::fcntl(fd_, F_SETFL, flags | O_NONBLOCK) < 0) {
+    close_unlocked();
+    return false;
+  }
+
   // 找到接口索引
   struct ifreq ifr;
   std::memset(&ifr, 0, sizeof(ifr));
@@ -161,7 +171,7 @@ void SocketCanInterface::close_unlocked()
   }
 }
 
-bool SocketCanInterface::send_unlocked(const CanFrame & frame)
+bool SocketCanInterface::send_unlocked(const CanFrame & frame, int timeout_ms)
 {
   if (fd_ < 0) {
     return false;
@@ -179,7 +189,20 @@ bool SocketCanInterface::send_unlocked(const CanFrame & frame)
   cframe.can_dlc = dlc;
   std::memcpy(cframe.data, frame.data, dlc);
 
+  // 非阻塞发送 + 可写超时: 接口异常时队列可能积压, 阻塞 write 会无限阻塞。
+  // 用 poll(POLLOUT) 限时等待可写, 超时返回失败, 由调用方走重连/重试逻辑。
+  struct pollfd pfd;
+  pfd.fd = fd_;
+  pfd.events = POLLOUT;
+  const int pr = ::poll(&pfd, 1, timeout_ms);
+  if (pr <= 0 || (pfd.revents & POLLOUT) == 0) {
+    return false;  // 超时或不可写
+  }
+
   const ssize_t n = ::write(fd_, &cframe, sizeof(cframe));
+  if (n < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
+    return false;  // 防御: poll 后仍不可写(非阻塞下理论不发生)
+  }
   return n == static_cast<ssize_t>(sizeof(cframe));
 }
 

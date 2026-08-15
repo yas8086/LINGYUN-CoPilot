@@ -42,7 +42,9 @@ public:
   void close();
 
   // 发送一帧, 成功返回 true
-  bool send(const CanFrame & frame);
+  // timeout_ms: 等待可写超时(默认 100ms)。CAN 接口异常(ERROR-PASSIVE/断线/队列满)时
+  //             非阻塞轮询等待, 超时返回失败, 避免阻塞 socket 的 write 无限阻塞卡死调用方。
+  bool send(const CanFrame & frame, int timeout_ms = 100);
 
   // 非阻塞接收一帧; 有数据返回 true 并填充 frame, 无数据返回 false
   // timeout_ms: 轮询等待超时
@@ -65,7 +67,7 @@ private:
   // 无锁内部实现 (调用方需持有 mutex_)
   bool open_unlocked();
   void close_unlocked();
-  bool send_unlocked(const CanFrame & frame);
+  bool send_unlocked(const CanFrame & frame, int timeout_ms);
   bool receive_unlocked(CanFrame & frame, int timeout_ms);
 };
 
