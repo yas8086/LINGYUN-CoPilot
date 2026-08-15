@@ -50,10 +50,10 @@ dcdc_node:
     control_rate_hz: 5.0
     # 模拟量查询频率 (Hz)
     query_rate_hz: 1.0
-    # 输出电压设定 (V)
-    set_voltage: 48.0
-    # 输出限流 (A)
-    set_current: 80.0
+    # 输出电压设定 (V)  (与 dcdc_hold 环境变量 DCDC_SET_VOLTAGE 保持一致)
+    set_voltage: 49.0
+    # 输出限流 (A)  (与 dcdc_hold 环境变量 DCDC_SET_CURRENT 保持一致)
+    set_current: 5.0
     # 是否开机
     dcdc_enabled: true
     # 无数据超时 (s): 超过该时长未收到任何有效帧, 兜底发布 online=false

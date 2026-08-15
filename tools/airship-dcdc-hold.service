@@ -4,7 +4,7 @@
 #       即使 ROS2/launch/DDS 崩溃, DCDC 仍保持输出(不因控制帧中断而断电)。
 #
 # 与 airship_params.yaml 的 dcdc_node 参数保持一致:
-#   DCDC_ENABLED=1 / DCDC_SET_VOLTAGE=48.0 / DCDC_SET_CURRENT=80.0 / can0
+#   DCDC_ENABLED=1 / DCDC_SET_VOLTAGE=49.0 / DCDC_SET_CURRENT=5.0 / can0
 #
 # 安装:
 #   sudo cp tools/airship-dcdc-hold.service /etc/systemd/system/
@@ -23,8 +23,8 @@ Type=simple
 ExecStart=/home/lingyun01/LINGYUN-CoPilot/install/airship_dcdc/lib/airship_dcdc/dcdc_hold
 Environment=DCDC_CAN_IF=can0
 Environment=DCDC_ENABLED=1
-Environment=DCDC_SET_VOLTAGE=48.0
-Environment=DCDC_SET_CURRENT=80.0
+Environment=DCDC_SET_VOLTAGE=49.0
+Environment=DCDC_SET_CURRENT=5.0
 Environment=DCDC_PERIOD_MS=200
 
 # 崩溃自愈: 保活进程绝不能长时间停止
