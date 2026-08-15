@@ -60,6 +60,23 @@ TEST(DcdcProtocol, ParseStatusOutputOff)
   EXPECT_NE(out.fault_word & airship_dcdc::fault::kInputUndervolt, 0u);
 }
 
+TEST(DcdcProtocol, ParseStatusWithAnalog)
+{
+  // 实际状态帧 04 8b 01 ee 01 34 00 54 (DCDC 状态帧携带模拟量, 与模拟量回应同格式):
+  //   Byte0=0x04 输出开, Byte1~2=0x018b=395V 输入,
+  //   Byte3~4=0x01ee=494 -> 49.4V 输出, Byte5~6=0x0034=52 -> 5.2A,
+  //   Byte7=0x54=84 -> 84-40=44℃
+  const std::array<uint8_t, 8> d = {0x04, 0x8B, 0x01, 0xEE, 0x01, 0x34, 0x00, 0x54};
+  DcdcData out;
+  airship_dcdc::parse_status(d.data(), 8, out);
+  EXPECT_EQ(out.fault_word, 0x04);
+  EXPECT_TRUE(out.output_enabled);
+  EXPECT_FLOAT_EQ(out.input_voltage, 395.0f);
+  EXPECT_FLOAT_EQ(out.output_voltage, 49.4f);
+  EXPECT_FLOAT_EQ(out.output_current, 5.2f);
+  EXPECT_FLOAT_EQ(out.heatsink_temp, 44.0f);
+}
+
 TEST(DcdcProtocol, ParseAnalog)
 {
   // 输入 360.0V(360), 输出 48.0V(480), 电流 12.5A(125), 温度 45℃/55℃

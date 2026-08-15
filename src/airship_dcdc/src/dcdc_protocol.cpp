@@ -44,7 +44,11 @@ CanFrame build_analog_query_frame()
   return frame;
 }
 
-// 电源状态帧: Byte0 故障字节, Bit2=输出状态
+// 电源状态帧: Byte0 故障字节, Bit2=输出状态;
+// 状态帧同时携带模拟量(与模拟量回应同格式, 实测 DCDC 不回应模拟量查询 0x18D84700,
+// 故电压/电流/温度均需由此帧解析):
+//   Byte1~2 输入电压(1V/BIT, 小端), Byte3~4 输出电压(0.1V/BIT),
+//   Byte5~6 输出电流(0.1A/BIT), Byte7 温度(1℃/BIT, -40 偏移)
 void parse_status(const uint8_t * data, uint32_t len, DcdcData & out)
 {
   if (len < 1) {
@@ -52,6 +56,12 @@ void parse_status(const uint8_t * data, uint32_t len, DcdcData & out)
   }
   out.fault_word = data[0];
   out.output_enabled = (data[0] & fault::kOutputOn) != 0;
+  if (len >= 8) {
+    out.input_voltage = scale_u16(get_u16_le(data, 1), 1.0f);
+    out.output_voltage = scale_u16(get_u16_le(data, 3), 0.1f);
+    out.output_current = scale_u16(get_u16_le(data, 5), 0.1f);
+    out.heatsink_temp = temp_with_offset(static_cast<int8_t>(data[7]));
+  }
 }
 
 // 模拟量回应帧: 输入电压(1V)/输出电压(0.1V)/输出电流(0.1A)/温度(1℃,-40)

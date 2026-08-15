@@ -17,6 +17,7 @@
 //   DCDC_SET_CURRENT  限流 A (默认 80.0)
 //   DCDC_PERIOD_MS    发送周期 ms (默认 200)
 #include <chrono>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -73,6 +74,22 @@ int env_int(const char * name, int def)
   return static_cast<int>(val);
 }
 
+// 读取 CAN 接口已成功发送的帧数 (/sys/class/net/<if>/statistics/tx_packets)。
+// 用途: 确认控制帧是否真正发出(而非仅 socket 入队后被 MCP2515 因 ERROR-PASSIVE 丢弃)。
+// 失败(接口暂未就绪等)返回 UINT64_MAX, 调用方据此跳过判断。
+uint64_t read_tx_packets(const std::string & ifname)
+{
+  const std::string path = "/sys/class/net/" + ifname + "/statistics/tx_packets";
+  FILE * f = std::fopen(path.c_str(), "r");
+  if (f == nullptr) {
+    return UINT64_MAX;
+  }
+  unsigned long long v = 0;
+  const int r = std::fscanf(f, "%llu", &v);
+  std::fclose(f);
+  return (r == 1) ? static_cast<uint64_t>(v) : UINT64_MAX;
+}
+
 }  // namespace
 
 int main(int argc, char ** argv)
@@ -102,6 +119,13 @@ int main(int argc, char ** argv)
   const auto log_every = std::chrono::milliseconds(5000);
   auto last_log = std::chrono::steady_clock::now() - log_every;
 
+  // TX 计数监控: 确认控制帧是否真正发出(而非仅 socket 入队)。
+  // 初始读取失败(接口未就绪)则从 0 开始, 后续读取失败时跳过判断。
+  uint64_t last_tx = read_tx_packets(can_if);
+  if (last_tx == UINT64_MAX) {
+    last_tx = 0;
+  }
+
   while (true) {
     if (!can.ensure_open()) {
       const auto now = std::chrono::steady_clock::now();
@@ -118,13 +142,30 @@ int main(int argc, char ** argv)
     const bool ctrl_ok = can.send(airship_dcdc::build_control_frame(
         enabled, set_voltage, set_current));
     const bool analog_ok = can.send(airship_dcdc::build_analog_query_frame());
+    const auto now = std::chrono::steady_clock::now();
     if (!ctrl_ok || !analog_ok) {
-      const auto now = std::chrono::steady_clock::now();
       if (now - last_log >= log_every) {
         last_log = now;
         fprintf(
           stderr, "[dcdc_hold] CAN 发送失败(control=%d analog=%d), 链路可能异常\n",
           ctrl_ok ? 1 : 0, analog_ok ? 1 : 0);
+      }
+    }
+
+    // TX 计数检查: send 返回成功但计数未增长 -> 帧仅在本地入队, 未真正上总线
+    // (典型: can0 ERROR-PASSIVE 时 MCP2515 无法发送数据帧)。
+    const uint64_t tx_now = read_tx_packets(can_if);
+    if (tx_now != UINT64_MAX) {
+      if ((ctrl_ok || analog_ok) && tx_now == last_tx && now - last_log >= log_every) {
+        last_log = now;
+        fprintf(
+          stderr,
+          "[dcdc_hold] 警告: 控制帧未真正发出(can0 TX 计数未增长=%llu), "
+          "接口可能异常(ERROR-PASSIVE/断线), 帧仅在本地入队\n",
+          static_cast<unsigned long long>(tx_now));
+      }
+      if (tx_now > last_tx) {
+        last_tx = tx_now;  // 已有帧真正发出, 更新基准
       }
     }
 
