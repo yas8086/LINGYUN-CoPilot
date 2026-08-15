@@ -70,12 +70,17 @@ lora_node:
     # LoRa 节点配置: node_ids 与 node_types 一一对应
     #   type: "temperature" -> 读温度寄存器
     #         "pressure"    -> 读温度 + 压力寄存器
-    node_ids: [1, 2, 6]
-    node_types: ["temperature", "temperature", "pressure"]
+    # 共 6 个节点: 1/2/3/4/5 温度探头, 6 压力+温度 (0x76C1 起逐节点 +1)
+    node_ids: [1, 2, 3, 4, 5, 6]
+    node_types: [
+      "temperature", "temperature", "temperature",
+      "temperature", "temperature", "pressure"]
     # 采集周期 (ms)
     sample_period_ms: 2000
     # 温度/压力寄存器起始地址
-    temp_reg_addr: 30393          # 0x76C1
+    # 注: 温度寄存器正确值为 0x76C1=30401 (曾误填 30393=0x76B9, 导致集中器对未映射地址
+    #     统一返回 raw=0, 温度恒为 0.00℃)
+    temp_reg_addr: 30401          # 0x76C1
     pressure_reg_addr: 36601      # 0x8EF9
     # 温度报警阈值 (℃)
     alarm_low: -10.0
