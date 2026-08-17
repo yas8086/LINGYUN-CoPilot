@@ -17,6 +17,7 @@
 //   DCDC_SET_CURRENT  限流 A (默认 80.0)
 //   DCDC_PERIOD_MS    发送周期 ms (默认 200)
 #include <chrono>
+#include <cinttypes>
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
@@ -84,10 +85,10 @@ uint64_t read_tx_packets(const std::string & ifname)
   if (f == nullptr) {
     return UINT64_MAX;
   }
-  unsigned long long v = 0;
-  const int r = std::fscanf(f, "%llu", &v);
+  uint64_t v = 0;
+  const int r = std::fscanf(f, "%" SCNu64, &v);
   std::fclose(f);
-  return (r == 1) ? static_cast<uint64_t>(v) : UINT64_MAX;
+  return (r == 1) ? v : UINT64_MAX;
 }
 
 }  // namespace
@@ -160,9 +161,9 @@ int main(int argc, char ** argv)
         last_log = now;
         fprintf(
           stderr,
-          "[dcdc_hold] 警告: 控制帧未真正发出(can0 TX 计数未增长=%llu), "
+          "[dcdc_hold] 警告: 控制帧未真正发出(can0 TX 计数未增长=%" PRIu64 "), "
           "接口可能异常(ERROR-PASSIVE/断线), 帧仅在本地入队\n",
-          static_cast<unsigned long long>(tx_now));
+          tx_now);
       }
       if (tx_now > last_tx) {
         last_tx = tx_now;  // 已有帧真正发出, 更新基准
