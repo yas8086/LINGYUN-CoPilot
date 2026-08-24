@@ -64,6 +64,12 @@ private:
   // BMS 状态回调
   void on_bms(const airship_msgs::msg::BmsStatus::SharedPtr msg)
   {
+    // 仅在线状态消息驱动链路检测与设备告警(issue#3):
+    // 设备离线时 bms_node 仍周期发布 online=false 兜底消息, 若据此刷新时间戳
+    // 会导致 monitor 永远误判在线。离线判定由 check_link 基于最后在线时间超时完成。
+    if (!msg->online) {
+      return;
+    }
     last_bms_time_ = this->now();
     bms_has_data_ = true;
     // BMS 告警级别检查
@@ -82,6 +88,10 @@ private:
   // MPPT 状态回调
   void on_mppt(const airship_msgs::msg::MpptStatus::SharedPtr msg)
   {
+    // 仅在线消息驱动链路检测与设备告警(issue#3), 理由见 on_bms
+    if (!msg->online) {
+      return;
+    }
     last_mppt_time_ = this->now();
     mppt_has_data_ = true;
     // MPPT 故障状态检查
@@ -99,6 +109,10 @@ private:
   // DCDC 状态回调
   void on_dcdc(const airship_msgs::msg::DcdcStatus::SharedPtr msg)
   {
+    // 仅在线消息驱动链路检测与设备告警(issue#3), 理由见 on_bms
+    if (!msg->online) {
+      return;
+    }
     last_dcdc_time_ = this->now();
     dcdc_has_data_ = true;
     // DCDC 故障判定 (排除 Bit2 输出状态位, 与 safety 判据一致); 仅在跳变时告警/解除
@@ -118,8 +132,13 @@ private:
   // LoRa 汇总回调: 超温/离线/串口掉线告警 (仅状态变化时触发)
   void on_lora(const airship_msgs::msg::LoRaSummary::SharedPtr msg)
   {
-    last_lora_time_ = this->now();
-    lora_has_data_ = true;
+    // 仅串口在线时刷新链路时间戳(issue#3): 串口掉线时 lora_node 仍周期发布
+    // serial_online=false 的 summary, 若据此刷新会导致 monitor 误判在线。
+    // 告警逻辑(串口/节点离线等)仍对所有消息处理, 以捕获状态变化。
+    if (msg->serial_online) {
+      last_lora_time_ = this->now();
+      lora_has_data_ = true;
+    }
 
     // 串口掉线告警 (状态变化触发)
     if (msg->serial_online != last_lora_serial_online_) {
@@ -178,6 +197,10 @@ private:
   // 12S 备用电源 BMS 状态回调
   void on_backup(const airship_msgs::msg::BackupBmsStatus::SharedPtr msg)
   {
+    // 仅在线消息驱动链路检测与设备告警(issue#3), 理由见 on_bms
+    if (!msg->online) {
+      return;
+    }
     last_backup_time_ = this->now();
     backup_has_data_ = true;
     // 备用电源告警/保护/故障任一触发即视为异常 (状态跳变时告警/解除, 避免刷屏)

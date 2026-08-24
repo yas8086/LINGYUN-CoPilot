@@ -70,8 +70,13 @@ private:
     std::lock_guard<std::mutex> lock(mutex_);
     dcdc_online_ = msg->online;
     dcdc_fault_word_ = msg->fault_word;
-    dcdc_has_data_ = true;
-    last_dcdc_time_ = this->now();
+    // 仅在线消息刷新链路时间戳(issue#3): 设备离线时 dcdc_node 仍周期发布 online=false
+    // 兜底消息, 若据此刷新 last_dcdc_time_, 超时判据 (now-last)<timeout 将永久失效。
+    // 离线由超时机制兜底, 保证 fail-safe(与 monitor_node 处理一致)。
+    if (msg->online) {
+      dcdc_has_data_ = true;
+      last_dcdc_time_ = this->now();
+    }
   }
 
   void on_bms(const airship_msgs::msg::BmsStatus::SharedPtr msg)
@@ -80,8 +85,11 @@ private:
     bms_online_ = msg->online;
     bms_pack_voltage_ = msg->pack_voltage;
     bms_alarm_level_ = msg->alarm_level;
-    bms_has_data_ = true;
-    last_bms_time_ = this->now();
+    // 仅在线消息刷新链路时间戳(issue#3), 理由见 on_dcdc
+    if (msg->online) {
+      bms_has_data_ = true;
+      last_bms_time_ = this->now();
+    }
   }
 
   void on_backup(const airship_msgs::msg::BackupBmsStatus::SharedPtr msg)
@@ -90,8 +98,11 @@ private:
     backup_online_ = msg->online;
     backup_pack_voltage_ = msg->pack_voltage;
     backup_fault_word_ = msg->fault_word;
-    backup_has_data_ = true;
-    last_backup_time_ = this->now();
+    // 仅在线消息刷新链路时间戳(issue#3), 理由见 on_dcdc
+    if (msg->online) {
+      backup_has_data_ = true;
+      last_backup_time_ = this->now();
+    }
   }
 
   void publish_status()
