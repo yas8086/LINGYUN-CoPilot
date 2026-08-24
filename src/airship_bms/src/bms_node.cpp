@@ -126,8 +126,15 @@ private:
       } else if (frame.id == kPoleTempStatistic) {
         parse_pole_temp_statistic(frame.data, frame.len, bms_data_);
       } else {
+        // 单体电压帧: 每帧 5 节, 帧 ID 每帧 +0x10 (0x3000, 0x3010, ...)
+        // 按实际电芯数计算所需帧数, 覆盖完整范围:
+        //   102 节 -> 21 帧, 帧 ID 至 0x3000 + 0x10*20 = 0x3140
+        // 旧实现固定 +0x100 仅覆盖 16 帧(节 1~80), 第 81~102 节被丢弃(安全盲区)
+        const uint32_t cell_frames =
+          (static_cast<uint32_t>(cell_count_) + airship_bms::kCellPerVoltFrame - 1) /
+          airship_bms::kCellPerVoltFrame;
         const bool in_cell_range = frame.id >= kCellVoltageBase &&
-          frame.id < kCellVoltageBase + 0x100;
+          frame.id < kCellVoltageBase + 0x10u * cell_frames;
         if (in_cell_range) {
           parse_cell_voltage(frame.id, frame.data, frame.len, bms_data_);
         } else {
