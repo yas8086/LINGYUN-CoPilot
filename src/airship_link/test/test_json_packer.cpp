@@ -68,6 +68,18 @@ TEST(JsonPackerTest, FcOnline)
   msg.battery_remaining = 0.85f;
   msg.flight_mode = "AUTO.LOITER";
   msg.armed = true;
+  // 飞控二次开发新增字段 (EKF/GPS/ESC)
+  msg.ekf_const_pos_mode = true;
+  msg.ekf_gps_glitch = false;
+  msg.gps_fix_type = 6;
+  msg.gps_satellites = 18;
+  msg.gps_eph = 50;
+  msg.gps_epv = 80;
+  msg.esc_count = 10;
+  msg.esc_rpm[0] = 3200.0f;
+  msg.esc_voltage[0] = 48.1f;
+  msg.esc_current[0] = 12.5f;
+  msg.esc_temperature[0] = 35.0f;
 
   const std::string s = fc_to_json(msg);
   EXPECT_NE(s.find("\"fc\""), std::string::npos);
@@ -81,6 +93,11 @@ TEST(JsonPackerTest, FcOnline)
   EXPECT_NE(s.find("\"thr\":50"), std::string::npos);
   EXPECT_NE(s.find("\"mode\":\"AUTO.LOITER\""), std::string::npos);
   EXPECT_NE(s.find("\"armed\":true"), std::string::npos);
+  // EKF/GPS/ESC 字段
+  EXPECT_NE(s.find("\"ekf\":{\"const_pos\":true,\"glitch\":false,\"accel_err\":false}"), std::string::npos);
+  EXPECT_NE(s.find("\"gps\":{\"fix\":6,\"sat\":18,\"eph\":50,\"epv\":80}"), std::string::npos);
+  EXPECT_NE(s.find("\"esc\":{\"n\":10,\"rpm\":[3200,"), std::string::npos);
+  EXPECT_NE(s.find("\"tmp\":[35"), std::string::npos);
 }
 
 TEST(JsonPackerTest, MpptOnline)

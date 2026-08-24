@@ -173,6 +173,36 @@ std::string fc_to_json(const airship_msgs::msg::FlightStatus & msg)
   s += "\"thr\":" + fmt_float(msg.throttle) + ",";
   s += "\"batt_v\":" + fmt_float(msg.battery_voltage) + ",";
   s += "\"batt_pct\":" + fmt_float(msg.battery_remaining);
+  // EKF / GPS 原始 / ESC 遥测 (飞控二次开发新增, DroneCAN/CAN 电调回传时 esc_count>0)
+  s += ",\"ekf\":{\"const_pos\":" + std::string(msg.ekf_const_pos_mode ? "true" : "false") +
+    ",\"glitch\":" + std::string(msg.ekf_gps_glitch ? "true" : "false") +
+    ",\"accel_err\":" + std::string(msg.ekf_accel_error ? "true" : "false") + "}";
+  s += ",\"gps\":{\"fix\":" + std::to_string(msg.gps_fix_type) +
+    ",\"sat\":" + std::to_string(msg.gps_satellites) +
+    ",\"eph\":" + std::to_string(msg.gps_eph) +
+    ",\"epv\":" + std::to_string(msg.gps_epv) + "}";
+  s += ",\"esc\":{\"n\":" + std::to_string(msg.esc_count);
+  s += ",\"rpm\":[";
+  for (int i = 0; i < msg.esc_rpm.size(); ++i) {
+    if (i > 0) {s += ",";}
+    s += fmt_float(msg.esc_rpm[i]);
+  }
+  s += "],\"v\":[";
+  for (int i = 0; i < msg.esc_voltage.size(); ++i) {
+    if (i > 0) {s += ",";}
+    s += fmt_float(msg.esc_voltage[i]);
+  }
+  s += "],\"i\":[";
+  for (int i = 0; i < msg.esc_current.size(); ++i) {
+    if (i > 0) {s += ",";}
+    s += fmt_float(msg.esc_current[i]);
+  }
+  s += "],\"tmp\":[";
+  for (int i = 0; i < msg.esc_temperature.size(); ++i) {
+    if (i > 0) {s += ",";}
+    s += fmt_float(msg.esc_temperature[i]);
+  }
+  s += "]}";
   s += "}";
   return s;
 }

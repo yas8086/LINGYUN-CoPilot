@@ -34,7 +34,11 @@
 #include <rclcpp/rclcpp.hpp>
 
 #include <mavros_msgs/msg/actuator_control.hpp>
+#include <mavros_msgs/msg/esc_status.hpp>
+#include <mavros_msgs/msg/esc_telemetry.hpp>
+#include <mavros_msgs/msg/estimator_status.hpp>
 #include <mavros_msgs/msg/extended_state.hpp>
+#include <mavros_msgs/msg/gpsraw.hpp>
 #include <mavros_msgs/msg/state.hpp>
 #include <mavros_msgs/msg/vfr_hud.hpp>
 #include <nav_msgs/msg/odometry.hpp>
@@ -56,6 +60,8 @@ constexpr uint8_t kLevelInfo = airship_msgs::msg::FcAlert::LEVEL_INFO;
 constexpr uint8_t kLevelWarning = airship_msgs::msg::FcAlert::LEVEL_WARNING;
 constexpr uint8_t kLevelCritical = airship_msgs::msg::FcAlert::LEVEL_CRITICAL;
 constexpr uint8_t kLevelEmergency = airship_msgs::msg::FcAlert::LEVEL_EMERGENCY;
+// "高度过低"告警的起飞判定阈值: 历史最高 AGL 超过该值才视为已起飞, 启用低高度检测
+constexpr float kTakeoffThresholdM = 10.0f;
 }
 
 // 单个参数的异常检测配置 (阈值分级 + 告警去抖)
@@ -118,6 +124,21 @@ public:
     battery_sub_ = this->create_subscription<sensor_msgs::msg::BatteryState>(
       "/mavros/battery", rclcpp::QoS(10).best_effort(),
       std::bind(&FcMonitorNode::on_battery, this, _1));
+    // EKF 估计器状态 (GPS 位置锁定/退化/毛刺/加速度计错误)
+    estimator_sub_ = this->create_subscription<mavros_msgs::msg::EstimatorStatus>(
+      "/mavros/estimator_status/status", rclcpp::QoS(10).best_effort(),
+      std::bind(&FcMonitorNode::on_estimator, this, _1));
+    // GPS 原始数据 (卫星数/定位精度 eph/epv)
+    gps_raw_sub_ = this->create_subscription<mavros_msgs::msg::GPSRAW>(
+      "/mavros/global_position/raw/gps", rclcpp::QoS(10).best_effort(),
+      std::bind(&FcMonitorNode::on_gps_raw, this, _1));
+    // ESC 遥测 (转速/电流/电压/温度, DroneCAN/CAN 电调; PWM 供电时 esp_status 空)
+    esc_status_sub_ = this->create_subscription<mavros_msgs::msg::ESCStatus>(
+      "/mavros/esc_status", rclcpp::QoS(10).best_effort(),
+      std::bind(&FcMonitorNode::on_esc_status, this, _1));
+    esc_telemetry_sub_ = this->create_subscription<mavros_msgs::msg::ESCTelemetry>(
+      "/mavros/esc_telemetry", rclcpp::QoS(10).best_effort(),
+      std::bind(&FcMonitorNode::on_esc_telemetry, this, _1));
 
     pub_timer_ = this->create_wall_timer(
       std::chrono::milliseconds(static_cast<int>(1000.0 / pub_rate_hz_)),
@@ -142,6 +163,14 @@ private:
     rules_.push_back({"altitude_agl_low", 3.0f, 2.0f, 1.0f, false});
     rules_.push_back({"battery_voltage", 48.0f, 46.0f, 44.0f, false});
     rules_.push_back({"battery_remaining", 30.0f, 20.0f, 10.0f, false});
+    // GPS 定位质量: fix_type < 3 (无 3D fix) 视为定位失效 (0=无GPS,1=NO_FIX,2=2D)
+    rules_.push_back({"gps_fix_loss", 3.0f, 3.0f, 3.0f, false});
+    // EKF 退化到位置锁定模式 (GPS 不可用) -> 定位精度骤降, 危急
+    rules_.push_back({"ekf_const_pos_mode", 1.0f, 1.0f, 1.0f, false});
+    // 卫星数过少 (低于 6 颗警告)-> 影响定位可靠性
+    rules_.push_back({"gps_satellites_low", 6.0f, 5.0f, 4.0f, false});
+    // 电机堵转: 任一电机输出>0.5 但转速≈0 (需 ESC 遥测数据, 否则跳过)
+    rules_.push_back({"motor_stuck", 0.5f, 0.5f, 0.5f, false});
   }
 
   // 初始化 CSV 日志
@@ -217,6 +246,12 @@ private:
   {
     std::lock_guard<std::mutex> lock(mutex_);
     alt_rel_ = static_cast<float>(msg->pose.pose.position.z);
+    // 记录历史最高 AGL (alt_agl = -alt_rel_): 用于"高度过低"告警的起飞判断,
+    // 避免飞艇在地面(AGL≈0)时 altitude_agl_low 持续误报。
+    const float alt_agl = -alt_rel_;
+    if (alt_agl > max_alt_agl_) {
+      max_alt_agl_ = alt_agl;
+    }
     vx_ = static_cast<float>(msg->twist.twist.linear.x);
     vy_ = static_cast<float>(msg->twist.twist.linear.y);
     vz_ = static_cast<float>(msg->twist.twist.linear.z);
@@ -248,10 +283,60 @@ private:
   void on_battery(const sensor_msgs::msg::BatteryState::SharedPtr msg)
   {
     std::lock_guard<std::mutex> lock(mutex_);
-    battery_voltage_ = msg->voltage;
-    battery_current_ = msg->current;
-    battery_remaining_ = msg->percentage;
-    battery_has_data_ = true;
+    // X25 EVO 未接电池/未配置电源监控时会上报电压 0 / 剩余 -1, 属无效数据。
+    // 仅在数值有效时才更新并启用电池判据, 避免 EMERGENCY 误报。
+    const bool valid = msg->voltage > 0.0f && msg->percentage >= 0.0f;
+    if (valid) {
+      battery_voltage_ = msg->voltage;
+      battery_current_ = msg->current;
+      battery_remaining_ = msg->percentage;
+      battery_has_data_ = true;
+    }
+    last_msg_stamp_ = this->now();
+  }
+
+  void on_estimator(const mavros_msgs::msg::EstimatorStatus::SharedPtr msg)
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    ekf_pos_vert_agl_ = msg->pos_vert_agl_status_flag;
+    ekf_const_pos_mode_ = msg->const_pos_mode_status_flag;
+    ekf_gps_glitch_ = msg->gps_glitch_status_flag;
+    ekf_accel_error_ = msg->accel_error_status_flag;
+    last_msg_stamp_ = this->now();
+  }
+
+  void on_gps_raw(const mavros_msgs::msg::GPSRAW::SharedPtr msg)
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    gps_fix_type_ = msg->fix_type;
+    gps_satellites_ = msg->satellites_visible;
+    gps_eph_ = msg->eph;
+    gps_epv_ = msg->epv;
+    last_msg_stamp_ = this->now();
+  }
+
+  void on_esc_status(const mavros_msgs::msg::ESCStatus::SharedPtr msg)
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    // ESC_STATUS 携带每路电调的 rpm/current/voltage
+    const size_t n = std::min(msg->esc_status.size(), esc_rpm_.size());
+    esc_count_ = static_cast<uint8_t>(n);
+    for (size_t i = 0; i < n; ++i) {
+      esc_rpm_[i] = static_cast<float>(msg->esc_status[i].rpm);
+      esc_current_[i] = msg->esc_status[i].current;
+      esc_voltage_[i] = msg->esc_status[i].voltage;
+    }
+    last_msg_stamp_ = this->now();
+  }
+
+  void on_esc_telemetry(const mavros_msgs::msg::ESCTelemetry::SharedPtr msg)
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    // ESC_TELEMETRY 携带每路电调温度 (转速/电流/电压也含, 与 esc_status 冗余)
+    const size_t n = std::min(msg->esc_telemetry.size(), esc_temperature_.size());
+    for (size_t i = 0; i < n; ++i) {
+      esc_temperature_[i] = msg->esc_telemetry[i].temperature;
+    }
     last_msg_stamp_ = this->now();
   }
 
@@ -284,17 +369,56 @@ private:
     if (name == "altitude_agl_low") {return -alt_rel_;}
     if (name == "battery_voltage") {return battery_voltage_;}
     if (name == "battery_remaining") {return battery_remaining_ * 100.0f;}
+    // GPS fix < 3 -> 触发 (upper=较低值告警, 这里返回当前 fix 值)
+    if (name == "gps_fix_loss") {return static_cast<float>(gps_fix_type_);}
+    // EKF 位置锁定模式标志 (0/1)
+    if (name == "ekf_const_pos_mode") {return ekf_const_pos_mode_ ? 1.0f : 0.0f;}
+    // 卫星数过少
+    if (name == "gps_satellites_low") {return static_cast<float>(gps_satellites_);}
+    // 电机堵转: 任一电机输出>0.5 且对应转速<阈值时置 1
+    if (name == "motor_stuck") {return check_motor_stuck() ? 1.0f : 0.0f;}
     return 0.0f;
+  }
+
+  // 电机堵转检测: 任一(有ESC遥测的)电机 输出>0.5 但转速≈0 (需 ESC 数据)
+  bool check_motor_stuck() const
+  {
+    if (esc_count_ == 0 || !armed_) {
+      return false;   // 无 ESC 遥测或未解锁, 不做堵转判断
+    }
+    const size_t n = std::min(
+      static_cast<size_t>(esc_count_),
+      std::min(motor_outputs_.size(), esc_rpm_.size()));
+    for (size_t i = 0; i < n; ++i) {
+      if (motor_outputs_[i] > 0.5f && esc_rpm_[i] < 50.0f) {
+        return true;   // 输出高但几乎无转速 -> 疑似堵转
+      }
+    }
+    return false;
   }
 
   // 异常检测: 遍历规则, 去抖后等级变化时发告警
   void run_anomaly_detection()
   {
     for (auto & r : rules_) {
-      // 电池数据尚未上报时跳过电池判据, 避免初始值 0 触发 EMERGENCY 误报
+      // 电池数据尚未上报/无效时跳过电池判据, 避免初始值 0 触发 EMERGENCY 误报
       if (!battery_has_data_ &&
         (r.name == "battery_voltage" || r.name == "battery_remaining"))
       {
+        continue;
+      }
+      // 高度过低告警: 仅在已起飞(历史最高 AGL 超阈值)后启用, 避免地面(AGL≈0)持续误报
+      if (r.name == "altitude_agl_low" && max_alt_agl_ < kTakeoffThresholdM) {
+        continue;
+      }
+      // GPS 定位相关: 飞控未连接 GPS 时 (fix_type=0) 不判定位失效, 避免无 GPS 期间持续误报
+      if ((r.name == "gps_fix_loss" || r.name == "gps_satellites_low") &&
+        gps_fix_type_ == 0)
+      {
+        continue;
+      }
+      // 电机堵转: 无 ESC 遥测数据(未接 CAN/DroneCAN)时不判堵转
+      if (r.name == "motor_stuck" && esc_count_ == 0) {
         continue;
       }
       const float value = rule_value(r.name);
@@ -379,6 +503,20 @@ private:
       msg.throttle = throttle_;
       msg.heading_deg = heading_deg_;
       msg.motor_outputs = motor_outputs_;
+      // EKF / GPS / ESC 遥测
+      msg.ekf_const_pos_mode = ekf_const_pos_mode_;
+      msg.ekf_gps_glitch = ekf_gps_glitch_;
+      msg.ekf_accel_error = ekf_accel_error_;
+      msg.ekf_pos_vert_agl = ekf_pos_vert_agl_;
+      msg.gps_fix_type = gps_fix_type_;
+      msg.gps_satellites = gps_satellites_;
+      msg.gps_eph = gps_eph_;
+      msg.gps_epv = gps_epv_;
+      msg.esc_count = esc_count_;
+      msg.esc_rpm = esc_rpm_;
+      msg.esc_voltage = esc_voltage_;
+      msg.esc_current = esc_current_;
+      msg.esc_temperature = esc_temperature_;
       msg.battery_voltage = battery_voltage_;
       msg.battery_current = battery_current_;
       msg.battery_remaining = battery_remaining_;
@@ -449,6 +587,7 @@ private:
   double lon_ = 0.0;
   float alt_amsl_ = 0.0f;
   float alt_rel_ = 0.0f;
+  float max_alt_agl_ = 0.0f;   // 历史最高 AGL, 用于"高度过低"告警的起飞判断
   float vx_ = 0.0f;
   float vy_ = 0.0f;
   float vz_ = 0.0f;
@@ -461,6 +600,22 @@ private:
   float heading_deg_ = 0.0f;    // 航向角 [deg] (/mavros/vfr_hud.heading)
   // 电机输出
   std::array<float, 8> motor_outputs_{0.0f};
+  // EKF 估计器状态
+  bool ekf_const_pos_mode_ = false;
+  bool ekf_gps_glitch_ = false;
+  bool ekf_accel_error_ = false;
+  bool ekf_pos_vert_agl_ = false;
+  // GPS 原始数据
+  uint8_t gps_fix_type_ = 0;
+  uint8_t gps_satellites_ = 0;
+  uint16_t gps_eph_ = 0;
+  uint16_t gps_epv_ = 0;
+  // ESC 遥测 (DroneCAN/CAN 电调, PWM 供电时 esc_count=0)
+  uint8_t esc_count_ = 0;
+  std::array<float, 10> esc_rpm_{0.0f};
+  std::array<float, 10> esc_voltage_{0.0f};
+  std::array<float, 10> esc_current_{0.0f};
+  std::array<float, 10> esc_temperature_{0.0f};
   // 状态/电池
   bool mavros_connected_ = false;
   bool armed_ = false;
@@ -485,6 +640,10 @@ private:
   rclcpp::Subscription<mavros_msgs::msg::ActuatorControl>::SharedPtr actuator_sub_;
   rclcpp::Subscription<mavros_msgs::msg::VfrHud>::SharedPtr vfr_sub_;
   rclcpp::Subscription<sensor_msgs::msg::BatteryState>::SharedPtr battery_sub_;
+  rclcpp::Subscription<mavros_msgs::msg::EstimatorStatus>::SharedPtr estimator_sub_;
+  rclcpp::Subscription<mavros_msgs::msg::GPSRAW>::SharedPtr gps_raw_sub_;
+  rclcpp::Subscription<mavros_msgs::msg::ESCStatus>::SharedPtr esc_status_sub_;
+  rclcpp::Subscription<mavros_msgs::msg::ESCTelemetry>::SharedPtr esc_telemetry_sub_;
   rclcpp::TimerBase::SharedPtr pub_timer_;
 };
 
