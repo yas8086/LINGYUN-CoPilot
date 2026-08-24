@@ -25,42 +25,14 @@
 
 # ==============================================================
 # 1. 麦克松（Mcuzone）MPUUART PCIe 转 4 串口板（/dev/ttyACM0..3）
-#    官方说明：
-#      ttyACM0 和 ttyACM3 = RS232（可改 TTL）
-#      ttyACM1 和 ttyACM2 = RS485（带隔离）
-#    本项目映射（12S 备用电源 BMS 已改接微雪板 RS485_2=/dev/ttySC1, 见下方微雪节）：
-#      RS485_1 (ttyACM0) → 温度压力集中器 (9600bps)
-#      RS485_2 (ttyACM1) → 麦克松板 485_2（规则已注释；12S BMS 走微雪板 ttySC1, 防符号链接冲突）
-#      UART0_TTL (ttyACM2) → 数传 L33 (接飞控+树莓派冗余)
-#      UART1_TTL (ttyACM3) → 数传 L39
+#    芯片: WCH CH348 USB Quad_Serial (ID 1a86:55d5)
+#    本机实测接口号: ttyACM0=00, ttyACM1=02, ttyACM2=04, ttyACM3=06
+#    ⚠️ 该板 4 路串口当前均【预留/未分配】。数传 L33/L39 机载侧走【网口】
+#      (接交换机, 192.168.10.x), 不占用 PCIe 串口。
+#      请按实际接入的设备增补对应符号链接规则。
 # ==============================================================
-# USB-CDC ACM 设备的区分规则：
-#   不同 ttyACM 属于同一个 USB 复合设备，靠 USB 接口号区分。
-#   先在 /dev/ 下为它们建立稳定符号链接。
-
-# ---- 485_1（温度压力集中器）- 预计对应 ttyACM0 / 接口 0 ----
-SUBSYSTEM=="tty", ACTION=="add", KERNEL=="ttyACM[0-9]*", \
-  ENV{ID_USB_INTERFACE_NUM}=="00", ENV{ID_VENDOR_ID}=="1d6b", \
-  SYMLINK+="airship_485_concentrator", GROUP="dialout", MODE="0660"
-
-# ---- 485_2（12S 备用电源 BMS）- 预计对应 ttyACM1 / 接口 1 ----
-# 注: 12S 备用电源 BMS 实际接在微雪工业扩展板 RS485_2 (/dev/ttySC1),
-#     /dev/airship_backup_bms 由下方"微雪板 ttySC1"规则绑定。
-#     若保留本规则, 麦克松板(ttyACM1)与微雪板(ttySC1)会同时抢占同名符号链接,
-#     导致 /dev/airship_backup_bms 指向不确定设备(udev 后匹配者胜), 故注释禁用。
-# SUBSYSTEM=="tty", ACTION=="add", KERNEL=="ttyACM[0-9]*", \
-#   ENV{ID_USB_INTERFACE_NUM}=="01", \
-#   SYMLINK+="airship_backup_bms", GROUP="dialout", MODE="0660"
-
-# ---- TTL1（数传 L33）- 预计对应 ttyACM2 / 接口 2 ----
-SUBSYSTEM=="tty", ACTION=="add", KERNEL=="ttyACM[0-9]*", \
-  ENV{ID_USB_INTERFACE_NUM}=="02", \
-  SYMLINK+="airship_radio_l33", GROUP="dialout", MODE="0660"
-
-# ---- TTL2（数传 L39）- 预计对应 ttyACM3 / 接口 3 ----
-SUBSYSTEM=="tty", ACTION=="add", KERNEL=="ttyACM[0-9]*", \
-  ENV{ID_USB_INTERFACE_NUM}=="03", \
-  SYMLINK+="airship_radio_l39", GROUP="dialout", MODE="0660"
+# USB-CDC ACM 设备: 同一 USB 复合设备(CH348)的 4 路 CDC-ACM,
+#   用 ID_USB_INTERFACE_NUM(接口号) 区分 (实测 00/02/04/06)。
 
 # ==============================================================
 # 2. 微雪工业扩展板 — SPI 扩展 RS485 双串口（SC16IS752 → /dev/ttySC0, ttySC1）
@@ -77,23 +49,13 @@ SUBSYSTEM=="tty", ACTION=="add", KERNEL=="ttySC1", \
 
 # ==============================================================
 # 3. 微雪工业扩展板 — 板载 RS232 (GPIO14/15, /dev/ttyAMA0)
-#    留作调试或备用数传。
+#    留作调试。
 # ==============================================================
 SUBSYSTEM=="tty", ACTION=="add", KERNEL=="ttyAMA0", \
   SYMLINK+="airship_debug_rs232", GROUP="dialout", MODE="0660"
 
 # ==============================================================
-# 4. 板载备用 UART2 (GPIO4/5, /dev/ttyAMA2) — 调试预留
+# 4. 说明：MPPT / 102S主BMS / DCDC 走 CAN 接口 → 用 can0/can1 直接引用,
+#    无需符号链接。飞控走网口(ETH), 用网络协议(MAVLink)访问, 也无需符号链接。
+#    故本文件只覆盖需要稳定别名的串口/485设备。
 # ==============================================================
-SUBSYSTEM=="tty", ACTION=="add", KERNEL=="ttyAMA2", \
-  SYMLINK+="airship_debug_uart", GROUP="dialout", MODE="0660"
-
-# ==============================================================
-# 5. CAN 接口：can0（BMS+MPPT+DCDC 共线）、can1（CAN FD / 预留）
-#    注意：CAN 是 net 子系统，符号链接落在 /dev/ 下通过 udev 可以建
-#          但实际网络接口仍以 ip link 的 can0/can1 为准。
-# ==============================================================
-SUBSYSTEM=="net", ACTION=="add", KERNEL=="can0", \
-  SYMLINK+="airship_can_bms", GROUP="netdev", MODE="0660"
-SUBSYSTEM=="net", ACTION=="add", KERNEL=="can1", \
-  SYMLINK+="airship_can_fd", GROUP="netdev", MODE="0660"
