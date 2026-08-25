@@ -68,4 +68,4 @@ float32[10]   esc_temperature            # 各电调温度 [degC]
 # 电池
 float32 battery_voltage   # [V]
 float32 battery_current   # [A]
-float32 battery_remaining # 剩余电量 0~1
+float32 battery_remaining # 剩余电量百分比 0~100

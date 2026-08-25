@@ -43,6 +43,11 @@ SerialInterface & SerialInterface::operator=(SerialInterface && other) noexcept
 
 bool SerialInterface::open(BaudRate baud)
 {
+  // 若此前已打开过, 先释放旧描述符, 避免重复 open() 造成 fd 泄漏
+  if (fd_ >= 0) {
+    ::close(fd_);
+    fd_ = -1;
+  }
   fd_ = ::open(device_.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
   if (fd_ < 0) {
     return false;

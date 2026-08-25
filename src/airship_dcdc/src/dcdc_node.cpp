@@ -17,6 +17,7 @@
 
 #include "airship_can/can_interface.hpp"
 #include "airship_dcdc/dcdc_protocol.hpp"
+#include "airship_utils/offline_utils.hpp"
 #include "airship_msgs/msg/dcdc_status.hpp"
 #include "airship_msgs/msg/safety_status.hpp"
 
@@ -38,18 +39,30 @@ public:
     this->declare_parameter("control_rate_hz", 5.0);
     set_voltage_ = this->declare_parameter("set_voltage", 48.0);          // 输出 [V]
     set_current_ = this->declare_parameter("set_current", 80.0);          // 限流 [A]
-    dcdc_enabled_ = this->declare_parameter("dcdc_enabled", true);        // 是否开机
+    // 注: 开机/关机由独立 dcdc_hold 进程通过环境变量 DCDC_ENABLED 决定, 本节点只读
+    // 监控, 不再声明 dcdc_enabled 参数(此前为死参数, 值从未被消费)。
     // 实际控制值以 dcdc_hold 进程的环境变量为准(单一配置源):
     // 若环境变量存在则覆盖 ROS 参数, 使本节点上报的 set_voltage/set_current
     // 与 dcdc_hold 实际下发到 DCDC 的值一致, 避免状态消息误导监控。
-    const char * env_v = std::getenv("DCDC_SET_VOLTAGE");
-    if (env_v != nullptr && env_v[0] != '\0') {
-      set_voltage_ = std::strtod(env_v, nullptr);
-    }
-    env_v = std::getenv("DCDC_SET_CURRENT");
-    if (env_v != nullptr && env_v[0] != '\0') {
-      set_current_ = std::strtod(env_v, nullptr);
-    }
+    // 严格校验(与 dcdc_hold 的 env_double 一致): 非法值(如 "49V")告警并保留
+    // ROS 参数值, 旧实现 strtod 裸转换会静默解析得 0.0 上报, 误导监控。
+    auto env_double_or = [this](const char * name, double def) -> double {
+        const char * v = std::getenv(name);
+        if (v == nullptr || v[0] == '\0') {
+          return def;
+        }
+        char * end = nullptr;
+        const double val = std::strtod(v, &end);
+        if (end == v || *end != '\0') {
+          RCLCPP_WARN(
+            this->get_logger(), "环境变量 %s='%s' 非法, 保留参数值 %.3g",
+            name, v, def);
+          return def;
+        }
+        return val;
+      };
+    set_voltage_ = env_double_or("DCDC_SET_VOLTAGE", set_voltage_);
+    set_current_ = env_double_or("DCDC_SET_CURRENT", set_current_);
     // 无数据超时 (s): 超过该时长未收到任何有效帧, 判定设备离线, 兜底发布 online=false
     link_timeout_s_ = this->declare_parameter("link_timeout_s", 3.0);
     if (link_timeout_s_ <= 0.0) {
@@ -92,24 +105,30 @@ private:
   void receive_loop()
   {
     while (running_.load()) {
+      // 无数据超时兜底: 距上次有效数据超过 link_timeout_s 后周期发布 online=false,
+      // 让下游能感知设备失联(而非停留在最后一次旧数据)。
+      // 注意: 该检查必须在循环顶部无条件执行——旧实现放在 receive()==false 分支内,
+      // dcdc_hold 以 200ms 周期连发控制帧+查询帧, SocketCAN 本地回环使本节点持续
+      // 收到不匹配帧, receive() 总能返回数据导致检查被持续跳过("饿死"),
+      // 设备失联的 offline 发布会被明显延迟; CAN 接口不可用期间同样会跳过检查。
+      {
+        const auto now = this->now();
+        if (airship_utils::should_publish_offline(
+            now.seconds(), last_data_time_.seconds(),
+            last_offline_pub_time_.seconds(), link_timeout_s_))
+        {
+          last_offline_pub_time_ = now;
+          publish_status(false);
+        }
+      }
       if (!can_.ensure_open()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
         continue;
       }
       CanFrame frame{};
       if (!can_.receive(frame, 100)) {
-        // 无数据超时兜底: 距上次有效数据超过 link_timeout_s 后周期发布 online=false,
-        // 让下游能感知设备失联(而非停留在最后一次旧数据)。
-        const auto now = this->now();
-        if ((now - last_data_time_).seconds() > link_timeout_s_ &&
-          (now - last_offline_pub_time_).seconds() >= link_timeout_s_)
-        {
-          last_offline_pub_time_ = now;
-          publish_status(false);
-        }
         continue;
       }
-      last_data_time_ = this->now();
       if (frame.id == airship_dcdc::kStatusId) {
         airship_dcdc::parse_status(frame.data, frame.len, dcdc_data_);
       } else if (frame.id == airship_dcdc::kAnalogRespId) {
@@ -117,6 +136,8 @@ private:
       } else {
         continue;
       }
+      // 仅在解析到本设备有效帧后刷新在线时间戳, 避免总线其他帧喂新鲜使 offline 兜底失效
+      last_data_time_ = this->now();
       publish_status(true);
     }
   }
@@ -163,7 +184,6 @@ private:
 
   double set_voltage_;
   double set_current_;
-  bool dcdc_enabled_;
   double link_timeout_s_;
 
   DcdcData dcdc_data_;

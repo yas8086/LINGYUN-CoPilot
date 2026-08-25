@@ -47,6 +47,9 @@ public:
 private:
   static void on_connect_cb(struct mosquitto * m, void * obj, int rc);
   static void on_disconnect_cb(struct mosquitto * m, void * obj, int rc);
+  // 库级日志回调: 桥接 TLS 握手失败/认证失败等内部错误到 stderr(journald),
+  // 否则现场只能看到"未连接"节流警告, 排障困难。
+  static void log_cb(struct mosquitto * m, void * obj, int level, const char * str);
 
   struct mosquitto * mosq_;
   std::string host_;
@@ -57,6 +60,9 @@ private:
   bool enable_tls_;
   std::string ca_cert_;
   bool tls_insecure_;
+  // libmosquitto 库级 init/cleanup 是否已配对: 仅在 connect() 首次调用 init 后,
+  // 析构才执行 cleanup(), 避免从未连接的对象析构时对未 init 的库做 cleanup。
+  bool lib_inited_ = false;
   // connected_ 由 libmosquitto 后台 loop 线程写入, 主线程经 is_connected() 读取,
   // 必须用原子类型避免数据竞争。
   std::atomic<bool> connected_ = false;

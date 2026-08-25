@@ -17,6 +17,7 @@
 #include "airship_can/can_interface.hpp"
 #include "airship_mppt/mppt_protocol.hpp"
 #include "airship_msgs/msg/mppt_status.hpp"
+#include "airship_utils/offline_utils.hpp"
 
 using airship_can::CanFrame;
 using airship_can::SocketCanInterface;
@@ -89,11 +90,16 @@ private:
       ReadCode::kCodeTemp, ReadCode::kCodeControl,
     };
     while (running_.load()) {
+      const auto cycle_start = std::chrono::steady_clock::now();
       // USB-CAN 插拔/接口重启后自动重连
       if (can_.ensure_open()) {
         for (ReadCode code : codes) {
           // 以设备地址作为源地址发送, 避免用 0x00(广播) 请求导致 MPPT 不应答
-          can_.send(airship_mppt::build_query_frame(code, device_addr_));
+          if (!can_.send(airship_mppt::build_query_frame(code, device_addr_))) {
+            RCLCPP_WARN_THROTTLE(
+              this->get_logger(), *this->get_clock(), 5000,
+              "MPPT 查询帧发送失败(接口 %s, 设备地址 %u)", can_if_.c_str(), device_addr_);
+          }
           std::this_thread::sleep_for(std::chrono::milliseconds(20));
         }
       } else {
@@ -101,7 +107,15 @@ private:
           this->get_logger(), *this->get_clock(), 3000,
           "CAN 接口 %s 不可用, 重连中", can_if_.c_str());
       }
-      std::this_thread::sleep_for(period);
+      // 周期调度: 扣除本轮查询已消耗(7 帧×20ms≈140ms + 发送耗时)后只 sleep 剩余量,
+      // 使实际查询周期贴近 query_rate_hz(旧实现固定 sleep period 导致实际偏慢 ~15%)。
+      const auto elapsed = std::chrono::steady_clock::now() - cycle_start;
+      const auto remain = period - elapsed;
+      if (remain > std::chrono::milliseconds::zero()) {
+        std::this_thread::sleep_for(remain);
+      } else {
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));  // 已超周期, 最小喘息防忙转
+      }
     }
   }
 
@@ -109,37 +123,37 @@ private:
   void receive_loop()
   {
     while (running_.load()) {
+      // 无数据超时兜底: 距上次有效数据超过 link_timeout_s 后周期发布 online=false,
+      // 让下游能感知设备失联(而非停留在最后一次旧数据)。
+      // 注意: 该检查必须在循环顶部无条件执行——旧实现放在 receive()==false 分支内,
+      // 双 MPPT 部署下总线上持续存在另一台设备的查询/回应帧(无关帧), receive()
+      // 总能返回数据导致检查被持续跳过("饿死"), 失联检测会随查询频率升高而失效;
+      // CAN 接口不可用期间同样会跳过检查。
+      {
+        const auto now = this->now();
+        if (airship_utils::should_publish_offline(
+            now.seconds(), last_data_time_.seconds(),
+            last_offline_pub_time_.seconds(), link_timeout_s_))
+        {
+          last_offline_pub_time_ = now;
+          publish_status(false);
+        }
+      }
       if (!can_.ensure_open()) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
         continue;
       }
       CanFrame frame{};
       if (!can_.receive(frame, 100)) {
-        // 无数据超时兜底: 距上次有效数据超过 link_timeout_s 后周期发布 online=false,
-        // 让下游能感知设备失联(而非停留在最后一次旧数据)。
-        const auto now = this->now();
-        if ((now - last_data_time_).seconds() > link_timeout_s_ &&
-          (now - last_offline_pub_time_).seconds() >= link_timeout_s_)
-        {
-          last_offline_pub_time_ = now;
-          publish_status(false);
-        }
         continue;
       }
-      last_data_time_ = this->now();
-      // 校验只读类型与目标地址
-      const uint8_t type = static_cast<uint8_t>((frame.id >> 24) & 0xFF);
-      const uint8_t target = static_cast<uint8_t>((frame.id >> 8) & 0xFF);
-      if (type != airship_mppt::kReadType || target != airship_mppt::kTargetAddr) {
+      // 帧 ID 匹配(纯函数): 校验只读类型/目标标志/源设备地址, 返回只读段 code;
+      // nullopt 表示非本设备或非法帧, 直接忽略(防多设备总线串扰误解析)。
+      const auto code = airship_mppt::match_response_id(frame.id, device_addr_);
+      if (!code) {
         continue;
       }
-      // 校验源地址与期望设备一致, 避免多设备总线串扰导致误解析
-      const uint8_t src = static_cast<uint8_t>(frame.id & 0xFF);
-      if (src != device_addr_) {
-        continue;
-      }
-      const uint8_t code = static_cast<uint8_t>((frame.id >> 16) & 0xFF);
-      switch (static_cast<ReadCode>(code)) {
+      switch (*code) {
         case ReadCode::kCodeRated:
           airship_mppt::parse_rated(frame.data, frame.len, mppt_data_);
           break;
@@ -162,8 +176,11 @@ private:
           airship_mppt::parse_control(frame.data, frame.len, mppt_data_);
           break;
         default:
-          continue;
+          continue;  // match_response_id 已保证不会是未知 code, 此分支仅为编译完备
       }
+      // 只有解析到本设备有效帧才刷新在线时间戳; 避免总线上其他设备的不相关帧
+      // "喂新鲜" last_data_time_, 从而让 offline 兜底失效、设备失联仍误报在线。
+      last_data_time_ = this->now();
       publish_status(true);
     }
   }
@@ -179,7 +196,10 @@ private:
     msg.pv_voltage = mppt_data_.pv_voltage;
     msg.battery_voltage = mppt_data_.battery_voltage;
     msg.charge_current = mppt_data_.charge_current;
-    msg.pv_power = mppt_data_.pv_voltage * mppt_data_.charge_current;
+    // 协议 0x03 实时段无光伏电流字段, 真实光伏功率不可得;
+    // 用 电池电压×充电电流 近似(即充电功率, 略低于光伏功率, 差值为 MPPT 效率损耗)。
+    // 旧实现误用 光伏电压(实测可到 320V)×充电电流, 高估约 25%+。
+    msg.pv_power = mppt_data_.battery_voltage * mppt_data_.charge_current;
 
     msg.rated_voltage = mppt_data_.rated_voltage;
     msg.rated_current = mppt_data_.rated_current;

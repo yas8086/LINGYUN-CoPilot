@@ -11,7 +11,7 @@ builtin_interfaces/Time timestamp
 # 解析值
 float32 temp_celsius     # 温度 (℃), 压力节点无效
 float64 pressure_pa      # 压力 (Pa), 温度节点为 0
-int32 raw                # 温度寄存器原始值(qint16)
+int32 raw                # 温度寄存器原始值(int16 补码, 负值=负温度)
 
 # 状态
 int32 online             # 1=本次读取成功, 0=读取失败/离线

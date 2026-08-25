@@ -53,6 +53,10 @@ inline bool battery_judge(
 }
 
 // 12S 备用电源判据: 在线 且 总压不低于下限 且 无故障位
+// 判据宽度说明(有意设计, 与 monitor_node 的告警判据不对称):
+//   safety 层仅拦截 fault_word(严重故障)——故障态电源不可信, 必须禁止控制;
+//   alarm_word/protect_word(告警/保护级)不阻断控制, 由 monitor_node 告警层
+//   负责提示(见 monitor_node on_backup 的三字任一判定), 避免次要告警误锁安全链。
 inline bool backup_battery_judge(
   bool online, float pack_voltage, uint32_t fault_word, float min_voltage)
 {

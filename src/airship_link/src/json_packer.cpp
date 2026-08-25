@@ -8,8 +8,9 @@
 namespace airship_link
 {
 
-// 带键名的 MPPT 打包 (供 mppt_to_json 与多台 MPPT 复用); 定义见下文
-std::string mppt_to_json_n(const std::string & key, const airship_msgs::msg::MpptStatus & msg);
+// 带键名的 MPPT 打包 (供 mppt_to_json 与多台 MPPT 复用); 定义见下文。
+// 仅本翻译单元使用, static 赋予内部链接, 避免从库导出污染链接命名空间。
+static std::string mppt_to_json_n(const std::string & key, const airship_msgs::msg::MpptStatus & msg);
 
 // 浮点格式化: 保留最多 4 位有效数字, 去掉多余 0
 // 非有限值(NaN/Inf)输出合法 JSON null, 避免产生非法 JSON
@@ -128,7 +129,7 @@ std::string mppt_to_json(const airship_msgs::msg::MpptStatus & msg)
 }
 
 // 带键名版本: 支持多台 MPPT 各自独立键 (如 mppt1/mppt2)
-std::string mppt_to_json_n(const std::string & key, const airship_msgs::msg::MpptStatus & msg)
+static std::string mppt_to_json_n(const std::string & key, const airship_msgs::msg::MpptStatus & msg)
 {
   std::string s = "\"" + key + "\":{";
   s += "\"online\":" + std::string(msg.online ? "true" : "false") + ",";
@@ -137,7 +138,17 @@ std::string mppt_to_json_n(const std::string & key, const airship_msgs::msg::Mpp
   s += "\"batt_v\":" + fmt_float(msg.battery_voltage) + ",";
   s += "\"charge_i\":" + fmt_float(msg.charge_current) + ",";
   s += "\"today\":" + fmt_float(msg.energy_today) + ",";
+  s += "\"month\":" + fmt_float(msg.energy_month) + ",";
   s += "\"total\":" + fmt_float(msg.energy_total) + ",";
+  s += "\"rated_v\":" + fmt_float(msg.rated_voltage) + ",";
+  s += "\"rated_i\":" + fmt_float(msg.rated_current) + ",";
+  s += "\"air_t\":" + fmt_float(msg.air_temp) + ",";
+  s += "\"mod_t\":" + fmt_float(msg.module_temp) + ",";
+  // 充电状态码: 0启动/1快充/2均充/3浮充/4结束充电(协议附录充电状态表)
+  s += "\"cs\":" + std::to_string(msg.charge_state) + ",";
+  // 设备控制模式: 0独立运行/1 EMS-RS485/2 EMS-CAN(协议附录控制模式表)
+  s += "\"mode\":" + std::to_string(msg.control_mode) + ",";
+  s += "\"chg_on\":" + std::string(msg.charging_enabled ? "true" : "false") + ",";
   s += "\"fault\":" + std::to_string(msg.fault_state);
   s += "}";
   return s;
@@ -192,22 +203,22 @@ std::string fc_to_json(const airship_msgs::msg::FlightStatus & msg)
     ",\"epv\":" + std::to_string(msg.gps_epv) + "}";
   s += ",\"esc\":{\"n\":" + std::to_string(msg.esc_count);
   s += ",\"rpm\":[";
-  for (int i = 0; i < msg.esc_rpm.size(); ++i) {
+  for (size_t i = 0; i < msg.esc_rpm.size(); ++i) {
     if (i > 0) {s += ",";}
     s += fmt_float(msg.esc_rpm[i]);
   }
   s += "],\"v\":[";
-  for (int i = 0; i < msg.esc_voltage.size(); ++i) {
+  for (size_t i = 0; i < msg.esc_voltage.size(); ++i) {
     if (i > 0) {s += ",";}
     s += fmt_float(msg.esc_voltage[i]);
   }
   s += "],\"i\":[";
-  for (int i = 0; i < msg.esc_current.size(); ++i) {
+  for (size_t i = 0; i < msg.esc_current.size(); ++i) {
     if (i > 0) {s += ",";}
     s += fmt_float(msg.esc_current[i]);
   }
   s += "],\"tmp\":[";
-  for (int i = 0; i < msg.esc_temperature.size(); ++i) {
+  for (size_t i = 0; i < msg.esc_temperature.size(); ++i) {
     if (i > 0) {s += ",";}
     s += fmt_float(msg.esc_temperature[i]);
   }

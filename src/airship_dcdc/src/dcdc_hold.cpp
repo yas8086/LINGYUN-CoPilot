@@ -116,9 +116,12 @@ int main(int argc, char ** argv)
 
   SocketCanInterface can(can_if);
   const auto period = std::chrono::milliseconds(safe_period_ms);
-  // 重连失败日志节流: 避免每周期刷屏, 每 5s 打印一次
+  // 三类告警(CAN 不可用/发送失败/TX 未增长)各自独立的节流时间戳,
+  // 避免共享一个 last_log 时互相抢占窗口导致某类告警永被吞掉。
   const auto log_every = std::chrono::milliseconds(5000);
-  auto last_log = std::chrono::steady_clock::now() - log_every;
+  auto last_log_can = std::chrono::steady_clock::now() - log_every;
+  auto last_log_send = last_log_can;
+  auto last_log_tx = last_log_can;
 
   // TX 计数监控: 确认控制帧是否真正发出(而非仅 socket 入队)。
   // 初始读取失败(接口未就绪)则从 0 开始, 后续读取失败时跳过判断。
@@ -126,12 +129,15 @@ int main(int argc, char ** argv)
   if (last_tx == UINT64_MAX) {
     last_tx = 0;
   }
+  // TX 计数检查节流: 停滞检测不需要每周期(200ms)粒度, 降到 1s, 减少 fopen 系统调用
+  const auto tx_check_every = std::chrono::seconds(1);
+  auto last_tx_check = std::chrono::steady_clock::now();
 
   while (true) {
     if (!can.ensure_open()) {
       const auto now = std::chrono::steady_clock::now();
-      if (now - last_log >= log_every) {
-        last_log = now;
+      if (now - last_log_can >= log_every) {
+        last_log_can = now;
         fprintf(
           stderr, "[dcdc_hold] CAN %s 不可用, 持续重连中...\n", can_if.c_str());
       }
@@ -145,28 +151,31 @@ int main(int argc, char ** argv)
     const bool analog_ok = can.send(airship_dcdc::build_analog_query_frame());
     const auto now = std::chrono::steady_clock::now();
     if (!ctrl_ok || !analog_ok) {
-      if (now - last_log >= log_every) {
-        last_log = now;
+      if (now - last_log_send >= log_every) {
+        last_log_send = now;
         fprintf(
           stderr, "[dcdc_hold] CAN 发送失败(control=%d analog=%d), 链路可能异常\n",
           ctrl_ok ? 1 : 0, analog_ok ? 1 : 0);
       }
     }
 
-    // TX 计数检查: send 返回成功但计数未增长 -> 帧仅在本地入队, 未真正上总线
+    // TX 计数检查(1s 节流): send 返回成功但计数未增长 -> 帧仅在本地入队, 未真正上总线
     // (典型: can0 ERROR-PASSIVE 时 MCP2515 无法发送数据帧)。
-    const uint64_t tx_now = read_tx_packets(can_if);
-    if (tx_now != UINT64_MAX) {
-      if ((ctrl_ok || analog_ok) && tx_now == last_tx && now - last_log >= log_every) {
-        last_log = now;
-        fprintf(
-          stderr,
-          "[dcdc_hold] 警告: 控制帧未真正发出(can0 TX 计数未增长=%" PRIu64 "), "
-          "接口可能异常(ERROR-PASSIVE/断线), 帧仅在本地入队\n",
-          tx_now);
-      }
-      if (tx_now > last_tx) {
-        last_tx = tx_now;  // 已有帧真正发出, 更新基准
+    if (now - last_tx_check >= tx_check_every) {
+      last_tx_check = now;
+      const uint64_t tx_now = read_tx_packets(can_if);
+      if (tx_now != UINT64_MAX) {
+        if ((ctrl_ok || analog_ok) && tx_now == last_tx && now - last_log_tx >= log_every) {
+          last_log_tx = now;
+          fprintf(
+            stderr,
+            "[dcdc_hold] 警告: 控制帧未真正发出(can0 TX 计数未增长=%" PRIu64 "), "
+            "接口可能异常(ERROR-PASSIVE/断线), 帧仅在本地入队\n",
+            tx_now);
+        }
+        if (tx_now > last_tx) {
+          last_tx = tx_now;  // 已有帧真正发出, 更新基准
+        }
       }
     }
 

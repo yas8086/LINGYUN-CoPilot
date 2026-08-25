@@ -23,6 +23,12 @@ float normalize_angle(float angle)
 
 float clampf(float val, float min_val, float max_val)
 {
+  // NaN 防护: NaN 与任何数比较均为 false, 会穿透下方两个 if 直接原样返回,
+  // 下游 static_cast<uint16_t>(NaN) 属未定义行为(如 DCDC 控制帧构造)。
+  // 非法输入(NaN)按区间下限处理(对物理量而言是安全侧)。
+  if (std::isnan(val)) {
+    return min_val;
+  }
   if (val < min_val) {
     return min_val;
   }

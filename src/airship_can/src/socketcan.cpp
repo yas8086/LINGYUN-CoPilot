@@ -228,6 +228,11 @@ bool SocketCanInterface::receive_unlocked(CanFrame & frame, int timeout_ms)
   }
 
   frame.id = cframe.can_id & CAN_EFF_MASK;
+  // 过滤 RTR 远程帧: 无有效数据负载, 但 can_dlc 非 0, 直接当数据帧解析会产生垃圾值。
+  // (错误帧默认不接收——未设 CAN_RAW_ERR_FILTER, 故无需在此处理。)
+  if (cframe.can_id & CAN_RTR_FLAG) {
+    return false;
+  }
   frame.extended = (cframe.can_id & CAN_EFF_FLAG) != 0;
   frame.len = cframe.can_dlc > 8 ? 8 : cframe.can_dlc;
   std::memcpy(frame.data, cframe.data, frame.len);

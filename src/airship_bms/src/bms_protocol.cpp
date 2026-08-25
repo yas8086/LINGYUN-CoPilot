@@ -45,6 +45,11 @@ void parse_cell_voltage(uint32_t frame_id, const uint8_t * data, uint32_t len, B
   if (len < 8) {
     return;
   }
+  // 防非对齐帧 ID: 单体电压帧 ID 必须按 0x10 步进(0x3000, 0x3010, ...),
+  // 若出现非法 ID(如 0x3005), 直接除会向下取整错位解析到错误节号(不越界但语义错)。
+  if (frame_id < kCellVoltageBase || (frame_id - kCellVoltageBase) % 0x10 != 0) {
+    return;
+  }
   const uint32_t frame_idx = (frame_id - kCellVoltageBase) / 0x10;
   const uint32_t cell_start = frame_idx * kCellPerVoltFrame;
 

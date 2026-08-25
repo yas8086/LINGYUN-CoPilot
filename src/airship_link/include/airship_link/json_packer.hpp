@@ -1,6 +1,6 @@
 // 灵云01号伴飞电脑 — 设备状态 JSON 打包
 // 将 BMS/MPPT/DCDC 状态序列化为单行 JSON, 供串口数传下传地面 Qt 上位机
-// 无 ROS 依赖, 便于单元测试
+// 无 rclcpp 运行时依赖(依赖 airship_msgs 消息类型定义), 便于单元测试
 #ifndef AIRSHIP_LINK__JSON_PACKER_HPP_
 #define AIRSHIP_LINK__JSON_PACKER_HPP_
 

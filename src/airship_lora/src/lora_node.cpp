@@ -143,6 +143,8 @@ private:
       serial_online_.store(true);
       consecutive_fail_ = 0;
       reconnect_attempt_ = 0;
+      // 记录重连成功时刻, 用于区分"重连后又全超时"是否疑似节点集体离线(见掉线判定)
+      last_reconnect_ok_time_ = std::chrono::steady_clock::now();
       RCLCPP_INFO(
         this->get_logger(),
         "[reconnect] 第 %d 次重连成功, 状态: OFFLINE->ONLINE, 耗时 %.1f ms, 设备 %s",
@@ -163,6 +165,7 @@ private:
     const auto req = build_read_request(slave_addr_, start_addr, quantity);
     serial_.flush_rx();
     if (!serial_.write(reinterpret_cast<const char *>(req.data()), req.size())) {
+      io_write_error_ = true;  // 底层写失败: 串口物理链路已断的强信号
       RCLCPP_WARN(this->get_logger(), "[diag] TX 写失败, addr=0x%04X qty=%u", start_addr, quantity);
       return false;
     }
@@ -206,6 +209,7 @@ private:
   std::vector<LoraSampleData> poll_once()
   {
     std::vector<LoraSampleData> out;
+    io_write_error_ = false;  // 每轮复位硬 I/O 错误标记
     const size_t n = std::min(node_ids_.size(), node_types_.size());
 
     for (size_t i = 0; i < n; ++i) {
@@ -292,14 +296,28 @@ private:
         online_count, samples.size(), round_ms, sample_period_ms_.load());
       if (online_count == 0) {
         ++consecutive_fail_;
-        // 连续多轮全失败 -> 判定串口掉线(区别于单节点离线)
-        if (consecutive_fail_ >= 3 && serial_online_.load()) {
+        // 串口掉线判定: 硬 I/O 错误(写失败)是断链强信号, 快速重连;
+        // 仅"所有节点读超时"时可能只是节点离线, 延迟更久再重连, 避免误伤自愈。
+        const int reconnect_thr = io_write_error_ ? 3 : 20;
+        if (consecutive_fail_ >= reconnect_thr && serial_online_.load()) {
           serial_.close();
           serial_online_.store(false);
+          const auto now = std::chrono::steady_clock::now();
+          // 区分两类"全超时": 无底层写错误信号, 且距上次重连成功很短, 说明串口已通
+          // 但所有节点都不应答——更可能是节点侧集体离线(掉电/远离基站)而非串口故障。
+          // (Modbus 主从架构无法彻底区分, 此日志帮助现场定位方向)
+          if (!io_write_error_ &&
+            now - last_reconnect_ok_time_ < std::chrono::seconds(10))
+          {
+            RCLCPP_WARN(
+              this->get_logger(),
+              "[reconnect] 重连成功后短时间内再次全节点无应答(无底层写错误), "
+              "疑似所有 LoRa 节点集体离线(节点掉电/远离)而非串口故障, 需现场排查");
+          }
           RCLCPP_WARN(
             this->get_logger(),
-            "[reconnect] 检测到串口掉线, 状态: ONLINE->OFFLINE, 抄送 %d 个节点全失败, 进入自动重连",
-            static_cast<int>(node_ids_.size()));
+            "[reconnect] 检测到串口掉线(连续 %d 轮无有效响应, io_error=%d), 进入自动重连",
+            consecutive_fail_, static_cast<int>(io_write_error_));
         }
       } else {
         consecutive_fail_ = 0;
@@ -458,7 +476,9 @@ private:
   airship_link::SerialInterface serial_;
   std::atomic<bool> running_;
   std::atomic<bool> serial_online_{false};  // 485 串口当前是否在线
+  std::chrono::steady_clock::time_point last_reconnect_ok_time_{};  // 最近一次重连成功时刻(区分节点集体离线)
   int consecutive_fail_ = 0;                 // 连续全失败轮数(用于串口掉线判定)
+  bool io_write_error_ = false;              // 本轮是否出现底层串口写失败(硬 I/O 信号)
   int reconnect_attempt_ = 0;                // 当前掉线周期内已重连次数(成功后清零)
   std::thread collect_thread_;
 

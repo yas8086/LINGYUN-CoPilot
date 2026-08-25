@@ -15,7 +15,7 @@ namespace airship_link
 class UdpSender
 {
 public:
-  // host 支持 IP 或主机名; port 为目标端口
+  // host 为目标 IPv4 (仅支持 IP 字面量, 不支持主机名/hostname; port=目标端口)
   UdpSender(const std::string & host, uint16_t port);
   ~UdpSender();
 

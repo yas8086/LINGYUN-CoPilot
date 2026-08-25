@@ -2,16 +2,17 @@
 // 协议: YQPV_SPC/SMC 系列 MPPT-CAN通信协议 V1.2
 //
 // 本模块为纯 C++ 协议解析库(无 ROS 依赖),便于 gtest 单元测试。
-// 帧 ID 结构(29位扩展帧):
-//   [28:24] 0x14 (只读) / 0x13 (配置)
-//   [23:16] 报文代码 code
-//   [15:8]  目标地址, 固定 0xA1
-//   [7:0]   源地址
-// 只读查询: 主机发远程帧 0x14[code]A1[src], 从机回 0x14[code]A1[dev]
+// 帧 ID 结构(29位扩展帧), 主机查询帧与从机回应帧的位域排布【不对称】
+// (勘误版协议 3.2 节, 2026-08 实测验证: 按对称排布发送从机不响应):
+//   主机查询帧: 0x14 [code] [设备地址] 0xA1   —— 设备地址在前(如 140301A1 查 01 号机)
+//   从机回应帧: 0x14 [code] 0xA1 [设备地址]   —— A1 在前(如 1403A101 为 01 号机回应)
+// 其中 [28:24] 为类型(0x14 只读 / 0x13 配置), [23:16] 为报文代码 code,
+// 其余两字节依帧方向分别为 0xA1 协议标志与目标/源设备地址。
 #ifndef AIRSHIP_MPPT__MPPT_PROTOCOL_HPP_
 #define AIRSHIP_MPPT__MPPT_PROTOCOL_HPP_
 
 #include <cstdint>
+#include <optional>
 
 #include "airship_can/can_interface.hpp"
 
@@ -95,12 +96,17 @@ struct MpptData
   bool charging_enabled = false;  // 充电开关是否开启
 };
 
-// 构造只读查询帧: 0x14[code]A1[src]
-// src: 本机(主机)源地址, 默认 0x00
-// 注: 当前实现按"8 字节数据帧(数据全 0)"发送查询(见 mppt_protocol.cpp)。
-//     协议文档(MPPT-CAN通信协议 V1.2)未明确是否需 CAN RTR 远程帧,
-//     若现场实测从机不响应, 需按设备实际行为改为 RTR 远程帧(见 docs/02_CAN协议汇总.md)。
-airship_can::CanFrame build_query_frame(uint8_t code, uint8_t src = 0x00);
+// 构造只读查询帧: 0x14[code][device_addr]A1 (设备地址在前, 与回应帧排布相反)
+// device_addr: 目标从机(MPPT)的设备地址——双机部署时主=0x01/副=0x02,
+//   勿用 0x00 广播地址发送(实测广播可能不应答, 故不提供默认值)。
+// 注: 按"8 字节数据帧(数据全 0)"发送查询(实测可触发响应, 对 RTR 不敏感)。
+airship_can::CanFrame build_query_frame(uint8_t code, uint8_t device_addr);
+
+// 解析从机回应帧 ID(0x14[code]A1[dev])为只读段 code。
+// 纯函数, 供接收线程作"帧 ID 匹配"判定——返回 nullopt 表示非本设备/非法帧,
+// 应被忽略(如: type 非 0x14、target 非 0xA1、src 设备地址不匹配、未知 code)。
+// 提炼自 mppt_node::receive_loop, 使历史 BUG 集中的帧匹配逻辑可单元测试。
+std::optional<ReadCode> match_response_id(uint32_t frame_id, uint8_t device_addr);
 
 // 解析 0x03 实时电压/电流帧
 void parse_realtime(const uint8_t * data, uint32_t len, MpptData & out);

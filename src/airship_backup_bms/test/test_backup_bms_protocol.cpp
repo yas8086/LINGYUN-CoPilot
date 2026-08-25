@@ -129,6 +129,35 @@ TEST(BackupBmsProtocol, ParseCellTemps)
   EXPECT_NEAR(d.cell_temps[1], 18.2f, 1e-3f);
 }
 
+// 负温度: 0.1℃ 有符号补码, 0xFF38 = -200 -> -20.0℃ (协议明确支持负温度)
+TEST(BackupBmsProtocol, ParseCellTempsNegative)
+{
+  const std::vector<uint8_t> data = {
+    0x00, 0x01, 0xFF, 0x38,  // count=1, raw=-200
+  };
+  BackupBmsData d;
+  ASSERT_TRUE(parse_cell_temps(data.data(), static_cast<uint32_t>(data.size()), d));
+  ASSERT_EQ(d.cell_temps.size(), 1u);
+  EXPECT_NEAR(d.cell_temps[0], -20.0f, 1e-3f);
+}
+
+// 4 个状态字(告警/保护/故障/系统)解析——safety 判据(backup_battery_judge)的关键输入
+TEST(BackupBmsProtocol, ParseBasicInfoStatusWords)
+{
+  // 状态字区偏移: alarm@42 / protect@46 / fault@50 / system@54, 各 32 位大端
+  std::vector<uint8_t> data(58, 0x00);
+  data[45] = 0x0A;  // alarm_word   = 0x0000000A
+  data[49] = 0x02;  // protect_word = 0x00000002
+  data[53] = 0x05;  // fault_word   = 0x00000005
+  data[57] = 0x01;  // system_word  = 0x00000001
+  BackupBmsData d;
+  ASSERT_TRUE(parse_basic_info(data.data(), static_cast<uint32_t>(data.size()), d));
+  EXPECT_EQ(d.alarm_word, 0x0000000Au);
+  EXPECT_EQ(d.protect_word, 0x00000002u);
+  EXPECT_EQ(d.fault_word, 0x00000005u);
+  EXPECT_EQ(d.system_word, 0x00000001u);
+}
+
 // 响应帧校验: 起始/地址/主机/指令/长度/CRC 均正确
 TEST(BackupBmsProtocol, ParseResponseFrameValid)
 {
@@ -189,4 +218,47 @@ TEST(BackupBmsProtocol, ParseResponseFrameRejectsWrongStartOrCmd)
   EXPECT_FALSE(parse_response_frame(
     frame2.data(), static_cast<uint32_t>(frame2.size()),
     kDefaultAddr, kHostUpper, kCmdBasicInfo, &data, &dlen));
+}
+
+// 响应帧校验: CRC 错误/地址不匹配/主机不匹配/短帧 均应拒绝
+// (串口残留帧/噪声帧误解析防线, 2026-08-26 补齐分支覆盖)
+TEST(BackupBmsProtocol, ParseResponseFrameRejectsBadCrcAddrHostAndShort)
+{
+  const std::vector<uint8_t> payload(4, 0x00);
+  std::vector<uint8_t> frame;
+  frame.push_back(0x57);
+  frame.push_back(kDefaultAddr);
+  frame.push_back(kHostUpper);
+  frame.push_back(0x00);
+  frame.push_back(kCmdCellVoltage);
+  frame.push_back(0x00);
+  frame.push_back(static_cast<uint8_t>(payload.size()));
+  frame.insert(frame.end(), payload.begin(), payload.end());
+  const uint16_t c = crc16(&frame[1], static_cast<uint32_t>(frame.size() - 1));
+  frame.push_back(static_cast<uint8_t>((c >> 8) & 0xFF));
+  frame.push_back(static_cast<uint8_t>(c & 0xFF));
+
+  const uint8_t * data = nullptr;
+  uint32_t dlen = 0;
+  // 1) CRC 破坏
+  std::vector<uint8_t> bad_crc = frame;
+  bad_crc[bad_crc.size() - 1] ^= 0xFF;
+  EXPECT_FALSE(parse_response_frame(
+    bad_crc.data(), static_cast<uint32_t>(bad_crc.size()),
+    kDefaultAddr, kHostUpper, kCmdCellVoltage, &data, &dlen));
+
+  // 2) 期望地址与帧地址不匹配(帧本身合法)
+  EXPECT_FALSE(parse_response_frame(
+    frame.data(), static_cast<uint32_t>(frame.size()),
+    static_cast<uint8_t>(kDefaultAddr - 1), kHostUpper, kCmdCellVoltage, &data, &dlen));
+
+  // 3) 期望主机与帧主机不匹配
+  EXPECT_FALSE(parse_response_frame(
+    frame.data(), static_cast<uint32_t>(frame.size()),
+    kDefaultAddr, static_cast<uint8_t>(kHostUpper + 1), kCmdCellVoltage, &data, &dlen));
+
+  // 4) 短帧(不足 7+4+2)
+  EXPECT_FALSE(parse_response_frame(
+    frame.data(), static_cast<uint32_t>(frame.size() - 1),
+    kDefaultAddr, kHostUpper, kCmdCellVoltage, &data, &dlen));
 }

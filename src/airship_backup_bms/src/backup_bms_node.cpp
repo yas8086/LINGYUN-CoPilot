@@ -216,12 +216,18 @@ private:
   }
 
   // 单轮轮询: 依次读 0x06 / 0x08 / 0x07
-  bool poll_once(BackupBmsData & out)
+  // 返回值 = online 判定: 仅由 0x06(基本信息) 成功决定——该帧携带 safety 判据
+  //   依赖的 pack_voltage/fault_word, 若其失败而电压/温度子查询成功仍报在线,
+  //   会用陈旧 fault_word 维持"安全"判定(旧实现 `|| ok` 即此缺陷)。
+  // 输出参数 link_alive = 任一指令有响应, 作为串口物理链路存活的判定依据
+  //   (避免"基本信息失败但电压正常响应"的半故障场景被误判为串口掉线)。
+  bool poll_once(BackupBmsData & out, bool & link_alive)
   {
-    bool ok = query(kCmdBasicInfo, out, PollKind::kBasic);
-    ok = query(kCmdCellVoltage, out, PollKind::kVoltages) || ok;
-    ok = query(kCmdCellTemp, out, PollKind::kTemps) || ok;
-    return ok;
+    const bool basic_ok = query(kCmdBasicInfo, out, PollKind::kBasic);
+    const bool volt_ok = query(kCmdCellVoltage, out, PollKind::kVoltages);
+    const bool temp_ok = query(kCmdCellTemp, out, PollKind::kTemps);
+    link_alive = basic_ok || volt_ok || temp_ok;
+    return basic_ok;
   }
 
   void publish_status(const BackupBmsData & d, bool online)
@@ -264,11 +270,12 @@ private:
       // 维护"上一帧有效数据", 失败轮次沿用旧值仅置 online=false,
       // 避免发布 online=false 时数值被清零而被下游误判为真实测量 0。
       BackupBmsData data = last_good_data_;
-      const bool ok = poll_once(data);
+      bool link_alive = false;
+      const bool ok = poll_once(data, link_alive);
       if (ok) {
         last_good_data_ = data;
       }
-      if (!ok) {
+      if (!link_alive) {
         ++consecutive_fail_;
         // 连续多轮全失败 -> 判定串口掉线, 进入自动重连
         if (consecutive_fail_ >= 3 && serial_online_.load()) {

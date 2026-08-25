@@ -1,6 +1,7 @@
 // 灵云01号伴飞电脑 — DCDC 协议解析单元测试
 #include <array>
 #include <cstdint>
+#include <limits>
 
 #include <gtest/gtest.h>
 
@@ -28,6 +29,35 @@ TEST(DcdcProtocol, ControlFrameOff)
   // 关机: 全 0
   const auto frame = airship_dcdc::build_control_frame(false, 48.0f, 80.0f);
   EXPECT_EQ(frame.data[2], (uint8_t)0x00);
+}
+
+// 钳制边界: 负值/超限/NaN 应被钳制到 [0,600]V / [0,100]A, 杜绝 cast 未定义行为
+TEST(DcdcProtocol, ControlFrameClamp)
+{
+  // 电压超上限 700V -> 钳到 600V (raw=6000=0x1770)
+  auto frame = airship_dcdc::build_control_frame(true, 700.0f, 50.0f);
+  EXPECT_EQ(frame.data[3], (uint8_t)0x70);
+  EXPECT_EQ(frame.data[4], (uint8_t)0x17);
+  // 电压负值 -> 钳到 0V
+  frame = airship_dcdc::build_control_frame(true, -10.0f, 50.0f);
+  EXPECT_EQ(frame.data[3], (uint8_t)0x00);
+  EXPECT_EQ(frame.data[4], (uint8_t)0x00);
+  // 电流超上限 150A -> 钳到 100A (raw=1000=0x03E8)
+  frame = airship_dcdc::build_control_frame(true, 48.0f, 150.0f);
+  EXPECT_EQ(frame.data[5], (uint8_t)0xE8);
+  EXPECT_EQ(frame.data[6], (uint8_t)0x03);
+  // 电流负值 -> 钳到 0A
+  frame = airship_dcdc::build_control_frame(true, 48.0f, -5.0f);
+  EXPECT_EQ(frame.data[5], (uint8_t)0x00);
+  EXPECT_EQ(frame.data[6], (uint8_t)0x00);
+  // NaN 输入(clampf NaN 防护) -> 按区间下限 0 处理, 不产生 cast UB
+  frame = airship_dcdc::build_control_frame(
+    true, std::numeric_limits<float>::quiet_NaN(),
+    std::numeric_limits<float>::quiet_NaN());
+  EXPECT_EQ(frame.data[3], (uint8_t)0x00);
+  EXPECT_EQ(frame.data[4], (uint8_t)0x00);
+  EXPECT_EQ(frame.data[5], (uint8_t)0x00);
+  EXPECT_EQ(frame.data[6], (uint8_t)0x00);
 }
 
 TEST(DcdcProtocol, AnalogQueryFrame)
@@ -89,6 +119,17 @@ TEST(DcdcProtocol, ParseAnalog)
   EXPECT_FLOAT_EQ(out.output_current, 12.5f);
   EXPECT_FLOAT_EQ(out.ambient_temp, 45.0f);
   EXPECT_FLOAT_EQ(out.heatsink_temp, 55.0f);
+}
+
+// 过温区间: raw 为无符号字节, raw=140(0x8C) -> 100℃
+// (旧 int8_t 实现曾把 raw>127 截断为负数, 过温告警反向失效——此用例锁定修复)
+TEST(DcdcProtocol, ParseAnalogOverheatRange)
+{
+  const std::array<uint8_t, 8> d = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x8C, 140};
+  DcdcData out;
+  airship_dcdc::parse_analog(d.data(), 8, out);
+  EXPECT_FLOAT_EQ(out.ambient_temp, 100.0f);
+  EXPECT_FLOAT_EQ(out.heatsink_temp, 100.0f);
 }
 
 // 帧长不足时应安全返回: parse_status 仅需 1 字节可正常解析;

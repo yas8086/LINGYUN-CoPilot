@@ -43,6 +43,14 @@ if(BUILD_TESTING)
   # 闭源代码: 跳过 ament_copyright 版权检查
   set(ament_cmake_copyright_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
+
+  # 最小单测: MQTT 客户端连接前状态与生命周期安全(纯库, 无需 broker/网络)
+  ament_add_gtest(test_mqtt_client
+    test/test_mqtt_client.cpp
+  )
+  if(TARGET test_mqtt_client)
+    target_link_libraries(test_mqtt_client ${PROJECT_NAME}_mqtt)
+  endif()
 endif()
 
 ament_package()

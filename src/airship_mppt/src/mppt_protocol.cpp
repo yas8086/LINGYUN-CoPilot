@@ -11,17 +11,45 @@ using airship_utils::get_i16_le;
 using airship_utils::get_u16_le;
 using airship_utils::get_u32_le;
 
-CanFrame build_query_frame(uint8_t code, uint8_t src)
+CanFrame build_query_frame(uint8_t code, uint8_t device_addr)
 {
   CanFrame frame{};
-  // 主机发送排布: 0x14 | code | 源地址(设备地址) | 0xA1
-  // 注: 说明书"主机发送 0x1401xxA1" 中设备地址 xx 在目标标志 A1 之前,
-  //     与从机回应 0x1401A1xx (A1 在设备地址前) 不对称, 需区别对待。
+  // 主机查询帧排布: 0x14 | code | 设备地址 | 0xA1 (设备地址在 A1 之前)
+  // 注: 与从机回应帧 0x14|code|A1|设备地址 (A1 在前) 排布相反, 二者不对称,
+  //     说明书"主机发送 0x1401xxA1, 从机回应 0x1401A1xx" 即此含义(勘误版 3.2 节)。
   frame.id = (kReadType << 24) | (static_cast<uint32_t>(code) << 16) |
-    (static_cast<uint32_t>(src) << 8) | kTargetAddr;
+    (static_cast<uint32_t>(device_addr) << 8) | kTargetAddr;
   frame.extended = true;
   frame.len = 8;
   return frame;
+}
+
+std::optional<ReadCode> match_response_id(uint32_t frame_id, uint8_t device_addr)
+{
+  // 从机回应帧位域: [28:24] type=0x14(只读), [23:16] code, [15:8] A1, [7:0] 设备地址
+  const uint8_t type = static_cast<uint8_t>((frame_id >> 24) & 0xFF);
+  const uint8_t target = static_cast<uint8_t>((frame_id >> 8) & 0xFF);
+  if (type != kReadType || target != kTargetAddr) {
+    return std::nullopt;
+  }
+  // 源地址(回应帧末尾 8 位)须与本设备地址一致, 防多设备总线串扰误解析
+  const uint8_t src = static_cast<uint8_t>(frame_id & 0xFF);
+  if (src != device_addr) {
+    return std::nullopt;
+  }
+  const uint8_t code = static_cast<uint8_t>((frame_id >> 16) & 0xFF);
+  switch (static_cast<ReadCode>(code)) {
+    case kCodeRated:
+    case kCodeRealtime:
+    case kCodeState:
+    case kCodeEnergyDay:
+    case kCodeEnergyTotal:
+    case kCodeTemp:
+    case kCodeControl:
+      return static_cast<ReadCode>(code);
+    default:
+      return std::nullopt;  // 未知/保留 code, 忽略
+  }
 }
 
 // 0x03: 光伏电压(0.1V) / 电池电压(0.1V) / 充电电流(0.1A) / 保留

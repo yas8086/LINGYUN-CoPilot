@@ -8,6 +8,7 @@
 using airship_safety::aggregate;
 using airship_safety::backup_battery_judge;
 using airship_safety::backup_battery_reason;
+using airship_safety::battery_judge;
 using airship_safety::battery_reason;
 using airship_safety::dcdc_judge;
 using airship_safety::dcdc_reason;
@@ -67,6 +68,33 @@ TEST(SafetyLogic, DcdcJudgeMultipleFaults)
 {
   // 多个故障位同时置位 => 不安全
   EXPECT_FALSE(dcdc_judge(true, 0x01 | 0x80 | 0x20));  // 欠压+总故障+短路
+}
+
+// ===== 主 BMS 判据 =====
+TEST(SafetyLogic, BatteryJudgeOnlineOk)
+{
+  // 在线 且 总压达下限 且 无告警 => 安全
+  EXPECT_TRUE(battery_judge(true, 300.0f, 0, 280.0f));
+}
+
+TEST(SafetyLogic, BatteryJudgeOffline)
+{
+  // 离线 => 不安全(无论电压/告警级), fail-safe
+  EXPECT_FALSE(battery_judge(false, 300.0f, 0, 280.0f));
+  EXPECT_FALSE(battery_judge(false, 0.0f, 2, 280.0f));
+}
+
+TEST(SafetyLogic, BatteryJudgeLowVoltage)
+{
+  // 总压低于下限 => 不安全
+  EXPECT_FALSE(battery_judge(true, 279.9f, 0, 280.0f));
+}
+
+TEST(SafetyLogic, BatteryJudgeAlarmLevel)
+{
+  // 告警级 1(故障)/2(严重) => 不安全(即使电压正常)
+  EXPECT_FALSE(battery_judge(true, 300.0f, 1, 280.0f));
+  EXPECT_FALSE(battery_judge(true, 300.0f, 2, 280.0f));
 }
 
 // ===== 12S 备用电源判据 =====

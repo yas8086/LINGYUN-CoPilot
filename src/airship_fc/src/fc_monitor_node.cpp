@@ -47,6 +47,7 @@
 #include <sensor_msgs/msg/nav_sat_fix.hpp>
 #include <std_msgs/msg/header.hpp>
 
+#include "airship_fc/fc_alert_logic.hpp"
 #include "airship_msgs/msg/fc_alert.hpp"
 #include "airship_msgs/msg/flight_status.hpp"
 #include "airship_utils/math_utils.hpp"
@@ -64,7 +65,7 @@ constexpr uint8_t kLevelEmergency = airship_msgs::msg::FcAlert::LEVEL_EMERGENCY;
 constexpr float kTakeoffThresholdM = 10.0f;
 }
 
-// 单个参数的异常检测配置 (阈值分级 + 告警去抖)
+// 单个参数的异常检测配置(纯阈值参数; 去抖/等级状态见 alert_states_)
 struct AlertRule
 {
   std::string name;            // 参数名
@@ -72,15 +73,18 @@ struct AlertRule
   float critical;              // 严重阈值
   float emergency;             // 危急阈值
   bool upper_side;             // true=超过阈值告警(>); false=低于阈值告警(<)
-  uint8_t current_level = 0;   // 当前活跃等级 (内部)
-  int debounce_count = 0;      // 去抖计数 (内部)
+  // 转成纯逻辑库的 Threshold(fc_alert_logic.hpp)
+  fc_logic::Threshold threshold() const
+  {
+    return {warning, critical, emergency, upper_side};
+  }
 };
 
 class FcMonitorNode : public rclcpp::Node
 {
 public:
   explicit FcMonitorNode(const rclcpp::NodeOptions & options = rclcpp::NodeOptions())
-  : rclcpp::Node("fc_monitor", options)
+  : rclcpp::Node("fc_monitor_node", options)  // 与 launch/yaml 节点名一致(旧为 fc_monitor, 手动调试时 yaml 参数不生效)
   {
     pub_rate_hz_ = this->declare_parameter("pub_rate_hz", 10.0);
     fc_timeout_s_ = this->declare_parameter("fc_timeout_s", 2.0);
@@ -171,6 +175,8 @@ private:
     rules_.push_back({"gps_satellites_low", 6.0f, 5.0f, 4.0f, false});
     // 电机堵转: 任一电机输出>0.5 但转速≈0 (需 ESC 遥测数据, 否则跳过)
     rules_.push_back({"motor_stuck", 0.5f, 0.5f, 0.5f, false});
+    // 去抖/告警状态与规则一一对应(状态与阈值参数分离存储)
+    alert_states_.assign(rules_.size(), fc_logic::AlertState{});
   }
 
   // 初始化 CSV 日志
@@ -289,7 +295,11 @@ private:
     if (valid) {
       battery_voltage_ = msg->voltage;
       battery_current_ = msg->current;
-      battery_remaining_ = msg->percentage;
+      // MAVROS /mavros/battery 为 sensor_msgs/BatteryState, 其 percentage 契约为
+      // 0~1(MAVROS 已将 MAVLink 的 0~100 除以 100)。此处统一归一化为 0~100 百分数,
+      // 供后续规则(阈值 30/20/10)直接比较, 也与本包 FlightStatus.battery_remaining
+      // 契约(0~100)一致。条件归一化为防御性写法(兼容直接透传 0~100 的实现)。
+      battery_remaining_ = fc_logic::normalize_battery_remaining(msg->percentage);
       battery_has_data_ = true;
     }
     last_msg_stamp_ = this->now();
@@ -334,25 +344,15 @@ private:
     std::lock_guard<std::mutex> lock(mutex_);
     // ESC_TELEMETRY 携带每路电调温度 (转速/电流/电压也含, 与 esc_status 冗余)
     const size_t n = std::min(msg->esc_telemetry.size(), esc_temperature_.size());
+    // 若仅收到 ESC_TELEMETRY 而无 ESC_STATUS(esc_count_ 仍为 0), 以温度通道数初始化
+    // 计数, 保证消息内 esc_count 与遥测数组语义自洽(否则温度有值但 n=0 自相矛盾)
+    if (esc_count_ == 0 && n > 0) {
+      esc_count_ = static_cast<uint8_t>(n);
+    }
     for (size_t i = 0; i < n; ++i) {
       esc_temperature_[i] = msg->esc_telemetry[i].temperature;
     }
     last_msg_stamp_ = this->now();
-  }
-
-  // 计算单个规则当前是否越界及对应等级 (0=正常)
-  uint8_t rule_level(const AlertRule & r, float value) const
-  {
-    if (r.upper_side) {
-      if (value > r.emergency) {return kLevelEmergency;}
-      if (value > r.critical) {return kLevelCritical;}
-      if (value > r.warning) {return kLevelWarning;}
-    } else {
-      if (value < r.emergency) {return kLevelEmergency;}
-      if (value < r.critical) {return kLevelCritical;}
-      if (value < r.warning) {return kLevelWarning;}
-    }
-    return 0;
   }
 
   // 取当前值用于规则判断
@@ -368,7 +368,7 @@ private:
     if (name == "altitude_agl_high") {return -alt_rel_;}
     if (name == "altitude_agl_low") {return -alt_rel_;}
     if (name == "battery_voltage") {return battery_voltage_;}
-    if (name == "battery_remaining") {return battery_remaining_ * 100.0f;}
+    if (name == "battery_remaining") {return battery_remaining_;}
     // GPS fix < 3 -> 触发 (upper=较低值告警, 这里返回当前 fix 值)
     if (name == "gps_fix_loss") {return static_cast<float>(gps_fix_type_);}
     // EKF 位置锁定模式标志 (0/1)
@@ -400,7 +400,8 @@ private:
   // 异常检测: 遍历规则, 去抖后等级变化时发告警
   void run_anomaly_detection()
   {
-    for (auto & r : rules_) {
+    for (size_t i = 0; i < rules_.size(); ++i) {
+      const AlertRule & r = rules_[i];
       // 电池数据尚未上报/无效时跳过电池判据, 避免初始值 0 触发 EMERGENCY 误报
       if (!battery_has_data_ &&
         (r.name == "battery_voltage" || r.name == "battery_remaining"))
@@ -422,22 +423,12 @@ private:
         continue;
       }
       const float value = rule_value(r.name);
-      const uint8_t level = rule_level(r, value);
-
-      if (level > 0) {
-        // 越界: 去抖计数
-        r.debounce_count++;
-        if (r.debounce_count >= debounce_n_ && level != r.current_level) {
-          publish_alert(r, level, value, true);
-          r.current_level = level;
-        }
-      } else {
-        // 恢复正常: 若之前处于告警态, 发解除告警
-        r.debounce_count = 0;
-        if (r.current_level > 0) {
-          publish_alert(r, kLevelInfo, value, false);
-          r.current_level = 0;
-        }
+      // 去抖状态机(纯逻辑, 见 fc_alert_logic.hpp): 累积越界、等级化去重、恢复解除
+      const auto d = fc_logic::update_alert(r.threshold(), value, alert_states_[i], debounce_n_);
+      if (d.action == fc_logic::Action::kActivate) {
+        publish_alert(r, d.level, d.value, true);
+      } else if (d.action == fc_logic::Action::kClear) {
+        publish_alert(r, kLevelInfo, d.value, false);
       }
     }
   }
@@ -540,6 +531,15 @@ private:
     if (!csv_ofs_.is_open()) {
       return;
     }
+    // 磁盘满/只读导致的写入失败检测: ofstream 写入失败会置 failbit 但 is_open() 仍为 true,
+    // 若不检测会每帧静默失败。检测到后关闭并告警一次(节流), 避免高频重复失败消耗资源。
+    if (!csv_ofs_.good()) {
+      RCLCPP_WARN_THROTTLE(
+        this->get_logger(), *this->get_clock(), 10000,
+        "CSV 日志写入失败(磁盘满或只读?), 已停止 CSV 记录(%s)", log_dir_.c_str());
+      csv_ofs_.close();
+      return;
+    }
     char ts_buf[64];
     // 时间戳: 秒 + 9 位纳秒(补零), 保证 CSV 时间列宽一致便于解析
     // sec/nanosec 为 32 位整型, 用 int 转换避免引入 C 类型 long
@@ -574,6 +574,7 @@ private:
   std::mutex mutex_;
   std::ofstream csv_ofs_;
   std::vector<AlertRule> rules_;
+  std::vector<fc_logic::AlertState> alert_states_;  // 与 rules_ 一一对应(去抖/等级状态)
   // 姿态
   float roll_rad_ = 0.0f;
   float pitch_rad_ = 0.0f;

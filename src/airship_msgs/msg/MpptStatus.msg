@@ -6,12 +6,11 @@ std_msgs/Header header
 # ===== 连接状态 =====
 bool online                 # CAN 链路是否在线
 uint8 device_addr           # 设备地址 (0x00-0xF7)
-uint32 can_id               # 本帧源 CAN ID(调试用, 29位扩展帧)
 
 # ===== 电压/电流 =====
 float32 pv_voltage          # 光伏电压 [V]
-float32 pv_current          # 光伏电流 [A]
-float32 pv_power            # 光伏功率 [W] (计算值)
+# 注: 协议 0x03 实时段无光伏电流字段, 故无 pv_current; pv_power 用 电池电压×充电电流 近似
+float32 pv_power            # 光伏功率 [W] (电池电压×充电电流 近似值)
 float32 battery_voltage     # 电池电压 [V]
 float32 charge_current      # 充电电流 [A]
 float32 rated_voltage       # 电池额定电压 [V]

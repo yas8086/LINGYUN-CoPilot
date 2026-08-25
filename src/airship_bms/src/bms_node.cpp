@@ -19,6 +19,7 @@
 #include "airship_bms/bms_protocol.hpp"
 #include "airship_can/can_interface.hpp"
 #include "airship_msgs/msg/bms_status.hpp"
+#include "airship_utils/offline_utils.hpp"
 
 using airship_bms::BmsData;
 using airship_can::CanFrame;
@@ -34,7 +35,23 @@ public:
   {
     // ===== 参数 =====
     can_if_ = this->declare_parameter("can_interface", std::string("can0"));
-    cell_count_ = static_cast<uint16_t>(this->declare_parameter("cell_count", 0));
+    // 电芯数: 默认 102(本项目主BMS)。旧默认 0 时 cell_voltages 恒空、max/min 恒 NaN,
+    // 无参数运行时出现空数据; 增加 ≥1 下限校验防负值经 uint16 回绕(如 -1 → 65535)。
+    {
+      int cell_count_param = this->declare_parameter("cell_count", 102);
+      if (cell_count_param <= 0) {
+        RCLCPP_WARN(this->get_logger(), "cell_count=%d 非法(须为正), 重置为 102", cell_count_param);
+        cell_count_param = 102;
+      }
+      cell_count_ = static_cast<uint16_t>(cell_count_param);
+    }
+    // 发布节流间隔 (s): 102 串 BMS 高频发帧(30+ 帧/100ms), 逐帧发布会达 300+ 次/秒,
+    // 每次都要 assign 复制 102 个 float。按此间隔聚合发布一次(默认 0.2s => 5Hz)。
+    pub_interval_s_ = this->declare_parameter("pub_interval_s", 0.2);
+    if (pub_interval_s_ <= 0.0) {
+      RCLCPP_WARN(this->get_logger(), "pub_interval_s 非法值 %.3f, 重置为 0.2", pub_interval_s_);
+      pub_interval_s_ = 0.2;
+    }
     // 无数据超时 (s): 超过该时长未收到任何有效帧, 判定设备离线, 兜底发布 online=false
     link_timeout_s_ = this->declare_parameter("link_timeout_s", 3.0);
     if (link_timeout_s_ <= 0.0) {
@@ -61,6 +78,7 @@ public:
     running_ = true;
     last_data_time_ = this->now();
     last_offline_pub_time_ = this->now();
+    last_pub_time_ = this->now();
     receive_thread_ = std::thread(&BmsNode::receive_loop, this);
   }
 
@@ -78,6 +96,21 @@ private:
   void receive_loop()
   {
     while (running_.load()) {
+      // 无数据超时兜底: 距上次有效数据超过 link_timeout_s 后周期发布 online=false,
+      // 让下游能感知设备失联(而非停留在最后一次旧数据)。
+      // 注意: 该检查必须在循环顶部无条件执行——旧实现放在 receive()==false 分支内,
+      // 总线上无关帧频繁到达时 receive() 总能返回数据导致检查被持续跳过("饿死"),
+      // 设备失联的 offline 发布会被无限延迟; CAN 接口不可用期间同样会跳过检查。
+      {
+        const auto now = this->now();
+        if (airship_utils::should_publish_offline(
+            now.seconds(), last_data_time_.seconds(),
+            last_offline_pub_time_.seconds(), link_timeout_s_))
+        {
+          last_offline_pub_time_ = now;
+          publish_status(false);
+        }
+      }
       // USB-CAN 插拔/接口重启后自动重连
       if (!can_.ensure_open()) {
         was_disconnected_ = true;
@@ -94,18 +127,9 @@ private:
       }
       CanFrame frame{};
       if (!can_.receive(frame, 100)) {
-        // 无数据超时兜底: 距上次有效数据超过 link_timeout_s 后周期发布 online=false,
-        // 让下游能感知设备失联(而非停留在最后一次旧数据)。
-        const auto now = this->now();
-        if ((now - last_data_time_).seconds() > link_timeout_s_ &&
-          (now - last_offline_pub_time_).seconds() >= link_timeout_s_)
-        {
-          last_offline_pub_time_ = now;
-          publish_status(false);
-        }
         continue;
       }
-      last_data_time_ = this->now();
+      bool matched = true;
       using namespace airship_bms;  // NOLINT
       if (frame.id == kBattInfo02) {
         parse_batt_info(frame.data, frame.len, bms_data_);
@@ -138,10 +162,21 @@ private:
         if (in_cell_range) {
           parse_cell_voltage(frame.id, frame.data, frame.len, bms_data_);
         } else {
-          continue;
+          matched = false;
         }
       }
-      publish_status(true);
+      if (matched) {
+        // 仅本设备有效帧刷新在线时间戳: 总线上其他设备的无关帧不应"喂新鲜"
+        // last_data_time_, 否则设备失联后 offline 兜底永远不触发。
+        last_data_time_ = this->now();
+        // 发布节流: 按 pub_interval_s_ 聚合发布, 避免高频帧逐个发布 300+ 次/秒。
+        // (帧间隔天然大于节流间隔时每帧仍会发布, 行为等价)
+        const auto now = this->now();
+        if ((now - last_pub_time_).seconds() >= pub_interval_s_) {
+          last_pub_time_ = now;
+          publish_status(true);
+        }
+      }
     }
   }
 
@@ -209,10 +244,12 @@ private:
 
   uint16_t cell_count_;
   double link_timeout_s_;
+  double pub_interval_s_;
   BmsData bms_data_;
   bool was_disconnected_ = false;
   rclcpp::Time last_data_time_;
   rclcpp::Time last_offline_pub_time_;
+  rclcpp::Time last_pub_time_;
 
   rclcpp::Publisher<airship_msgs::msg::BmsStatus>::SharedPtr status_pub_;
 };

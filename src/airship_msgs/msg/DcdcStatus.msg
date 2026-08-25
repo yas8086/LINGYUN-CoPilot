@@ -5,7 +5,6 @@ std_msgs/Header header
 
 # ===== 连接状态 =====
 bool online                 # CAN 链路是否在线
-uint32 can_id               # 本帧源 CAN ID(调试用)
 
 # ===== 输入/输出 =====
 float32 input_voltage       # 输入电压 [V] (母线电压)

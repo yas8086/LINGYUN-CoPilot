@@ -51,9 +51,9 @@ float scale_u16(uint16_t raw, float scale, float offset)
   return static_cast<float>(raw) * scale + offset;
 }
 
-float temp_with_offset(int8_t raw)
+float temp_with_offset(uint8_t raw)
 {
-  // 协议约定: 1℃/BIT, 负温度用反码; -40 偏移
+  // 协议约定: 1℃/BIT, -40 偏移; raw 为无符号字节(0~255 → -40~215℃)
   return static_cast<float>(raw) - 40.0f;
 }
 

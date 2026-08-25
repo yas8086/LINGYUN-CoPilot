@@ -10,6 +10,8 @@
 #include <cmath>
 #include <map>
 #include <memory>
+#include <string>
+#include <vector>
 
 #include <rclcpp/rclcpp.hpp>
 
@@ -58,6 +60,16 @@ public:
     watchdog_timer_ = this->create_wall_timer(
       std::chrono::milliseconds(static_cast<int>(1000.0 / watchdog_hz_)),
       std::bind(&MonitorNode::watchdog_callback, this));
+
+    // 时钟类型统一: 默认构造的 rclcpp::Time 为 RCL_SYSTEM_TIME, 与 check_link 中
+    // this->now()(RCL_ROS_TIME) 相减会抛 std::runtime_error。当前被 has_data_
+    // 短路保护(未收到数据不做减法), 但不应依赖该隐式防护, 显式初始化消除隐患
+    // (safety_node 同款做法)。
+    last_bms_time_ = this->now();
+    last_mppt_time_ = this->now();
+    last_dcdc_time_ = this->now();
+    last_lora_time_ = this->now();
+    last_backup_time_ = this->now();
   }
 
 private:
@@ -140,6 +152,18 @@ private:
       lora_has_data_ = true;
     }
 
+    // 首帧只建立基线, 不触发任何"恢复/掉线/告警", 避免启动时误报
+    // (与 check_link 的 has_data_ 首次保护语义对齐)
+    if (!lora_first_frame_seen_) {
+      lora_first_frame_seen_ = true;
+      last_lora_serial_online_ = msg->serial_online;
+      last_lora_alarm_ = msg->alarm_count;
+      last_lora_alarm_ids_ = msg->alarm_node_ids;
+      last_lora_node_offline_ =
+        (msg->node_count > 0 && msg->online_count < msg->node_count);
+      return;
+    }
+
     // 串口掉线告警 (状态变化触发)
     if (msg->serial_online != last_lora_serial_online_) {
       publish_alert(airship_msgs::msg::DeviceAlert::DEVICE_LORA,
@@ -151,7 +175,9 @@ private:
       last_lora_serial_online_ = msg->serial_online;
     }
 
-    if (msg->alarm_count != last_lora_alarm_) {
+    if (msg->alarm_count != last_lora_alarm_ ||
+      (msg->alarm_count > 0 && msg->alarm_node_ids != last_lora_alarm_ids_))
+    {
       if (msg->alarm_count > 0) {
         std::string ids;
         for (size_t i = 0; i < msg->alarm_node_ids.size(); ++i) {
@@ -170,7 +196,9 @@ private:
           "LoRa 温度告警解除",
           false);
       }
+      // 同时记录告警节点序列, 使"同一 count 但告警节点更换"也能触发重新告警
       last_lora_alarm_ = msg->alarm_count;
+      last_lora_alarm_ids_ = msg->alarm_node_ids;
     }
 
     // 部分节点离线告警 (状态变化触发, 避免每次 summary 刷屏)
@@ -316,6 +344,10 @@ private:
   // DCDC 故障告警去重: 与 safety 一致, 排除 Bit2 输出状态位
   static constexpr uint8_t kDcdcFaultMask = 0xFB;  // ~0x04
   bool last_dcdc_fault_active_ = false;
+  // LoRa 首帧基线保护: 收到首条 summary 不告警, 只建立基线
+  bool lora_first_frame_seen_ = false;
+  // LoRa 告警节点序列去重: 与 alarm_count 一起比较, 捕获"换告警节点"场景
+  std::vector<int32_t> last_lora_alarm_ids_;
 };
 
 int main(int argc, char ** argv)

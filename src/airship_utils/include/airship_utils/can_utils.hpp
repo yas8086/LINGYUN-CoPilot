@@ -36,8 +36,11 @@ uint8_t get_bits2(const uint8_t * data, size_t byte_offset, uint8_t bit_pos);
 float scale_i16(int16_t raw, float scale, float offset = 0.0f);
 float scale_u16(uint16_t raw, float scale, float offset = 0.0f);
 
-// 温度换算: 带 -40 偏移的 1℃/BIT 温度(MPPT/DCDC 用)
-float temp_with_offset(int8_t raw);
+// 温度换算: 带 -40 偏移的 1℃/BIT 温度(DCDC 用)
+// 注意: raw 为【无符号】字节。昊瑞昌协议"1℃/BIT, -40 偏移"的 8 位编码按无符号
+// 解释才能覆盖过温区(raw=140 → 100℃); 旧签名 int8_t 会把 raw>127 的过温值
+// 截断为负数(如 raw=140 被解析成 -156℃), 过温告警反向失效。
+float temp_with_offset(uint8_t raw);
 
 }  // namespace airship_utils
 

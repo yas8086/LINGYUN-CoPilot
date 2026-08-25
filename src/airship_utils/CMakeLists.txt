@@ -49,6 +49,13 @@ if(BUILD_TESTING)
   if(TARGET test_can_utils)
     target_link_libraries(test_can_utils ${PROJECT_NAME})
   endif()
+
+  ament_add_gtest(test_offline_utils
+    test/test_offline_utils.cpp
+  )
+  if(TARGET test_offline_utils)
+    target_link_libraries(test_offline_utils ${PROJECT_NAME})
+  endif()
 endif()
 
 ament_package()

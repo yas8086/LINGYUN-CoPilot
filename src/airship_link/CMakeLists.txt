@@ -65,6 +65,19 @@ if(BUILD_TESTING)
   if(TARGET test_udp_sender)
     target_link_libraries(test_udp_sender ${PROJECT_NAME})
   endif()
+
+  # SerialInterface PTY 单测: fd 泄漏回归锁 + 生命周期/读写
+  # openpty 自 glibc 2.34 起位于 libc, 旧系统需 -lutil; 尝试查找 util 库(非强制)
+  find_library(UTIL_LIBRARY util)
+  ament_add_gtest(test_serial_interface
+    test/test_serial_interface.cpp
+  )
+  if(TARGET test_serial_interface)
+    target_link_libraries(test_serial_interface ${PROJECT_NAME})
+    if(UTIL_LIBRARY)
+      target_link_libraries(test_serial_interface ${UTIL_LIBRARY})
+    endif()
+  endif()
 endif()
 
 ament_package()

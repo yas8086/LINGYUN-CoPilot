@@ -27,11 +27,22 @@ static std::array<uint8_t, 8> make_frame(
 
 TEST(MpptProtocol, QueryFrameId)
 {
-  const auto frame = airship_mppt::build_query_frame(ReadCode::kCodeRealtime, 0x00);
-  // 0x14[code]A1[00]
-  EXPECT_EQ(frame.id, 0x1403A100U);
+  // 主机发送排布: 0x14[code][设备地址][0xA1] (目标标志 A1 在末尾)
+  // 与从机回应 0x14[code]A1[dev] (A1 在设备地址之前) 非对称, 见勘误文档。
+  const auto frame = airship_mppt::build_query_frame(ReadCode::kCodeRealtime, 0x01);
+  EXPECT_EQ(frame.id, 0x140301A1U);
   EXPECT_TRUE(frame.extended);
   EXPECT_EQ(frame.len, 8U);
+}
+
+// 副 MPPT(设备地址 02, 双机部署形态): 查询帧 0x14 03 02 A1
+TEST(MpptProtocol, QueryFrameIdSecondaryDevice)
+{
+  const auto frame = airship_mppt::build_query_frame(ReadCode::kCodeRealtime, 0x02);
+  EXPECT_EQ(frame.id, 0x140302A1U);
+  // 额定参数段(code=0x02) 副 MPPT: 0x14 02 02 A1
+  const auto frame2 = airship_mppt::build_query_frame(ReadCode::kCodeRated, 0x02);
+  EXPECT_EQ(frame2.id, 0x140202A1U);
 }
 
 TEST(MpptProtocol, ParseRealtime)
@@ -132,4 +143,29 @@ TEST(MpptProtocol, ShortFrameIgnored)
   EXPECT_EQ(out.pv_voltage, 0.0f);
   EXPECT_EQ(out.charge_state, 0);
   EXPECT_EQ(out.energy_today, 0.0f);
+}
+
+// ===== 回应帧 ID 匹配 (match_response_id, 从 receive_loop 提炼的纯函数) =====
+TEST(MpptProtocol, MatchResponseId)
+{
+  // 01 号机实时段回应 0x1403A101 -> kCodeRealtime
+  auto c = airship_mppt::match_response_id(0x1403A101U, 1);
+  ASSERT_TRUE(c.has_value());
+  EXPECT_EQ(*c, ReadCode::kCodeRealtime);
+  // 副 MPPT(02 号机)回应帧为其设备地址 -> 同样匹配
+  auto c2 = airship_mppt::match_response_id(0x1403A102U, 2);
+  ASSERT_TRUE(c2.has_value());
+  EXPECT_EQ(*c2, ReadCode::kCodeRealtime);
+}
+
+TEST(MpptProtocol, MatchResponseIdRejects)
+{
+  // 设备地址不匹配: 期望 02, 帧实为 01 号机回应 -> 忽略(防串联误解析)
+  EXPECT_FALSE(airship_mppt::match_response_id(0x1403A101U, 2).has_value());
+  // type 非 0x14 (配置帧 0x13)
+  EXPECT_FALSE(airship_mppt::match_response_id(0x1303A101U, 1).has_value());
+  // target 非 0xA1
+  EXPECT_FALSE(airship_mppt::match_response_id(0x14030001U, 1).has_value());
+  // 未知/保留 code (0xF0)
+  EXPECT_FALSE(airship_mppt::match_response_id(0x14F0A101U, 1).has_value());
 }

@@ -4,6 +4,7 @@
 #include <mosquitto.h>
 
 #include <atomic>
+#include <cstdio>
 #include <cstring>
 
 namespace airship_cloud
@@ -25,6 +26,9 @@ MqttClient::MqttClient(
 
 MqttClient::~MqttClient()
 {
+  if (!lib_inited_) {
+    return;
+  }
   if (mosq_ != nullptr) {
     mosquitto_disconnect(mosq_);
     mosquitto_loop_stop(mosq_, true);
@@ -36,7 +40,20 @@ MqttClient::~MqttClient()
 
 bool MqttClient::connect()
 {
-  mosquitto_lib_init();
+  // 库级 init 只需一次; 用标志保证与析构的 cleanup() 严格配对(可多次 connect 不重复 init)
+  if (!lib_inited_) {
+    mosquitto_lib_init();
+    lib_inited_ = true;
+  }
+  // 幂等保护: 重复 connect 时先释放旧句柄, 避免句柄泄漏与旧后台 loop 线程残留
+  // (当前 cloud_node 仅构造时调用一次不会触发, 但 API 不应埋雷)
+  if (mosq_ != nullptr) {
+    mosquitto_disconnect(mosq_);
+    mosquitto_loop_stop(mosq_, true);
+    mosquitto_destroy(mosq_);
+    mosq_ = nullptr;
+    connected_ = false;
+  }
   mosq_ = mosquitto_new(client_id_.c_str(), true, this);
   if (mosq_ == nullptr) {
     return false;
@@ -65,11 +82,17 @@ bool MqttClient::connect()
       return false;
     }
     // TLS ALPN 协商使用 SSLv23 兼容模式(libmosquitto 默认即可)
-    mosquitto_tls_opts_set(mosq_, 1 /* cert_reqs: 验证对端证书 */, nullptr, nullptr);
+    const int rc_opts = mosquitto_tls_opts_set(mosq_, 1 /* cert_reqs: 验证对端证书 */, nullptr, nullptr);
+    if (rc_opts != MOSQ_ERR_SUCCESS) {
+      mosquitto_destroy(mosq_);
+      mosq_ = nullptr;
+      return false;
+    }
   }
 
   mosquitto_connect_callback_set(mosq_, &MqttClient::on_connect_cb);
   mosquitto_disconnect_callback_set(mosq_, &MqttClient::on_disconnect_cb);
+  mosquitto_log_callback_set(mosq_, &MqttClient::log_cb);  // 库级日志走自定义回调(stderr), 见 log_cb
 
   // 异步连接 + 后台循环(loop 负责自动重连)
   if (mosquitto_connect_async(mosq_, host_.c_str(), port_, 60) != MOSQ_ERR_SUCCESS) {
@@ -113,6 +136,16 @@ void MqttClient::on_disconnect_cb(struct mosquitto * m, void * obj, int rc)
   (void)rc;
   auto * self = static_cast<MqttClient *>(obj);
   self->connected_ = false;
+}
+
+void MqttClient::log_cb(struct mosquitto * m, void * obj, int level, const char * str)
+{
+  (void)m;
+  (void)obj;
+  // 桥接 libmosquitto 库级日志(含 TLS 握手/证书/认证错误)到 stderr, 由 journald 收集
+  if (str != nullptr) {
+    std::fprintf(stderr, "[mqtt][level=%d] %s\n", level, str);
+  }
 }
 
 }  // namespace airship_cloud

@@ -73,8 +73,8 @@ void parse_analog(const uint8_t * data, uint32_t len, DcdcData & out)
   out.input_voltage = scale_u16(get_u16_le(data, 0), 1.0f);
   out.output_voltage = scale_u16(get_u16_le(data, 2), 0.1f);
   out.output_current = scale_u16(get_u16_le(data, 4), 0.1f);
-  out.ambient_temp = temp_with_offset(static_cast<int8_t>(data[6]));
-  out.heatsink_temp = temp_with_offset(static_cast<int8_t>(data[7]));
+  out.ambient_temp = temp_with_offset(data[6]);
+  out.heatsink_temp = temp_with_offset(data[7]);
 }
 
 }  // namespace airship_dcdc

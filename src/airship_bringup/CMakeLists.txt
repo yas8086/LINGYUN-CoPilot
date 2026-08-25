@@ -19,6 +19,10 @@ if(BUILD_TESTING)
   # (若改用开源 license 如 Apache-2.0/BSD-3,删除下面一行即可启用版权检查)
   set(ament_cmake_copyright_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
+
+  # 端到端集成测试通过独立脚本 tools/integration_test_bms.sh 提供(CI 的 Test 后运行),
+  # 不走 ament launch_testing——launch_testing 的测试进程与本工程 rclpy 存在
+  # env/rcl-context 兼容问题, 改用 ros2 topic echo 的独立进程断言更稳。
 endif()
 
 ament_package()

@@ -65,7 +65,7 @@ TEST(JsonPackerTest, FcOnline)
   msg.climb_rate = 1.2f;
   msg.throttle = 50.0f;
   msg.battery_voltage = 48.0f;
-  msg.battery_remaining = 0.85f;
+  msg.battery_remaining = 85.0f;  // 契约: 0~100 百分比(FlightStatus.msg 注释)
   msg.flight_mode = "AUTO.LOITER";
   msg.armed = true;
   // 飞控二次开发新增字段 (EKF/GPS/ESC)
@@ -91,6 +91,8 @@ TEST(JsonPackerTest, FcOnline)
   EXPECT_NE(s.find("\"gs\":9.8"), std::string::npos);
   EXPECT_NE(s.find("\"climb\":1.2"), std::string::npos);
   EXPECT_NE(s.find("\"thr\":50"), std::string::npos);
+  // 契约锁定: battery_remaining 为 0~100 百分比, 直接下传为 batt_pct
+  EXPECT_NE(s.find("\"batt_pct\":85"), std::string::npos);
   EXPECT_NE(s.find("\"mode\":\"AUTO.LOITER\""), std::string::npos);
   EXPECT_NE(s.find("\"armed\":true"), std::string::npos);
   // EKF/GPS/ESC 字段
@@ -108,10 +110,27 @@ TEST(JsonPackerTest, MpptOnline)
   msg.pv_voltage = 300.0f;
   msg.energy_total = 123.4f;
   msg.fault_state = 0;
+  // 2026-08-26 补齐下传: 月发电量/额定参数/温度/充电状态/控制模式/充电开关
+  msg.energy_month = 45.6f;
+  msg.rated_voltage = 260.0f;
+  msg.rated_current = 60.0f;
+  msg.air_temp = 25.5f;
+  msg.module_temp = 30.1f;
+  msg.charge_state = 1;   // 快充
+  msg.control_mode = 0;   // 独立运行
+  msg.charging_enabled = true;
 
   const std::string s = mppt_to_json(msg);
   EXPECT_NE(s.find("\"mppt\""), std::string::npos);
   EXPECT_NE(s.find("\"pv_v\":300"), std::string::npos);
+  EXPECT_NE(s.find("\"month\":45.6"), std::string::npos);
+  EXPECT_NE(s.find("\"rated_v\":260"), std::string::npos);
+  EXPECT_NE(s.find("\"rated_i\":60"), std::string::npos);
+  EXPECT_NE(s.find("\"air_t\":25.5"), std::string::npos);
+  EXPECT_NE(s.find("\"mod_t\":30.1"), std::string::npos);
+  EXPECT_NE(s.find("\"cs\":1"), std::string::npos);
+  EXPECT_NE(s.find("\"mode\":0"), std::string::npos);
+  EXPECT_NE(s.find("\"chg_on\":true"), std::string::npos);
 }
 
 TEST(JsonPackerTest, DcdcOnline)

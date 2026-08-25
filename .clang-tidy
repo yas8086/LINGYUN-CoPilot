@@ -1,6 +1,6 @@
 # 灵云01号飞艇伴飞电脑 — C++ 静态分析
 # 注意:.clang-tidy 不在 ament_lint_common 默认检查范围内(非 CI 阻塞项),
-# 供本地 IDE/clangd 使用。CI 默认不强制;如需启用见 .gitlab-ci.yml 的 clang-tidy job(默认 skip)。
+# 供本地 IDE/clangd 使用。CI 默认不强制(见 .github/workflows/ci.yml, 仅 ament_uncrustify 阻塞)。
 ---
 Checks: >
   -*,
