@@ -13,7 +13,7 @@
 #
 # 用法示例：
 #   sudo bash airship_wifi.sh list
-#   sudo bash airship_wifi.sh add "于永强的iPhone" "qwertyuiop" 100
+#   sudo bash airship_wifi.sh add "于永强的iPhone" "<你的热点密码>" 100
 #   sudo bash airship_wifi.sh add "公司WiFi" "密码" 50
 #   sudo bash airship_wifi.sh add "某场地开放热点" "" 30     # 开放网络，密码留空
 #   sudo bash airship_wifi.sh rm "公司WiFi"

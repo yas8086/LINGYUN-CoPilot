@@ -1,0 +1,11 @@
+# 灵云01号伴飞电脑 — rosbag 每日清理定时器
+# 每日一次触发 airship-bag-clean.service 删除过期记录。
+[Unit]
+Description=Daily airship rosbag cleanup
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target

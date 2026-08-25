@@ -37,6 +37,14 @@ fi
 source "$WS_DIR/install/setup.bash"
 
 # ===== 3. 配置 CAN 接口 =====
+# 生产环境 CAN 初始化由 systemd 的 airship-can.service 负责(单一机制)。
+# 此处的 ip link 仅为纯开发手动启动(未运行 systemd 服务)场景的便捷配置,
+# 波特率优先读取统一配置源 /etc/default/airship-can, 与 airship-can.service 保持一致。
+if [ -f /etc/default/airship-can ]; then
+  # shellcheck disable=SC1091
+  . /etc/default/airship-can
+  CAN_BITRATE="${CAN0_BITRATE:-${CAN_BITRATE:-250000}}"
+fi
 if command -v ip >/dev/null 2>&1; then
   if ip link show "$CAN_INTERFACE" >/dev/null 2>&1; then
     if ! ip link show "$CAN_INTERFACE" | grep -q "state UP"; then

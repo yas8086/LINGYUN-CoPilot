@@ -23,14 +23,16 @@
 #   SYMLINK+="airship_485", GROUP="dialout", MODE="0660"
 
 # ---- 12S 备用电源 BMS (北辰协议 串口) ----
-# TODO: 待确认 12S 备用电源所用 USB-串口芯片的 VID/PID (常见: FTDI=0403:6001,
-#       CP2102=10c4:ea60, CH340=1a86:7523)。确认后取消下行注释并填入实际 VID/PID:
+# 已改接微雪 RS232-RS485-CAN-Board 的 RS485_2 (/dev/ttySC1),
+# /dev/airship_backup_bms 由 71-airship-extboards.rules 绑定到 ttySC1。
+# 下方 USB 占位规则不再需要(保留历史说明, 勿再启用以免符号链接冲突):
 # SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="XXXX", ATTRS{idProduct}=="XXXX", \
 #   SYMLINK+="airship_backup_bms", GROUP="dialout", MODE="0660"
 
-# ---- 数传电台 (串口数传, 固定符号链接) ----
-# TODO: 待确认数传电台所用 USB-串口芯片的 VID/PID (常见: CP2102=10c4:ea60,
-#       CH340=1a86:7523, FTDI=0403:6001)。确认后取消下行注释并填入实际 VID/PID:
+# ---- 数传电台 ----
+# 数传 L33 经网口接入交换机(UART1 TTL 接飞控 Telem1, 不接树莓派串口),
+# 业务数据走 UDP(高位端口 20000) 经数传 MAC 层透传, 不占用树莓派串口,
+# /dev/airship_link 串口符号链接规则预留(若未来接串口数传再启用):
 # SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="XXXX", ATTRS{idProduct}=="XXXX", \
 #   SYMLINK+="airship_link", GROUP="dialout", MODE="0660"
 

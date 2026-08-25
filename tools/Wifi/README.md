@@ -18,7 +18,7 @@
 sudo bash airship_wifi.sh list
 
 # 新增 / 更新 WiFi：add <SSID> [密码] [优先级]
-sudo bash airship_wifi.sh add "于永强的iPhone" "qwertyuiop" 100   # 热点，最优先
+sudo bash airship_wifi.sh add "于永强的iPhone" "<你的热点密码>" 100   # 热点，最优先
 sudo bash airship_wifi.sh add "公司WiFi" "公司密码" 50             # 备用
 sudo bash airship_wifi.sh add "开放热点" "" 30                     # 开放网络，密码留空
 

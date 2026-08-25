@@ -28,19 +28,29 @@ else
 fi
 
 # ---------- 2. CAN 接口 ----------
+# 只读探测: 不修改接口配置。旧实现曾用 `ip link set ... bitrate 1000000` 强行
+# 重配, 在生产系统运行会把正在通信的 CAN 波特率改坏(MPPT/DCDC/BMS 全部失联)。
+# 预期波特率与 tools/systemd/airship-can-up.sh 保持一致:
+#   can0=250000 (MPPT/DCDC), can1=500000 (主电源 BMS)
 echo "--- 2. CAN 接口 ---"
-if [ -d /sys/class/net/can0 ]; then
-    ip link set can0 up type can bitrate 1000000 2>/dev/null
-    ok "can0 存在 (MCP2515 经典CAN)"
-else
-    bad "can0 不存在"
-fi
-if [ -d /sys/class/net/can1 ]; then
-    ip link set can1 up type can bitrate 1000000 2>/dev/null
-    ok "can1 存在 (MCP2518FD CAN FD)"
-else
-    bad "can1 不存在"
-fi
+check_can() {
+    local ifname=$1 expected=$2 desc=$3
+    if [ ! -d "/sys/class/net/$ifname" ]; then
+        bad "$ifname 不存在 ($desc)"
+        return
+    fi
+    local actual
+    actual=$(ip -details link show "$ifname" 2>/dev/null | grep -oE 'bitrate [0-9]+' | head -1 | grep -oE '[0-9]+')
+    if [ -z "$actual" ]; then
+        ok "$ifname 存在 ($desc), 尚未配置波特率 (预期 $expected bps, 由 airship-can.service 配置)"
+    elif [ "$actual" = "$expected" ]; then
+        ok "$ifname 存在 ($desc), 波特率 ${actual}bps 与预期一致"
+    else
+        bad "$ifname 波特率 ${actual}bps 与预期 ${expected}bps 不一致 (以 tools/systemd/airship-can-up.sh 为准)"
+    fi
+}
+check_can can0 250000 "MCP2515 经典CAN, MPPT/DCDC"
+check_can can1 500000 "MCP2518FD CAN FD, 主电源BMS"
 echo "  can 状态:"
 ip -br link show 2>/dev/null | grep -E "^can" || echo "  (can 未 up)"
 

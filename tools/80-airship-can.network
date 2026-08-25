@@ -15,9 +15,12 @@
 #     ip -d link show can0
 #
 # 说明：
-#   - can0：BMS + MPPT + DCDC 共线，波特率 250kbps（厂家协议要求）
-#   - can1：CAN FD 备用，波特率 500kbps + 数据相位 2Mbps（若设备不支持CANFD，可把 Control.Mode 改成 "normal"）
+#   - can0：MPPT(双机 01/02) + DCDC 共线，波特率 250kbps（MPPT 厂家协议要求）
+#   - can1：102S 主电源 BMS（经典帧），波特率 500kbps + 数据相位 2Mbps
+#     （BMS 500k 与 MPPT 250k 不同须分通道；若设备不支持 CANFD 可把 Control.Mode 改成 "normal"）
 #   - 若硬件未插入 CAN 控制器（例如开发阶段只有 vcan），这两份配置会自动跳过不报错
+#   - 注意：CAN 波特率的单一配置源为 /etc/default/airship-can（airship-can-up.sh），
+#     本文件为 systemd-networkd 路线的等价配置，两种方式二选一部署，勿同时启用
 
 [Match]
 Name=can0

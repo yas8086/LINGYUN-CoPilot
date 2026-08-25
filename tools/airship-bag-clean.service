@@ -1,0 +1,12 @@
+# 灵云01号伴飞电脑 — 清理过期 rosbag
+# 由 airship-bag-clean.timer 每日触发, 删除 BAG_DIR 下 3 天前的记录目录。
+[Unit]
+Description=Clean old airship rosbag files
+
+[Service]
+Type=oneshot
+User=lingyun01
+Group=lingyun01
+Environment=BAG_DIR=/home/lingyun01/bags
+# -mtime +3: 仅保留最近 3 天; 按需调整天数
+ExecStart=/bin/bash -c 'if [ -d ${BAG_DIR} ]; then find ${BAG_DIR} -maxdepth 1 -mindepth 1 -type d -mtime +3 -exec rm -rf {} +; fi'

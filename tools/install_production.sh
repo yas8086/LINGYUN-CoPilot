@@ -5,8 +5,10 @@
 #       journald 日志上限 / ROS2 logrotate / NTP 时间同步 / CAN 接口自启
 #
 # 用法:
-#   sudo ./tools/install_production.sh            # 全量安装
-#   sudo ./tools/install_production.sh --can  250000   # 仅配置 CAN (可指定波特率)
+#   sudo ./tools/install_production.sh                    # 全量安装
+#   sudo ./tools/install_production.sh --can0 250000      # 仅配置 CAN, 指定 can0 波特率
+#   sudo ./tools/install_production.sh --can0 250000 --can1 500000
+#   (--can 为 --can0 的旧名别名, 兼容保留)
 #
 # 注意:
 #   - 需要 root (sudo)
@@ -14,7 +16,12 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CAN_BITRATE="${CAN_BITRATE:-250000}"
+# 波特率写入 /etc/default/airship-can(airship-can-up.sh 开机 source 该文件)
+# 拓扑: can0=MPPT/DCDC@250k, can1=主电源BMS@500k(经典帧, CAN FD 接口)
+CAN0_BITRATE="${CAN0_BITRATE:-${CAN_BITRATE:-250000}}"
+CAN1_BITRATE="${CAN1_BITRATE:-500000}"
+CAN_DBITRATE="${CAN_DBITRATE:-2000000}"
+CAN_FD_ON="${CAN_FD_ON:-1}"
 
 echo "=============================================="
 echo " 灵云01号 生产环境部署"
@@ -23,10 +30,12 @@ echo "=============================================="
 # ============ 1. udev 设备规则(固定串口名) ============
 install_udev() {
   echo "[1/4] 安装 udev 设备规则..."
+  # 70: USB 串口规范化(数传/4G); 71: 微雪工业扩展板(485/BMS 串口符号链接)
   install -m 644 "$SCRIPT_DIR/70-airship-usb.rules" /etc/udev/rules.d/70-airship-usb.rules
+  install -m 644 "$SCRIPT_DIR/71-airship-extboards.rules" /etc/udev/rules.d/71-airship-extboards.rules
   udevadm control --reload-rules
   udevadm trigger
-  echo "      已安装, 触发重载。符号链接: /dev/airship_485, /dev/airship_4g_*"
+  echo "      已安装, 触发重载。符号链接: /dev/airship_485, /dev/airship_backup_bms, /dev/airship_4g_*"
 }
 
 # ============ 1b. 敏感凭据 env 文件 ============
@@ -91,18 +100,54 @@ install_ntp() {
 
 # ============ 6. CAN 接口自启(可选) ============
 install_can() {
-  echo "[6/7] 配置 CAN 接口开机自启 (can0 @ ${CAN_BITRATE}bps)..."
-  # 使用 /etc/network 或 systemd-networkd 方式保证开机即配置
-  if command -v systemctl >/dev/null 2>&1 && systemctl list-unit-files | grep -q can0; then
-    systemctl enable can0 2>/dev/null || true
-  fi
-  # 主服务 ExecStartPre 已含 CAN 初始化兜底, 这里仅提示
-  echo "      CAN 初始化已由 airship-device-monitor 的 ExecStartPre 兜底"
+  echo "[6/7] 配置 CAN 接口开机自启 (can0@${CAN0_BITRATE} / can1@${CAN1_BITRATE})..."
+  # 落地 airship-can 服务: airship-can-up.sh 提供 can0/can1 开机配置
+  install -m 755 "$SCRIPT_DIR/systemd/airship-can-up.sh" /usr/local/bin/airship-can-up.sh
+  install -m 644 "$SCRIPT_DIR/systemd/airship-can.service" /etc/systemd/system/airship-can.service
+  # 波特率写入 /etc/default/airship-can(airship-can-up.sh 开机时 source 该文件)。
+  # 旧实现中 --can 指定的波特率仅被赋值从未被消费(静默无效), 现真正落地。
+  mkdir -p /etc/default
+  cat > /etc/default/airship-can <<EOF
+# 由 install_production.sh 生成; /usr/local/bin/airship-can-up.sh 开机时 source 本文件
+# 拓扑: can0=MPPT/DCDC, can1=主电源BMS(经典帧, CAN FD 接口)
+CAN0_BITRATE=${CAN0_BITRATE}
+CAN1_BITRATE=${CAN1_BITRATE}
+CAN_DBITRATE=${CAN_DBITRATE}
+CAN_FD_ON=${CAN_FD_ON}
+EOF
+  chmod 644 /etc/default/airship-can
+  systemctl daemon-reload
+  systemctl enable airship-can >/dev/null 2>&1 || true
+  echo "      已启用 airship-can 开机自启 (can0@${CAN0_BITRATE}, can1@${CAN1_BITRATE})"
+}
+
+# ============ 6b. 系统看门狗(systemd + 硬件) ============
+install_watchdog() {
+  echo "[6b] 配置 systemd 看门狗(配合硬件 watchdog)..."
+  mkdir -p /etc/systemd/system.conf.d
+  install -m 644 "$SCRIPT_DIR/systemd/90-airship-watchdog.conf" /etc/systemd/system.conf.d/90-airship-watchdog.conf
+  systemctl daemon-reload
+  echo "      已安装看门狗配置 Runtime/ RebootWatchdogSec=20/30"
+  echo "      注意: 请确认 /boot/firmware/config.txt 已含 'dtparam=watchdog=on'(见 rpi5_ubuntu2404_config.txt)"
+}
+
+# ============ 6c. rosbag 数据记录 + 按期清理 ============
+install_bag_record() {
+  local bag_dir
+  bag_dir="${BAG_DIR:-/home/lingyun01/bags}"
+  echo "[6c] 配置 rosbag 后台记录(目录: $bag_dir)..."
+  install -m 644 "$SCRIPT_DIR/airship-bag-record.service" /etc/systemd/system/airship-bag-record.service
+  install -m 644 "$SCRIPT_DIR/airship-bag-clean.service" /etc/systemd/system/airship-bag-clean.service
+  install -m 644 "$SCRIPT_DIR/airship-bag-clean.timer" /etc/systemd/system/airship-bag-clean.timer
+  systemctl daemon-reload
+  systemctl enable airship-bag-clean.timer >/dev/null 2>&1 || true
+  systemctl enable airship-bag-record >/dev/null 2>&1 || true
+  echo "      已启用 rosbag 记录(随 device-monitor 启动)与每日清理"
 }
 
 # ============ 执行 ============
 # 参数解析: 默认全量; 支持单独指定
-# 注意: --can 后可选跟波特率, 如 `--can 250000`
+# 注意: --can0/--can1/--can(旧名) 后可选跟波特率数字
 if [ "$#" -gt 0 ]; then
   while [ "$#" -gt 0 ]; do
     case "$1" in
@@ -112,7 +157,9 @@ if [ "$#" -gt 0 ]; then
       --journald) install_journald; shift ;;
       --logrotate) install_logrotate; shift ;;
       --ntp) install_ntp; shift ;;
-      --can)
+      --watchdog) install_watchdog; shift ;;
+      --bag-record) install_bag_record; shift ;;
+      --can|--can0)
         # 消费可选波特率参数(紧跟的数字), 否则使用环境变量/默认值
         case "${2:-}" in
           ''|--*)
@@ -120,7 +167,20 @@ if [ "$#" -gt 0 ]; then
             shift
             ;;
           *)
-            CAN_BITRATE="$2"
+            CAN0_BITRATE="$2"
+            install_can
+            shift 2
+            ;;
+        esac
+        ;;
+      --can1)
+        case "${2:-}" in
+          ''|--*)
+            install_can
+            shift
+            ;;
+          *)
+            CAN1_BITRATE="$2"
             install_can
             shift 2
             ;;
@@ -138,6 +198,8 @@ else
   install_logrotate
   install_ntp
   install_can
+  install_watchdog
+  install_bag_record
 fi
 
 echo ""

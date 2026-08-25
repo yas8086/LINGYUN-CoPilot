@@ -1,0 +1,29 @@
+# 灵云01号伴飞电脑 — rosbag 后台数据记录
+#
+# 用途: 整机持续记录所有 ROS2 话题到 /home/lingyun01/bags(<启动时间戳> 目录),
+#       为实机故障/飞行复盘提供完整可回放数据(仅 fc_monitor 的 CSV 无法还原全链路)。
+# 配合 airship-bag-clean.timer 每日清理 3 天前数据, 防 TF 卡写满。
+#
+# 安装: 见 install_production.sh 的 install_bag_record()。
+# 查看: ros2 bag info /home/lingyun01/bags/<目录>
+[Unit]
+Description=Lingyun Airship rosbag recorder (full topic record)
+Wants=network-online.target airship-device-monitor.service
+After=network-online.target airship-device-monitor.service
+
+[Service]
+Type=simple
+User=lingyun01
+Group=lingyun01
+Environment=BAG_DIR=/home/lingyun01/bags
+# 每次启动生成独立时间戳目录, 便于事后按时间定位
+ExecStart=/bin/bash -c 'source /opt/ros/jazzy/setup.bash && source /home/lingyun01/LINGYUN-CoPilot/install/setup.bash && mkdir -p ${BAG_DIR} && exec ros2 bag record -a -o ${BAG_DIR}/$(date +%Y%m%d_%H%M%S) --storage sqlite3'
+Restart=always
+RestartSec=5
+TimeoutStartSec=120
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

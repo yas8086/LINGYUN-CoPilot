@@ -14,7 +14,9 @@
 
 [Unit]
 Description=Lingyun DCDC Hardware Keepalive (CAN control frame)
-After=network-online.target
+# 显式依赖 CAN 接口配置完成(airship-can.service 配置 can0@250k)后再生效,
+# 避免开机时 can0 未配置导致保活帧发送失败(靠 Restart 兜底, 但顺序应明确)
+After=network-online.target airship-can.service
 Wants=network-online.target
 
 [Service]

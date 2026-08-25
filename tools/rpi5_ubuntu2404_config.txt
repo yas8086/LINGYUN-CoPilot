@@ -15,6 +15,15 @@
 #   - 修改后必须 sudo reboot 生效
 #   - 本文件假设使用 Waveshare RS232-RS485-CAN-Board 工业扩展板接 40pin GPIO
 #     若该板未接（开发阶段），请注释掉 SPI + CAN 相关 overlay 行，避免影响启动
+#
+# ⚠️ 部署前必核对（权威来源：docs/lingyun01/拓展板/RS232-RS485-CAN-Board/部署配置手册.md，
+#    官方 Wiki "Modify config.txt" 章节）：
+#   1. overlay 名称与片选：mcp2515,spi0-0 → can0；mcp251xfd,spi0-1 → can1；
+#      sc16is752-spi1（SPI1 三片选，勿用 spi0）
+#   2. IRQ 引脚：MCP2515=GPIO23(can0)、MCP2518FD=GPIO24(can1)、SC16IS752=GPIO25(RS485)
+#   3. 晶振频率：MCP2515 为 16MHz（另一款 RS485 CAN HAT (B) 板是 8MHz，勿混用）
+#   4. 本机角色分配：can0=MPPT/DCDC@250kbps，can1=主电源BMS@500kbps
+#      （与 tools/systemd/airship-can-up.sh、airship_params.yaml 一致）
 # ==============================================================
 
 [all]
@@ -23,6 +32,15 @@
 # 0. 基础：串口硬件使能
 # --------------------------------------------------------------
 enable_uart=1
+
+# --------------------------------------------------------------
+# 0b. 硬件看门狗（bcm2835-wdt）
+#     启用树莓派板载硬件看门狗。配合 systemd 的 RuntimeWatchdogSec
+#     （见 tools/systemd/90-airship-watchdog.conf），实现系统假死/死机时
+#     自动硬件复位，避免机载无人值守时"卡死不自愈"。痛点：本机曾因
+#     编译/内存打满导致系统假死、SSH 断连、只能手工断电复活。
+# --------------------------------------------------------------
+dtparam=watchdog=on
 
 # --------------------------------------------------------------
 # 1. 板载 PWM 主动散热器（官方）风扇温控
@@ -59,25 +77,26 @@ dtoverlay=uart2   # /dev/ttyAMA2 → GPIO4(TX) / GPIO5(RX)，预留调试/备用
 # 4. SPI 总线 + 微雪工业板 overlay
 #    Waveshare RS232-RS485-CAN-Board 使用：
 #      - SC16IS752（SPI 转双 UART → 双路 RS485）
-#      - MCP2515   （SPI 转 CAN 2.0）
-#      - MCP2518FD （SPI 转 CAN FD）
+#      - MCP2515   （SPI 转 CAN 2.0 → can0）
+#      - MCP2518FD （SPI 转 CAN FD → can1）
 #
-#  ⚠️ 关键注意：SPI 片选 CE 与中断 IRQ 引脚请根据微雪板实际接线修改。
-#     下列值为 Waveshare 典型/默认配置，若板上 CE/IRQ 不同请按 wiki 更新。
+#  以下配置与部署配置手册(官方 Wiki "Modify config.txt" 章节)一致。
+#  旧版模板曾误写 mcp2515-can1/spi0-2 等，导致 can0/can1 角色对调，
+#  部署脚本假设(can0=250k MPPT/DCDC, can1=500k BMS)全部错位，勿回退。
 # --------------------------------------------------------------
 
-# 启用 SPI0（板载标准 SPI 控制器）
+# 启用 SPI（SC16IS752 走 SPI1；MCP2515/MCP2518FD 走 SPI0）
 dtparam=spi=on
+dtoverlay=spi1-3cs
 
-# RS485：SC16IS752（SPI0，IRQ 接 GPIO25 → 按微雪板标注；若为 GPIO22/24 请替换）
-dtoverlay=sc16is752-spi0,int_pin=25
+# RS485：SC16IS752（SPI1 三片选，IRQ=GPIO25）→ /dev/ttySC0, /dev/ttySC1
+dtoverlay=sc16is752-spi1,int_pin=25
 
-# CAN：MCP2515（SPI0 第二个片选 CE1，oscillator=16MHz；IRQ 同 SC16IS752 或独立 GPIO，示例 GPIO24）
-dtoverlay=mcp2515-can1,oscillator=16000000,interrupt=24,spimaxfrequency=1000000
+# CAN：MCP2515（SPI0 CE0，16MHz 晶振，IRQ=GPIO23）→ can0（MPPT/DCDC，250kbps）
+dtoverlay=mcp2515,spi0-0,oscillator=16000000,interrupt=23
 
-# CAN FD：MCP2518FD（SPI0-0/CE0 之前被 SC16IS752 占用 → 这里用 spidev0.2 CE2；IRQ 用 GPIO23，示例）
-# 如果没有 CAN FD 设备，可注释本行
-dtoverlay=mcp251xfd,spi0-2,interrupt=23
+# CAN FD：MCP2518FD（SPI0 CE1，IRQ=GPIO24）→ can1（主电源 BMS，500kbps）
+dtoverlay=mcp251xfd,spi0-1,interrupt=24
 
 # --------------------------------------------------------------
 # 5. 其它工程化设置
