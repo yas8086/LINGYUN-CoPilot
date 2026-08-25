@@ -102,11 +102,21 @@ jobs:
           colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -Wno-dev
 
       - name: Setup vcan0 for integration tests
+        id: vcan
         run: |
-          # launch_testing 集成测试(bms 链路)依赖虚拟 CAN 接口 vcan0
+          # BMS 集成测试依赖虚拟 CAN 接口 vcan0。GitHub 官方 runner 使用 Azure Linux
+          # 内核, 不含 vcan 模块(见 actions/runner-images#13991), 无法创建 vcan0。
+          # 此处尽力创建并输出 vcan_ok 标记: 仅 vcan0 真正可用时才执行集成测试
+          # (与 airship_can 单测在 CI 的 vcan 跳过策略一致), 否则跳过而非失败。
           sudo modprobe vcan 2>/dev/null || true
-          sudo ip link add dev vcan0 type vcan 2>/dev/null || true
-          sudo ip link set vcan0 up
+          if sudo ip link add dev vcan0 type vcan 2>/dev/null && \
+             sudo ip link set vcan0 up; then
+            echo "vcan_ok=true" >> "$GITHUB_OUTPUT"
+            echo "vcan0 已就绪"
+          else
+            echo "vcan_ok=false" >> "$GITHUB_OUTPUT"
+            echo "无法创建 vcan0(官方 runner 内核不含 vcan 模块), 跳过 BMS 集成测试"
+          fi
 
       - name: Test
         run: |
@@ -118,6 +128,7 @@ jobs:
           colcon test-result --verbose
 
       - name: End-to-end integration test (BMS link)
+        if: steps.vcan.outputs.vcan_ok == 'true'
         run: |
           source /opt/ros/jazzy/setup.bash
           source install/setup.bash
