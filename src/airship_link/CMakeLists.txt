@@ -11,10 +11,11 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(airship_msgs REQUIRED)
 
-# ===== JSON 打包 + 串口接口库 =====
+# ===== JSON 打包 + 串口接口 + UDP 发送 库 =====
 add_library(${PROJECT_NAME}
   src/json_packer.cpp
   src/serial_interface.cpp
+  src/udp_sender.cpp
 )
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -56,6 +57,13 @@ if(BUILD_TESTING)
   if(TARGET test_json_packer)
     target_link_libraries(test_json_packer ${PROJECT_NAME})
     ament_target_dependencies(test_json_packer airship_msgs)
+  endif()
+
+  ament_add_gtest(test_udp_sender
+    test/test_udp_sender.cpp
+  )
+  if(TARGET test_udp_sender)
+    target_link_libraries(test_udp_sender ${PROJECT_NAME})
   endif()
 endif()
 
