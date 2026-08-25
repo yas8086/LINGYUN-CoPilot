@@ -40,6 +40,8 @@ public:
       query_rate_hz_ = 1.0;
     }
     device_addr_ = static_cast<uint8_t>(this->declare_parameter("device_addr", 1));
+    // 发布话题名: 支持多台 MPPT 各自独立话题 (如 /mppt1/status, /mppt2/status)
+    topic_name_ = this->declare_parameter("topic_name", std::string("/mppt/status"));
     // 无数据超时 (s): 超过该时长未收到任何有效帧, 判定设备离线, 兜底发布 online=false
     link_timeout_s_ = this->declare_parameter("link_timeout_s", 3.0);
     if (link_timeout_s_ <= 0.0) {
@@ -49,7 +51,7 @@ public:
 
     // ===== 发布器 =====
     status_pub_ =
-      this->create_publisher<airship_msgs::msg::MpptStatus>("/mppt/status", rclcpp::QoS(10));
+      this->create_publisher<airship_msgs::msg::MpptStatus>(topic_name_, rclcpp::QoS(10));
 
     can_ = SocketCanInterface(can_if_);
     if (!can_.open()) {
@@ -90,7 +92,8 @@ private:
       // USB-CAN 插拔/接口重启后自动重连
       if (can_.ensure_open()) {
         for (ReadCode code : codes) {
-          can_.send(airship_mppt::build_query_frame(code));
+          // 以设备地址作为源地址发送, 避免用 0x00(广播) 请求导致 MPPT 不应答
+          can_.send(airship_mppt::build_query_frame(code, device_addr_));
           std::this_thread::sleep_for(std::chrono::milliseconds(20));
         }
       } else {
@@ -207,6 +210,7 @@ private:
   double query_rate_hz_;
   double link_timeout_s_;
   uint8_t device_addr_;
+  std::string topic_name_;
 
   MpptData mppt_data_;
   rclcpp::Time last_data_time_;

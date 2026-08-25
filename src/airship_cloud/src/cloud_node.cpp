@@ -60,6 +60,8 @@ public:
       "/bms/status", rclcpp::QoS(10), std::bind(&CloudNode::on_bms, this, _1));
     mppt_sub_ = this->create_subscription<airship_msgs::msg::MpptStatus>(
       "/mppt/status", rclcpp::QoS(10), std::bind(&CloudNode::on_mppt, this, _1));
+    mppt2_sub_ = this->create_subscription<airship_msgs::msg::MpptStatus>(
+      "/mppt2/status", rclcpp::QoS(10), std::bind(&CloudNode::on_mppt2, this, _1));
     dcdc_sub_ = this->create_subscription<airship_msgs::msg::DcdcStatus>(
       "/dcdc/status", rclcpp::QoS(10), std::bind(&CloudNode::on_dcdc, this, _1));
     fc_sub_ = this->create_subscription<airship_msgs::msg::FlightStatus>(
@@ -99,6 +101,12 @@ private:
     mppt_ = *msg;
   }
 
+  void on_mppt2(const airship_msgs::msg::MpptStatus::SharedPtr msg)
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    mppt2_ = *msg;
+  }
+
   void on_dcdc(const airship_msgs::msg::DcdcStatus::SharedPtr msg)
   {
     std::lock_guard<std::mutex> lock(mutex_);
@@ -129,7 +137,7 @@ private:
     {
       std::lock_guard<std::mutex> lock(mutex_);
       json = airship_link::pack_telemetry_json(
-        this->now().seconds(), &bms_, &mppt_, &dcdc_, &fc_, &lora_, &backup_);
+        this->now().seconds(), &bms_, &mppt_, &mppt2_, &dcdc_, &fc_, &lora_, &backup_);
     }
 
     if (!mqtt_->is_connected()) {
@@ -157,6 +165,7 @@ private:
   std::mutex mutex_;
   airship_msgs::msg::BmsStatus bms_;
   airship_msgs::msg::MpptStatus mppt_;
+  airship_msgs::msg::MpptStatus mppt2_;
   airship_msgs::msg::DcdcStatus dcdc_;
   airship_msgs::msg::FlightStatus fc_;
   airship_msgs::msg::LoRaSamples lora_;
@@ -166,6 +175,7 @@ private:
 
   rclcpp::Subscription<airship_msgs::msg::BmsStatus>::SharedPtr bms_sub_;
   rclcpp::Subscription<airship_msgs::msg::MpptStatus>::SharedPtr mppt_sub_;
+  rclcpp::Subscription<airship_msgs::msg::MpptStatus>::SharedPtr mppt2_sub_;
   rclcpp::Subscription<airship_msgs::msg::DcdcStatus>::SharedPtr dcdc_sub_;
   rclcpp::Subscription<airship_msgs::msg::FlightStatus>::SharedPtr fc_sub_;
   rclcpp::Subscription<airship_msgs::msg::LoRaSamples>::SharedPtr lora_sub_;

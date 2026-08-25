@@ -14,8 +14,11 @@ using airship_utils::get_u32_le;
 CanFrame build_query_frame(uint8_t code, uint8_t src)
 {
   CanFrame frame{};
+  // 主机发送排布: 0x14 | code | 源地址(设备地址) | 0xA1
+  // 注: 说明书"主机发送 0x1401xxA1" 中设备地址 xx 在目标标志 A1 之前,
+  //     与从机回应 0x1401A1xx (A1 在设备地址前) 不对称, 需区别对待。
   frame.id = (kReadType << 24) | (static_cast<uint32_t>(code) << 16) |
-    (static_cast<uint32_t>(kTargetAddr) << 8) | src;
+    (static_cast<uint32_t>(src) << 8) | kTargetAddr;
   frame.extended = true;
   frame.len = 8;
   return frame;

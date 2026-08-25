@@ -101,6 +101,20 @@ def generate_launch_description():
         respawn_delay=2.0,
     )
 
+    # 第二台 MPPT: 副囊光伏板 (设备地址 0x02), 独立话题 /mppt2/status
+    mppt2_node = Node(
+        package='airship_mppt',
+        executable='mppt_node',
+        name='mppt2_node',
+        parameters=[
+            params_file,
+            {'device_addr': 2, 'topic_name': '/mppt2/status'},
+        ],
+        output='screen',
+        respawn=True,
+        respawn_delay=2.0,
+    )
+
     dcdc_node = Node(
         package='airship_dcdc',
         executable='dcdc_node',
@@ -168,6 +182,7 @@ def generate_launch_description():
         bms_node,
         backup_bms_node,
         mppt_node,
+        mppt2_node,
         dcdc_node,
         lora_node,
         monitor_node,

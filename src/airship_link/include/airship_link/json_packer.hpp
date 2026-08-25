@@ -34,13 +34,14 @@ std::string fc_to_json(const airship_msgs::msg::FlightStatus & msg);
 // LoRa 温度/压力采集 -> JSON 片段 (仅含在线节点)
 std::string lora_to_json(const airship_msgs::msg::LoRaSamples & msg);
 
-// 组装完整帧: {"t":<sec>, "bms":{...}, "backup":{...}, "mppt":{...}, "dcdc":{...}, "fc":{...}, "lora":{...}}
-// 空设备(online=false)不出现在帧中; flight/lora/backup 可不传(为 nullptr)以保持向后兼容
+// 组装完整帧: {"t":<sec>, "bms":{...}, "backup":{...}, "mppt1":{...}, "mppt2":{...}, "dcdc":{...}, "fc":{...}, "lora":{...}}
+// 空设备(online=false)不出现在帧中; mppt2/flight/lora/backup 可不传(为 nullptr)以保持向后兼容
 std::string pack_telemetry_json(
   double timestamp_sec,
   const airship_msgs::msg::BmsStatus * bms,
   const airship_msgs::msg::MpptStatus * mppt,
-  const airship_msgs::msg::DcdcStatus * dcdc,
+  const airship_msgs::msg::MpptStatus * mppt2 = nullptr,
+  const airship_msgs::msg::DcdcStatus * dcdc = nullptr,
   const airship_msgs::msg::FlightStatus * flight = nullptr,
   const airship_msgs::msg::LoRaSamples * lora = nullptr,
   const airship_msgs::msg::BackupBmsStatus * backup = nullptr);

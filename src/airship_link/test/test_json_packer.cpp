@@ -139,11 +139,29 @@ TEST(JsonPackerTest, PackTelemetryWithAll)
   dcdc.online = true;
   dcdc.output_power = 100.0f;
 
-  const std::string s = pack_telemetry_json(1234.5, &bms, &mppt, &dcdc);
+  const std::string s = pack_telemetry_json(1234.5, &bms, &mppt, nullptr, &dcdc);
   EXPECT_NE(s.find("\"t\":1234.5"), std::string::npos);
   EXPECT_NE(s.find("\"bms\""), std::string::npos);
-  EXPECT_NE(s.find("\"mppt\""), std::string::npos);
+  EXPECT_NE(s.find("\"mppt1\""), std::string::npos);
   EXPECT_NE(s.find("\"dcdc\""), std::string::npos);
+}
+
+// 两台 MPPT (主囊 mppt1 / 副囊 mppt2) 各自独立打包
+TEST(JsonPackerTest, PackTwoMppt)
+{
+  airship_msgs::msg::MpptStatus mppt1;
+  mppt1.online = true;
+  mppt1.pv_voltage = 100.0f;
+  mppt1.energy_total = 1.0f;
+
+  airship_msgs::msg::MpptStatus mppt2;
+  mppt2.online = true;
+  mppt2.pv_voltage = 200.0f;
+  mppt2.energy_total = 2.0f;
+
+  const std::string s = pack_telemetry_json(1.0, nullptr, &mppt1, &mppt2);
+  EXPECT_NE(s.find("\"mppt1\":{\"online\":true,\"pv_v\":100"), std::string::npos);
+  EXPECT_NE(s.find("\"mppt2\":{\"online\":true,\"pv_v\":200"), std::string::npos);
 }
 
 TEST(JsonPackerTest, PackTelemetryOfflineOmitted)
@@ -154,9 +172,9 @@ TEST(JsonPackerTest, PackTelemetryOfflineOmitted)
   mppt.online = true;
   mppt.pv_voltage = 100.0f;
 
-  const std::string s = pack_telemetry_json(1.0, &bms, &mppt, nullptr);
+  const std::string s = pack_telemetry_json(1.0, &bms, &mppt);
   EXPECT_NE(s.find("\"t\":1"), std::string::npos);
   EXPECT_EQ(s.find("\"bms\""), std::string::npos);   // 离线 BMS 不应出现
-  EXPECT_NE(s.find("\"mppt\""), std::string::npos);
-  EXPECT_EQ(s.find("\"dcdc\""), std::string::npos);  // nullptr 不应出现
+  EXPECT_NE(s.find("\"mppt1\""), std::string::npos);
+  EXPECT_EQ(s.find("\"dcdc\""), std::string::npos);  // 默认 dcdc=nullptr 不应出现
 }
