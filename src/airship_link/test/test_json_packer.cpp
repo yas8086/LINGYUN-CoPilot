@@ -94,7 +94,8 @@ TEST(JsonPackerTest, FcOnline)
   EXPECT_NE(s.find("\"mode\":\"AUTO.LOITER\""), std::string::npos);
   EXPECT_NE(s.find("\"armed\":true"), std::string::npos);
   // EKF/GPS/ESC 字段
-  EXPECT_NE(s.find("\"ekf\":{\"const_pos\":true,\"glitch\":false,\"accel_err\":false}"), std::string::npos);
+  EXPECT_NE(s.find("\"ekf\":{\"const_pos\":true,\"glitch\":false,\"accel_err\":false}"),
+    std::string::npos);
   EXPECT_NE(s.find("\"gps\":{\"fix\":6,\"sat\":18,\"eph\":50,\"epv\":80}"), std::string::npos);
   EXPECT_NE(s.find("\"esc\":{\"n\":10,\"rpm\":[3200,"), std::string::npos);
   EXPECT_NE(s.find("\"tmp\":[35"), std::string::npos);
