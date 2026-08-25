@@ -10,7 +10,9 @@ namespace airship_link
 
 // 带键名的 MPPT 打包 (供 mppt_to_json 与多台 MPPT 复用); 定义见下文。
 // 仅本翻译单元使用, static 赋予内部链接, 避免从库导出污染链接命名空间。
-static std::string mppt_to_json_n(const std::string & key, const airship_msgs::msg::MpptStatus & msg);
+static std::string mppt_to_json_n(
+  const std::string & key,
+  const airship_msgs::msg::MpptStatus & msg);
 
 // 浮点格式化: 保留最多 4 位有效数字, 去掉多余 0
 // 非有限值(NaN/Inf)输出合法 JSON null, 避免产生非法 JSON
@@ -129,7 +131,9 @@ std::string mppt_to_json(const airship_msgs::msg::MpptStatus & msg)
 }
 
 // 带键名版本: 支持多台 MPPT 各自独立键 (如 mppt1/mppt2)
-static std::string mppt_to_json_n(const std::string & key, const airship_msgs::msg::MpptStatus & msg)
+static std::string mppt_to_json_n(
+  const std::string & key,
+  const airship_msgs::msg::MpptStatus & msg)
 {
   std::string s = "\"" + key + "\":{";
   s += "\"online\":" + std::string(msg.online ? "true" : "false") + ",";
