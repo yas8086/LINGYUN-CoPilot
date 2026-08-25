@@ -39,7 +39,7 @@ jobs:
         run: |
           source /opt/ros/jazzy/setup.bash
           sudo apt-get update -qq
-          sudo apt-get install -y -qq --no-install-recommends ros-jazzy-ament-lint-common
+          sudo apt-get install -y -qq --no-install-recommends ros-jazzy-ament-lint-common shellcheck
 
       - name: Run linters
         run: |
@@ -59,6 +59,11 @@ jobs:
           echo '==> ament_flake8 / ament_pep257'
           ament_flake8 $PY
           ament_pep257 $PY
+
+          echo '==> shellcheck (tools/ 下 bash 脚本, severity=error)'
+          SH=$(find tools -type f -name '*.sh')
+          # 增量引入: 先收集 error 级问题, 当前不阻塞(现有脚本可能含历史告警需分批清理)
+          shellcheck --severity=error $SH || true
 
   # ==================== 编译 + 测试(矩阵)====================
   build-test:
@@ -92,7 +97,16 @@ jobs:
       - name: Build
         run: |
           source /opt/ros/jazzy/setup.bash
+          # 注: GitHub runner 多核资源充足, 故此处不设 MAKEFLAGS="-j1"(与 .trae 编译规则一致),
+          # 仅在本机/树莓派 4 核低配环境强制单线程(见 .trae/rules/编译规则.md)。
           colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -Wno-dev
+
+      - name: Setup vcan0 for integration tests
+        run: |
+          # launch_testing 集成测试(bms 链路)依赖虚拟 CAN 接口 vcan0
+          sudo modprobe vcan 2>/dev/null || true
+          sudo ip link add dev vcan0 type vcan 2>/dev/null || true
+          sudo ip link set vcan0 up
 
       - name: Test
         run: |
@@ -102,6 +116,13 @@ jobs:
           colcon test --event-handlers console_cohesion+ \
             --return-code-on-test-failure --executor sequential
           colcon test-result --verbose
+
+      - name: End-to-end integration test (BMS link)
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          source install/setup.bash
+          bash tools/integration_test_bms.sh online
+          bash tools/integration_test_bms.sh offline
 
       - name: Upload test results
         if: always()
