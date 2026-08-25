@@ -1,30 +1,38 @@
 # 灵云01号伴飞电脑 (LINGYUN-CoPilot)
 
-基于 **Raspberry Pi 5 + ROS2 Jazzy** 的飞艇机载数据中继节点，当前阶段聚焦**设备监控**（锂电池 BMS / 光伏 MPPT / DCDC 电源模块）。
+基于 **Raspberry Pi 5 + ROS2 Jazzy** 的飞艇机载数据中继节点，当前阶段聚焦**设备监控**（锂电池 BMS / 光伏 MPPT / DCDC 电源模块 / LoRa 温压 / 飞控遥测）。
 
 ## 系统定位
 
-伴飞电脑作为**机载数据中继节点**，通过 CAN 总线接收各电源设备数据，解析后统一经串口数传下传给地面 Qt 上位机：
+伴飞电脑作为**机载数据中继节点**，通过双 CAN 总线接收各电源设备数据，经 LoRa 485 采集温压、经 MAVROS 获取飞控遥测，解析后统一以 JSON 帧经**数传网口 UDP**（主通道，L33 数传透传至地面）与串口（调试通道）双路冗余下传，并可经 4G MQTT 上云：
 
 ```
-  MPPT ──┐
-  BMS  ──┼── CAN总线 (SocketCAN can0, 250kbps, 扩展帧) ──► 树莓派5 ──► 串口数传 ──► Qt上位机
-  DCDC ──┘                                               (airship_* 节点)   (JSON帧)
+  MPPT×2 ─┐ can0 (SocketCAN, 250kbps)
+  DCDC   ─┤            ┌─► 数传网口 UDP:20000 ─► L33 数传 ─► 地面站 (192.168.10.x)
+          │  树莓派5   │
+  主BMS  ─┤ can1 (500kbps) └─► 串口(调试通道) ─► Qt 上位机
+          │ (airship_* 节点) ─► 4G MQTT(TLS:8883) ─► EMQX Cloud ─► web dashboard
+  LoRa温压 ─ RS485(/dev/airship_485)   飞控 ─ MAVROS(UDP:14550@10.41.10.x)
+  12S备用BMS ─ RS485(/dev/airship_backup_bms)
 ```
 
 ## 软件包结构
 
 ```
 src/
-├── airship_msgs/        # 设备监控消息定义 (BmsStatus/MpptStatus/DcdcStatus/BackupBmsStatus/DeviceAlert)
-├── airship_can/         # SocketCAN 抽象层 (收发帧)
+├── airship_msgs/        # 设备监控消息定义 (11 msg + 2 srv, 独立包避免循环依赖)
+├── airship_can/         # SocketCAN 抽象层 (互斥锁线程安全 + 非阻塞收发)
 ├── airship_utils/       # 可测工具库 (CAN解析/单位换算/限幅, 含 gtest 单测)
-├── airship_bms/         # 主锂电池 BMS 驱动节点 (CAN)
+├── airship_bms/         # 主锂电池 BMS 驱动节点 (CAN1, 102串, bms_ems DBC)
 ├── airship_backup_bms/  # 12S 备用电源 BMS 驱动节点 (串口, 北辰协议 V1.4)
-├── airship_mppt/        # MPPT 驱动节点
-├── airship_dcdc/        # DCDC 驱动节点
-├── airship_monitor/     # 设备监控聚合节点 (告警/看门狗)
-├── airship_link/        # 串口数传链路节点 (JSON 下传)
+├── airship_mppt/        # MPPT 驱动节点 (CAN0, 双设备 01主/02副)
+├── airship_dcdc/        # DCDC 驱动节点(仅监控) + dcdc_hold 独立保活进程
+├── airship_lora/        # LoRa 温压采集节点 (RS485 Modbus RTU, 6 节点)
+├── airship_fc/          # 飞控监控节点 (MAVROS: 姿态/EKF/GPS/ESC 遥测)
+├── airship_monitor/     # 设备监控聚合节点 (告警去重/看门狗)
+├── airship_safety/      # 安全仲裁节点 (DCDC+BMS+备用BMS 三判据, safe_to_control)
+├── airship_link/        # 数传链路节点 (JSON 打包, 串口+UDP 双发)
+├── airship_cloud/       # 4G 上云节点 (MQTT/TLS, 密码经环境变量注入)
 └── airship_bringup/     # launch + 参数配置 (集中管理)
 ```
 
@@ -33,14 +41,15 @@ src/
 ### 环境
 
 - 树莓派5 + Ubuntu 24.04 LTS + ROS2 Jazzy
-- USB-CAN 适配器 → SocketCAN 接口 `can0`（250kbps）
-- 串口数传模块（默认 `/dev/ttyUSB0`, 115200 baud）
+- 微雪 RS232-RS485-CAN 扩展板 → `can0`（MCP2515, 250kbps, MPPT/DCDC）+ `can1`（MCP2518FD, 500kbps, 主 BMS）
+- 数传 L33 经网口接入（UDP 下传至地面站 192.168.10.200:20000）；串口通道为调试用
 
 ### 构建
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-colcon build
+# 【强制单线程】本机为 4 核低配机, 并行编译会把 CPU 打满导致 SSH 假死/系统冻结
+MAKEFLAGS="-j1" colcon build --parallel-workers 1
 source install/setup.bash
 ```
 
@@ -156,7 +165,7 @@ colcon test-result --verbose
 - **link_node 写失败日志**：串口写入失败节流告警
 - **dcdc_hold 加固**：`strtod/strtol` 校验非法环境变量回退默认；send 返回值检查
 - **MQTT 密码防暴露**：`cloud_node` 支持 `MQTT_PASSWORD` 环境变量，脚本不再经命令行传密码
-- **install_production.sh 参数 bug**：`--can 250000` 现可正确消费波特率
+- **install_production.sh 参数 bug**：`--can/--can0/--can1 <波特率>` 现写入 `/etc/default/airship-can` 真正生效（旧实现仅赋值从未消费，静默无效）；can0/can1 波特率单一配置源化
 - **airship_bringup package.xml**：补充 `airship_safety/fc/cloud/mavros` 的 exec_depend
 
 ### 高级（健壮性/一致性修复）
