@@ -3,10 +3,10 @@
 
 bms_node:
   ros__parameters:
-    # CAN 接口名: 102S 主电源 BMS(500kbps) 接微雪扩展板 CAN1(MCP2518FD),
-    # 与 can0 的 MPPT/DCDC(250kbps) 分通道(波特率不同不可共线)。
-    # 注意: BMS 设备侧端子名为"CAN0"(COM-PCS PIN4/5), 系统接口名是 can1, 勿混淆。
-    can_interface: "can1"
+    # CAN 接口名: BMS / MPPT1 / MPPT2 / DCDC 统一接入 can0, 波特率统一 250kbps
+    # (原设计 BMS 500k 接 can1/MCP2518FD, 现改为全部 250k 共线 can0/MCP2515,
+    #  注意: BMS 设备波特率需与 250k 一致, 否则无法与 MPPT/DCDC 共线)
+    can_interface: "can0"
     # 电池单体串数 (三元锂 102 串)
     cell_count: 102
     # 无数据超时 (s): 超过该时长未收到任何有效帧, 兜底发布 online=false
