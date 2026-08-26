@@ -10,16 +10,30 @@ namespace airship_bms
 
 using airship_utils::get_u16_le;
 
-// BattInfo02: 总压(0.1V)/总电流(0.1A,-100A偏移)/SOC(0.1%)/RealSoc(0.1%)
+namespace
+{
+// BattInfo02 的 16 位信号为 Motorola(大端)布局: 高字节在前。
+// (与 parse_cell_voltage 的 12-bit Motorola 同源; 曾误用 get_u16_le 小端导致
+//  总压/SOC 解析 ×1.53 错误, 2026-08-26 实机对照 PDU 面板 386V/43% 确认大端。)
+uint16_t u16_be(const uint8_t * data, size_t offset)
+{
+  return static_cast<uint16_t>((data[offset] << 8) | data[offset + 1]);
+}
+}  // namespace
+
+// BattInfo02: 总压(0.1V)/总电流(0.1A,-1000A偏移)/SOC(0.1%)/RealSoc(0.1%) — 大端
+// (DBC L474: BattCurr : 23|16@0+ (0.1,-1000) [-1000|1000] "A" — 偏移为 -1000 非 -100;
+//  实机静置帧 0F 16 27 10 01 AC 01 8A: raw=0x2710=10000, 10000×0.1-1000=0A ✓;
+//  误用 -100 会得到 900A — 正是 2026-08-26 地面站显示的 900A bug 根因)
 void parse_batt_info(const uint8_t * data, uint32_t len, BmsData & out)
 {
   if (len < 8) {
     return;
   }
-  out.pack_voltage = airship_utils::scale_u16(get_u16_le(data, 0), 0.1f);
-  out.pack_current = airship_utils::scale_u16(get_u16_le(data, 2), 0.1f) - 100.0f;
-  out.soc = airship_utils::scale_u16(get_u16_le(data, 4), 0.1f);
-  out.real_soc = airship_utils::scale_u16(get_u16_le(data, 6), 0.1f);
+  out.pack_voltage = airship_utils::scale_u16(u16_be(data, 0), 0.1f);
+  out.pack_current = airship_utils::scale_u16(u16_be(data, 2), 0.1f) - 1000.0f;
+  out.soc = airship_utils::scale_u16(u16_be(data, 4), 0.1f);
+  out.real_soc = airship_utils::scale_u16(u16_be(data, 6), 0.1f);
 }
 
 // BattInfo01: 运行状态(低4位)/连接状态(高4位)/绝缘电阻(kΩ)/报警级别

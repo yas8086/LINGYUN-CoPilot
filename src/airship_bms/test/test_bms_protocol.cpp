@@ -25,10 +25,26 @@ TEST(BmsProtocol, QueryFrameIds)
 
 TEST(BmsProtocol, ParseBattInfo)
 {
-  // 总压 367.2V, 电流 5.0A, SOC 85.0%, RealSoc 85.0%
-  // 小端: v raw 0x0E58, c raw 0x041A, soc raw 0x0352
+  // 2026-08-26 实机 candump 静置帧: 00001400 [8] 0F 16 27 10 01 AC 01 8A
+  // 总压 0x0F16=3862 → 386.2V; 电流 0x2710=10000 → 1000.0-1000=0A;
+  // SOC 0x01AC=428 → 42.8%; RealSoc 0x018A=394 → 39.4%
+  // (DBC L474 确认 BattCurr offset=-1000; 旧代码 -100 算出 900A 即当日 900A bug)
   const std::array<uint8_t, 8> d = {
-    0x58, 0x0E, 0x1A, 0x04, 0x52, 0x03, 0x52, 0x03,
+    0x0F, 0x16, 0x27, 0x10, 0x01, 0xAC, 0x01, 0x8A,
+  };
+  BmsData out;
+  airship_bms::parse_batt_info(d.data(), 8, out);
+  EXPECT_FLOAT_EQ(out.pack_voltage, 386.2f);
+  EXPECT_FLOAT_EQ(out.pack_current, 0.0f);
+  EXPECT_FLOAT_EQ(out.soc, 42.8f);
+  EXPECT_FLOAT_EQ(out.real_soc, 39.4f);
+}
+
+TEST(BmsProtocol, ParseBattInfoDischarge5A)
+{
+  // 放电 +5A: raw = (5+1000)/0.1 = 10050 = 0x2742(BE); 其余保持 367.2V/85%/85%
+  const std::array<uint8_t, 8> d = {
+    0x0E, 0x58, 0x27, 0x42, 0x03, 0x52, 0x03, 0x52,
   };
   BmsData out;
   airship_bms::parse_batt_info(d.data(), 8, out);

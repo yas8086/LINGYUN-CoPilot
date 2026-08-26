@@ -5,7 +5,7 @@
 // 注意: 帧 ID 为 SocketCAN 收到的 29 位扩展帧 ID(已做 0x1FFFFFFF 掩码)。
 //
 // 关键报文:
-//   0x001400 BattInfo02        总压/总电流/SOC/RealSoc (小端 u16)
+//   0x001400 BattInfo02        总压/总电流/SOC/RealSoc (大端 u16; 电流 0.1A,-1000A偏移)
 //   0x001300 BattInfo01        运行状态/连接状态/绝缘电阻/报警级别
 //   0x003000+ CellVoltage_XX   逐节单体电压 (每帧5节, 12位信号, 0.001V@+1V)
 //   0x001500 CellTempStatistic 温度统计 (max/min/avg, 1℃@-50)
@@ -41,7 +41,7 @@ struct BmsData
 {
   // 总状态 (BattInfo02)
   float pack_voltage = 0.0f;      // 总电压 [V]
-  float pack_current = 0.0f;      // 总电流 [A] (含 -100A 偏移)
+  float pack_current = 0.0f;      // 总电流 [A] (含 -1000A 偏移, raw×0.1-1000)
   float soc = 0.0f;               // SOC [%]
   float real_soc = 0.0f;          // 真实 SOC [%]
   // 运行/告警 (BattInfo01)
