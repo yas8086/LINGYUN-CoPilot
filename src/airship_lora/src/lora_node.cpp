@@ -67,6 +67,12 @@ public:
     alarm_low_ = this->declare_parameter("alarm_low", -10.0);
     alarm_high_ = this->declare_parameter("alarm_high", 60.0);
     resp_timeout_ms_ = this->declare_parameter("resp_timeout_ms", 200);
+    // 单寄存器读失败就地重试次数: RS485 半双工应答偶发截断(实测日志 已收0B/6B),
+    // 重试即可恢复, 避免把瞬态错误放大成"节点离线"
+    read_retries_ = this->declare_parameter("read_retries", 1);
+    // 离线去抖轮数: 连续失败达到该轮数才发布 online=0(下传列表才会移除该节点);
+    // 其间沿用上一帧有效值, 使地面站看到的节点名单稳定不闪断 (2026-08-27)
+    offline_debounce_rounds_ = this->declare_parameter("offline_debounce_rounds", 3);
     // 串口自动重连周期 (ms): 检测到串口掉线后按此周期尝试重连
     reconnect_ms_ = this->declare_parameter("reconnect_ms", 2000);
 
@@ -239,11 +245,20 @@ private:
       }
 
       // 所有节点都读温度, 保留压力节点的温度值
+      // 失败就地重试 read_retries_ 次: 单次应答截断/超时不应立即判离线
       const uint16_t taddr = static_cast<uint16_t>(taddr32);
       std::vector<uint8_t> resp;
       float temp = 0.0f;
       int raw = 0;
-      if (read_registers(taddr, 1, resp) && parse_temp_response(resp, slave_addr_, temp, raw)) {
+      bool temp_ok = false;
+      for (int attempt = 0; attempt <= read_retries_ && !temp_ok; ++attempt) {
+        temp_ok = read_registers(taddr, 1, resp) &&
+          parse_temp_response(resp, slave_addr_, temp, raw);
+        if (!temp_ok && attempt < read_retries_) {
+          continue;  // 下一轮尝试
+        }
+      }
+      if (temp_ok) {
         s.online = 1;
         s.raw = raw;
         s.temp_celsius = temp;
@@ -254,7 +269,15 @@ private:
       if (is_pressure) {
         const uint16_t paddr = static_cast<uint16_t>(paddr32);
         double pa = 0.0;
-        if (read_registers(paddr, 2, resp) && parse_pressure_response(resp, slave_addr_, pa)) {
+        bool press_ok = false;
+        for (int attempt = 0; attempt <= read_retries_ && !press_ok; ++attempt) {
+          press_ok = read_registers(paddr, 2, resp) &&
+            parse_pressure_response(resp, slave_addr_, pa);
+          if (!press_ok && attempt < read_retries_) {
+            continue;
+          }
+        }
+        if (press_ok) {
           s.online = 1;
           s.pressure_pa = pa;
         }
@@ -263,6 +286,27 @@ private:
       out.push_back(s);
     }
     return out;
+  }
+
+  // 离线去抖: 连续失败 < offline_debounce_rounds_ 轮时沿用上一帧有效值并视为在线,
+  // 只有持续失败才放行 online=0。避免单个寄存器读瞬态失败使地面站节点名单闪烁
+  // (2026-08-27 实测: 2 分钟内节点集合切换 53 次, 根因即单轮偶发失败)。
+  void apply_debounce(std::vector<LoraSampleData> & samples)
+  {
+    for (auto & s : samples) {
+      auto & d = deb_[s.node_id];
+      if (s.online != 0) {
+        d.last = s;
+        d.consec_fail = 0;
+        d.has = true;
+        continue;
+      }
+      ++d.consec_fail;
+      if (d.has && d.consec_fail < offline_debounce_rounds_) {
+        s = d.last;       // 沿用上一帧有效值, 本轮仍按有效上报
+        s.online = 1;
+      }
+    }
   }
 
   // 采集线程主循环
@@ -282,7 +326,8 @@ private:
         continue;
       }
 
-      const auto samples = poll_once();
+      auto samples = poll_once();
+      apply_debounce(samples);
       const double round_ms = std::chrono::duration<double, std::milli>(
         std::chrono::steady_clock::now() - round_t0_).count();
       // 统计本轮在线节点数
@@ -471,6 +516,8 @@ private:
   double alarm_low_;
   double alarm_high_;
   int resp_timeout_ms_;
+  int read_retries_;
+  int offline_debounce_rounds_;
   int reconnect_ms_;
 
   airship_link::SerialInterface serial_;
@@ -478,6 +525,15 @@ private:
   std::atomic<bool> serial_online_{false};  // 485 串口当前是否在线
   std::chrono::steady_clock::time_point last_reconnect_ok_time_{};  // 最近一次重连成功时刻(区分节点集体离线)
   int consecutive_fail_ = 0;                 // 连续全失败轮数(用于串口掉线判定)
+
+  // 每节点离线去抖状态: 最近一次有效采样 + 连续失败计数
+  struct NodeDeb
+  {
+    LoraSampleData last{};
+    int consec_fail = 0;
+    bool has = false;
+  };
+  std::map<int, NodeDeb> deb_;
   bool io_write_error_ = false;              // 本轮是否出现底层串口写失败(硬 I/O 信号)
   int reconnect_attempt_ = 0;                // 当前掉线周期内已重连次数(成功后清零)
   std::thread collect_thread_;

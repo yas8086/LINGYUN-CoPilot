@@ -233,18 +233,20 @@ std::string fc_to_json(const airship_msgs::msg::FlightStatus & msg)
 
 std::string lora_to_json(const airship_msgs::msg::LoRaSamples & msg)
 {
+  // 恒定名单输出: 所有配置节点始终出现在 JSON 中, 用 online(=valid) 区分本轮
+  // 是否有有效数据。此前仅输出在线节点, 导致地面站节点数随偶发读失败闪烁
+  // (2026-08-27 实测: 2 分钟内集合切换 53 次)。
   std::string s = "\"lora\":{\"nodes\":[";
   bool first = true;
   for (const auto & smp : msg.samples) {
-    if (smp.online == 0) {
-      continue;  // 仅打包在线节点
-    }
     if (!first) {
       s += ",";
     }
     first = false;
+    const char * v = smp.online != 0 ? "1" : "0";
     s += "{\"id\":" + std::to_string(smp.node_id) + ",";
-    s += "\"online\":1,";
+    s += std::string("\"online\":") + v + ",";   // 有效数据标志 (语义 = 原在线判定)
+    s += std::string("\"valid\":") + v + ",";    // 显式有效性 (与 online 同值, 供新解析用)
     s += "\"temp\":" + fmt_float(smp.temp_celsius) + ",";
     s += "\"pressure\":" + fmt_double(smp.pressure_pa) + ",";
     s += "\"alarm\":" + std::to_string(smp.alarm);

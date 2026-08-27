@@ -24,6 +24,7 @@
 #include <chrono>
 #include <cmath>
 #include <cstdio>
+#include <ctime>
 #include <filesystem>
 #include <fstream>
 #include <memory>
@@ -180,6 +181,32 @@ private:
   }
 
   // 初始化 CSV 日志
+  // 按天切分的 CSV 文件名 (tm 可注入, 便于单元测试跨天切分逻辑)
+  static std::string make_csv_path(const std::string & dir, const std::tm & lt)
+  {
+    char buf[16];
+    std::snprintf(buf, sizeof(buf), "%04d%02d%02d",
+      lt.tm_year + 1900, lt.tm_mon + 1, lt.tm_mday);
+    return dir + "/fc_status_" + buf + ".csv";
+  }
+
+  // 同上: 生成 YYYYMMDD 日期串
+  static std::string date_key(const std::tm & lt)
+  {
+    char buf[9];
+    std::snprintf(buf, sizeof(buf), "%04d%02d%02d",
+      lt.tm_year + 1900, lt.tm_mon + 1, lt.tm_mday);
+    return buf;
+  }
+
+  static std::tm local_now()
+  {
+    const std::time_t t = std::time(nullptr);
+    std::tm lt{};
+    localtime_r(&t, &lt);
+    return lt;
+  }
+
   void init_logger()
   {
     if (log_dir_.empty()) {
@@ -192,12 +219,19 @@ private:
       RCLCPP_WARN(this->get_logger(), "创建日志目录失败: %s, 禁用 CSV", ec.message().c_str());
       return;
     }
-    const std::string path = log_dir_ + "/fc_status.csv";
+    open_daily_csv(local_now());
+  }
+
+  // 打开当日 CSV 文件(追加模式), 空文件写表头
+  void open_daily_csv(const std::tm & lt)
+  {
+    const std::string path = make_csv_path(log_dir_, lt);
     csv_ofs_.open(path, std::ios::app);
     if (!csv_ofs_.is_open()) {
       RCLCPP_WARN(this->get_logger(), "打开 CSV 失败: %s", path.c_str());
       return;
     }
+    csv_open_date_ = date_key(lt);
     // 空文件时写表头
     if (csv_ofs_.tellp() == 0) {
       csv_ofs_
@@ -531,6 +565,18 @@ private:
     if (!csv_ofs_.is_open()) {
       return;
     }
+    // 跨天切分: 本地日期变化时关闭旧文件并打开新一天的文件
+    // (否则单文件追加无限增长; 按天分片后由 airship-disk-guard 按 mtime 清理)
+    const std::tm now_lt = local_now();
+    if (date_key(now_lt) != csv_open_date_) {
+      RCLCPP_INFO(this->get_logger(), "CSV 跨天切分: %s -> %s",
+        csv_open_date_.c_str(), date_key(now_lt).c_str());
+      csv_ofs_.close();
+      open_daily_csv(now_lt);
+      if (!csv_ofs_.is_open()) {
+        return;
+      }
+    }
     // 磁盘满/只读导致的写入失败检测: ofstream 写入失败会置 failbit 但 is_open() 仍为 true,
     // 若不检测会每帧静默失败。检测到后关闭并告警一次(节流), 避免高频重复失败消耗资源。
     if (!csv_ofs_.good()) {
@@ -570,6 +616,7 @@ private:
   int debounce_n_;
   std::string log_dir_;
   int csv_write_count_ = 0;
+  std::string csv_open_date_;   // 当前 CSV 文件对应的 YYYYMMDD (跨天切分判定)
 
   std::mutex mutex_;
   std::ofstream csv_ofs_;

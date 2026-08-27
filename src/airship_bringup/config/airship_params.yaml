@@ -3,9 +3,8 @@
 
 bms_node:
   ros__parameters:
-    # CAN 接口名: BMS / MPPT1 / MPPT2 / DCDC 统一接入 can0, 波特率统一 250kbps
-    # (原设计 BMS 500k 接 can1/MCP2518FD, 现改为全部 250k 共线 can0/MCP2515,
-    #  注意: BMS 设备波特率需与 250k 一致, 否则无法与 MPPT/DCDC 共线)
+    # CAN 接口: BMS / MPPT1 / MPPT2 / DCDC 四设备统一接入 can0, 波特率统一 250kbps。
+    # (2026-08-27 实测确认: 四设备均 250k, 共用一根总线; 曾短暂分接 can1 验证过链路)
     can_interface: "can0"
     # 电池单体串数 (三元锂 102 串)
     cell_count: 102
@@ -52,7 +51,9 @@ backup_bms_node:
     # 轮询周期 (ms)
     sample_period_ms: 1000
     # 单次响应超时 (ms)
-    resp_timeout_ms: 200
+    resp_timeout_ms: 250
+    # 单轮查询重试次数 (RS485 突发噪声打坏帧时就地重试, 2026-08-27)
+    resp_retries: 5
     # 串口自动重连周期 (ms)
     reconnect_ms: 2000
 

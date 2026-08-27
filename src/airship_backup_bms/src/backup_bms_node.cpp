@@ -58,6 +58,10 @@ public:
     sample_period_ms_ = this->declare_parameter("sample_period_ms", 1000);
     resp_timeout_ms_ = this->declare_parameter("resp_timeout_ms", 200);
     reconnect_ms_ = this->declare_parameter("reconnect_ms", 2000);
+    // 单轮查询重试次数: RS485 半双工线上偶发噪声会打坏个别帧(头部对齐但载荷/CRC
+    // 受扰, 2026-08-27 实测 8 轮仅 1 帧完整通过), 就地重试即可恢复, 避免整轮失败
+    // 触发"连续 N 轮无响应→掉线"误判抖动。
+    resp_retries_ = this->declare_parameter("resp_retries", 3);
     // 轮询周期下限保护: 过小会导致 485/串口无法及时响应
     if (sample_period_ms_ < 100) {
       RCLCPP_WARN(this->get_logger(), "sample_period_ms 过小(%d), 重置为 100", sample_period_ms_);
@@ -120,71 +124,36 @@ private:
     return false;
   }
 
-  // 读取完整响应帧: 先读头部定位长度, 再读数据+CRC。
-  // 返回响应帧(不含起始噪声); 失败返回空 vector。
-  std::vector<uint8_t> read_response()
+  // 从累计字节流中扫描全部候选起点(每个 0x57), 提取首个通过完整校验的帧。
+  // 背景: RS485 线上突发噪声会在帧间/帧内插入杂散字节, 严格的"逐段顺序读"
+  // 一旦对齐被破坏就整轮失败; 而帧内容本身可达率仍高(实测连续响应流),
+  // 扫描式提取可把噪声容错提升一个量级。
+  bool extract_valid_frame(
+    const std::vector<uint8_t> & acc, uint8_t cmd,
+    std::vector<uint8_t> & frame_out)
   {
-    std::vector<uint8_t> frame;
-    char buf[256];
-    const auto deadline = std::chrono::steady_clock::now() +
-      std::chrono::milliseconds(resp_timeout_ms_);
-
-    // 阶段1: 寻找起始字节 0x57 (跳过总线噪声/残留)
-    while (true) {
-      const auto now = std::chrono::steady_clock::now();
-      const int remaining = static_cast<int>(
-        std::chrono::duration_cast<std::chrono::milliseconds>(deadline - now).count());
-      if (remaining <= 0) {
-        return {};  // 超时未找到起始字节
-      }
-      const int n = serial_.read(buf, 1, remaining);
-      if (n < 0) {
-        return {};  // 读错误
-      }
-      if (n == 0) {
+    for (size_t i = 0; i + 9 <= acc.size(); ++i) {
+      if (acc[i] != airship_backup_bms::kRespStart) {
         continue;
       }
-      if (static_cast<uint8_t>(buf[0]) == 0x57) {
-        frame.push_back(static_cast<uint8_t>(buf[0]));
-        break;
+      const uint32_t dlen =
+        (static_cast<uint32_t>(acc[i + 5]) << 8) | acc[i + 6];
+      const size_t total = 7 + dlen + 2;
+      if (total > 1024 || acc.size() - i < total) {
+        continue;  // 长度异常或数据未到齐
+      }
+      std::vector<uint8_t> cand(acc.begin() + i, acc.begin() + i + total);
+      const uint8_t * data = nullptr;
+      uint32_t vdlen = 0;
+      if (parse_response_frame(
+          cand.data(), static_cast<uint32_t>(cand.size()), addr_, host_,
+          cmd, &data, &vdlen))
+      {
+        frame_out = std::move(cand);
+        return true;
       }
     }
-
-    // 阶段2: 读取剩余头部(地址/主机/读写/指令/长度 6 字节)
-    while (frame.size() < 7) {
-      const auto now = std::chrono::steady_clock::now();
-      const int remaining = static_cast<int>(
-        std::chrono::duration_cast<std::chrono::milliseconds>(deadline - now).count());
-      if (remaining <= 0) {
-        return {};
-      }
-      const int n = serial_.read(buf, 7 - frame.size(), remaining);
-      if (n <= 0) {
-        return {};
-      }
-      frame.insert(frame.end(), buf, buf + n);
-    }
-
-    // 阶段3: 读取数据 + CRC
-    const uint32_t dlen = (static_cast<uint32_t>(frame[5]) << 8) | frame[6];
-    const size_t total = 7 + dlen + 2;
-    if (total > sizeof(buf)) {
-      return {};  // 长度异常, 拒绝
-    }
-    while (frame.size() < total) {
-      const auto now = std::chrono::steady_clock::now();
-      const int remaining = static_cast<int>(
-        std::chrono::duration_cast<std::chrono::milliseconds>(deadline - now).count());
-      if (remaining <= 0) {
-        return {};
-      }
-      const int n = serial_.read(buf, total - frame.size(), remaining);
-      if (n <= 0) {
-        return {};
-      }
-      frame.insert(frame.end(), buf, buf + n);
-    }
-    return frame;
+    return false;
   }
 
   // 发送读请求并校验响应, 成功返回 true
@@ -192,25 +161,50 @@ private:
   bool query(uint8_t cmd, BackupBmsData & out, PollKind kind)
   {
     const auto req = build_read_request(addr_, host_, cmd);
-    serial_.flush_rx();
-    if (!serial_.write(reinterpret_cast<const char *>(req.data()), req.size())) {
-      return false;
-    }
-    const auto frame = read_response();
-    if (frame.empty()) {
-      return false;
-    }
-    const uint8_t * data = nullptr;
-    uint32_t dlen = 0;
-    if (!parse_response_frame(
-        frame.data(), static_cast<uint32_t>(frame.size()), addr_, host_, cmd, &data, &dlen))
-    {
-      return false;
-    }
-    switch (kind) {
-      case PollKind::kBasic: return parse_basic_info(data, dlen, out);
-      case PollKind::kVoltages: return parse_cell_voltages(data, dlen, out);
-      case PollKind::kTemps: return parse_cell_temps(data, dlen, out);
+    // 噪声容错: 每轮"flush→write→超时窗内累积全部字节→扫描提取有效帧",
+    // 失败再整体重试(最多 resp_retries_ 次)。扫描式提取配合多轮累积,
+    // 对 RS485 突发噪声帧内/帧间插入杂散字节的场景(2026-08-27 实测)容错最强。
+    for (int attempt = 0; attempt <= resp_retries_; ++attempt) {
+      serial_.flush_rx();
+      if (!serial_.write(reinterpret_cast<const char *>(req.data()), req.size())) {
+        return false;
+      }
+      const auto deadline = std::chrono::steady_clock::now() +
+        std::chrono::milliseconds(resp_timeout_ms_);
+      std::vector<uint8_t> acc;
+      char buf[64];
+      while (std::chrono::steady_clock::now() < deadline) {
+        const int remaining = static_cast<int>(
+          std::chrono::duration_cast<std::chrono::milliseconds>(deadline -
+          std::chrono::steady_clock::now()).count());
+        const int n = serial_.read(buf, sizeof(buf), remaining);
+        if (n < 0) {
+          break;
+        }
+        if (n > 0) {
+          acc.insert(acc.end(), buf, buf + n);
+          std::vector<uint8_t> frame;
+          if (extract_valid_frame(acc, cmd, frame)) {
+            const uint8_t * data = nullptr;
+            uint32_t dlen = 0;
+            if (!parse_response_frame(
+                frame.data(), static_cast<uint32_t>(frame.size()), addr_,
+                host_, cmd, &data, &dlen))
+            {
+              break;  // 理论不可达: extract 已通过同一校验
+            }
+            switch (kind) {
+              case PollKind::kBasic:
+                return parse_basic_info(data, dlen, out);
+              case PollKind::kVoltages:
+                return parse_cell_voltages(data, dlen, out);
+              case PollKind::kTemps:
+                return parse_cell_temps(data, dlen, out);
+            }
+            return false;
+          }
+        }
+      }
     }
     return false;
   }
@@ -308,6 +302,7 @@ private:
   uint8_t host_;
   int sample_period_ms_;
   int resp_timeout_ms_;
+  int resp_retries_;
   int reconnect_ms_;
 
   airship_link::SerialInterface serial_;
