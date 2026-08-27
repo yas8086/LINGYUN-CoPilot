@@ -29,9 +29,11 @@ case "$ACTION" in
   up)
     # ---------- can0 : 经典 CAN (MPPT/DCDC @ 250k) ----------
     if ip link show can0 >/dev/null 2>&1; then
-        ip link set can0 up type can bitrate "$CAN0_BITRATE"
+        # restart-ms=100 : BUS-OFF 后 100ms 内内核自动重启控制器,
+        # 避免瞬时强噪声(如带电插拔)把接口打死后永不自愈 (2026-08-27 实测教训)
+        ip link set can0 up type can bitrate "$CAN0_BITRATE" restart-ms 100
         ip link set can0 txqueuelen 65536
-        log "can0 up (bitrate=$CAN0_BITRATE)"
+        log "can0 up (bitrate=$CAN0_BITRATE restart-ms=100)"
     else
         log "can0 不存在，跳过"
     fi
@@ -39,11 +41,11 @@ case "$ACTION" in
     # ---------- can1 : CAN FD (预留/BMS) ----------
     if ip link show can1 >/dev/null 2>&1; then
         if [ "$FD_ON" = "1" ]; then
-            ip link set can1 up type can bitrate "$CAN1_BITRATE" dbitrate "$DBITRATE" fd on
-            log "can1 up (bitrate=$CAN1_BITRATE dbitrate=$DBITRATE fd=on)"
+            ip link set can1 up type can bitrate "$CAN1_BITRATE" dbitrate "$DBITRATE" fd on restart-ms 100
+            log "can1 up (bitrate=$CAN1_BITRATE dbitrate=$DBITRATE fd=on restart-ms=100)"
         else
-            ip link set can1 up type can bitrate "$CAN1_BITRATE"
-            log "can1 up (bitrate=$CAN1_BITRATE fd=off)"
+            ip link set can1 up type can bitrate "$CAN1_BITRATE" restart-ms 100
+            log "can1 up (bitrate=$CAN1_BITRATE fd=off restart-ms=100)"
         fi
         ip link set can1 txqueuelen 65536
     else

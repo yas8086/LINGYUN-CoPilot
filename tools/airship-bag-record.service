@@ -16,8 +16,15 @@ Type=simple
 User=lingyun01
 Group=lingyun01
 Environment=BAG_DIR=/home/lingyun01/bags
-# 每次启动生成独立时间戳目录, 便于事后按时间定位
-ExecStart=/bin/bash -c 'source /opt/ros/jazzy/setup.bash && source /home/lingyun01/LINGYUN-CoPilot/install/setup.bash && mkdir -p ${BAG_DIR} && exec ros2 bag record -a -o ${BAG_DIR}/$(date +%Y%m%d_%H%M%S) --storage sqlite3'
+# 关键: 必须与生产节点同域(ROS_DOMAIN_ID=5), 否则在默认 domain0 上"成功启动却零数据"
+# (2026-08-27 排障实证: 录制器仅订阅到自身 /rosout, bags 目录 28KB 恒定不动)
+Environment=ROS_DOMAIN_ID=5
+Environment=RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+# 每次启动生成独立时间戳目录, 便于事后按时间定位。
+# 关键: systemd 会先把 ExecStart 中的 '%' 按自己的转义符展开(曾把 %m 展开成
+#   machine-id 导致输出路径错乱、数据落到嵌套垃圾目录), 故日期格式必须写 '%%'。
+# 2026-08-27 修复: 输出目录由此前 /bags//etc/systemd/system<machine-id>/... 修正。
+ExecStart=/bin/bash -c 'source /opt/ros/jazzy/setup.bash && source /home/lingyun01/LINGYUN-CoPilot/install/setup.bash && mkdir -p ${BAG_DIR} && exec ros2 bag record -a -o ${BAG_DIR}/$(date +%%Y%%m%%d_%%H%%M%%S) --storage sqlite3'
 Restart=always
 RestartSec=5
 TimeoutStartSec=120

@@ -9,7 +9,24 @@
 #   - copytruncate: 节点持续写文件时也能安全清理(先复制再截断)
 #   - 每日自动执行(logrotate 由系统 cron 调度)
 #   - su: ~/.ros/log 属于普通用户, 需以该用户身份执行轮转(root 无法直接处理)
+#
+# 注: logrotate 不支持 ** 递归通配; ros2 launch 的日志位于两层布局
+#   ~/.ros/log/*.log        (旧式/直接文件)
+#   ~/.ros/log/<run-id>/*.log (每次启动的 launch.log 等, 2026-08-27 修复单层 glob 匹配不到的问题)
+# 更深层残留由 airship-disk-guard.sh 按 mtime 清理。
 /home/lingyun01/.ros/log/*.log {
+    su lingyun01 lingyun01
+    daily
+    size 10M
+    rotate 5
+    copytruncate
+    missingok
+    notifempty
+    compress
+    delaycompress
+}
+
+/home/lingyun01/.ros/log/*/*.log {
     su lingyun01 lingyun01
     daily
     size 10M

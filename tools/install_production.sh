@@ -131,18 +131,39 @@ install_watchdog() {
   echo "      注意: 请确认 /boot/firmware/config.txt 已含 'dtparam=watchdog=on'(见 rpi5_ubuntu2404_config.txt)"
 }
 
-# ============ 6c. rosbag 数据记录 + 按期清理 ============
+# ============ 6c. rosbag 数据记录 ============
 install_bag_record() {
   local bag_dir
   bag_dir="${BAG_DIR:-/home/lingyun01/bags}"
   echo "[6c] 配置 rosbag 后台记录(目录: $bag_dir)..."
   install -m 644 "$SCRIPT_DIR/airship-bag-record.service" /etc/systemd/system/airship-bag-record.service
-  install -m 644 "$SCRIPT_DIR/airship-bag-clean.service" /etc/systemd/system/airship-bag-clean.service
-  install -m 644 "$SCRIPT_DIR/airship-bag-clean.timer" /etc/systemd/system/airship-bag-clean.timer
   systemctl daemon-reload
-  systemctl enable airship-bag-clean.timer >/dev/null 2>&1 || true
+  # 旧版 bag-clean.service/timer 已被 airship-disk-guard 取代(见 [6d]), 统一退役
+  systemctl disable --now airship-bag-clean.timer >/dev/null 2>&1 || true
   systemctl enable airship-bag-record >/dev/null 2>&1 || true
-  echo "      已启用 rosbag 记录(随 device-monitor 启动)与每日清理"
+  echo "      已启用 rosbag 全量记录 (清理/水位由 airship-disk-guard 负责, 见 [6d])"
+}
+
+# ============ 6d. 磁盘守护(时间清理+水位删除+红线停录) ============
+install_disk_guard() {
+  echo "[6d] 配置磁盘守护 airship-disk-guard..."
+  install -m 755 "$SCRIPT_DIR/airship-disk-guard.sh" /usr/local/bin/airship-disk-guard.sh
+  install -m 644 "$SCRIPT_DIR/systemd/airship-disk-guard.service" /etc/systemd/system/airship-disk-guard.service
+  install -m 644 "$SCRIPT_DIR/systemd/airship-disk-guard.timer" /etc/systemd/system/airship-disk-guard.timer
+  systemctl daemon-reload
+  systemctl enable --now airship-disk-guard.timer
+  echo "      已启用磁盘守护: bags>3天/fc_csv>7天/roslog>7天时间清理,"
+  echo "            根分区 >=85% 删最旧bag, >=92% 红线停录, 回落 <=75% 自动恢复"
+}
+
+# ============ 6e. TF 卡 TRIM 维护(fstrim) ============
+install_trim() {
+  echo "[6e] 启用 fstrim 定时裁剪(TF 卡写放大维护)..."
+  if systemctl list-unit-files fstrim.timer >/dev/null 2>&1; then
+    systemctl enable --now fstrim.timer && echo "      fstrim.timer 已启用(每周裁剪)"
+  else
+    echo "      本机无 fstrim.timer(Utility 不存在), 跳过"
+  fi
 }
 
 # ============ 执行 ============
@@ -159,6 +180,8 @@ if [ "$#" -gt 0 ]; then
       --ntp) install_ntp; shift ;;
       --watchdog) install_watchdog; shift ;;
       --bag-record) install_bag_record; shift ;;
+      --disk-guard) install_disk_guard; shift ;;
+      --trim) install_trim; shift ;;
       --can|--can0)
         # 消费可选波特率参数(紧跟的数字), 否则使用环境变量/默认值
         case "${2:-}" in
@@ -200,6 +223,8 @@ else
   install_can
   install_watchdog
   install_bag_record
+  install_disk_guard
+  install_trim
 fi
 
 echo ""

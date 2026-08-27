@@ -1,0 +1,9 @@
+[Unit]
+Description=Lingyun Airship disk guard (time cleanup + watermark protect)
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/local/bin/airship-disk-guard.sh
+StandardOutput=journal
+StandardError=journal

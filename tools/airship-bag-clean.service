@@ -1,7 +1,12 @@
 # 灵云01号伴飞电脑 — 清理过期 rosbag
 # 由 airship-bag-clean.timer 每日触发, 删除 BAG_DIR 下 3 天前的记录目录。
+#
+# ===== DEPRECATED (2026-08-27) =====
+# 本 unit 的职责已由 airship-disk-guard.sh/timer 接管(时间清理 + 水位删除 + 红线停录)。
+# 保留文件仅作历史参考, install_production.sh 不再安装/enable;
+# 若需回退: sudo ./tools/install_production.sh 重装或手动 cp + enable 本文件。
 [Unit]
-Description=Clean old airship rosbag files
+Description=Clean old airship rosbag files (DEPRECATED, replaced by airship-disk-guard)
 
 [Service]
 Type=oneshot
