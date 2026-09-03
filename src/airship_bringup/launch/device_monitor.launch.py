@@ -8,6 +8,8 @@
   - backup_bms_node (airship_backup_bms): 12S 备用电源 BMS 驱动 (串口)
   - mppt_node  (airship_mppt): MPPT 光伏控制器驱动
   - dcdc_node  (airship_dcdc): DCDC 电源模块驱动
+  - lora_node  (airship_lora): LoRa 温度/压力采集 (485 Modbus)
+  - bladder_bridge_node (airship_fc): 气囊压差桥 (LoRa -> uXRCE-DDS -> PX4)
   - monitor_node (airship_monitor): 设备监控聚合/告警
   - safety_node (airship_safety): 安全仲裁, 发布 safe_to_control
   - link_node  (airship_link): 串口数传链路 (下传 Qt 上位机)
@@ -135,6 +137,18 @@ def generate_launch_description():
         respawn_delay=2.0,
     )
 
+    # 气囊压差桥: 订阅 /lora/samples, 发布 px4_msgs/AirshipBladderPressure
+    # 到 /fmu/in/airship_bladder_pressure (经 MicroXRCEAgent 进 PX4, 见文档 08)
+    bladder_bridge_node = Node(
+        package='airship_fc',
+        executable='bladder_bridge_node',
+        name='bladder_bridge_node',
+        parameters=[params_file],
+        output='screen',
+        respawn=True,
+        respawn_delay=2.0,
+    )
+
     monitor_node = Node(
         package='airship_monitor',
         executable='monitor_node',
@@ -185,6 +199,7 @@ def generate_launch_description():
         mppt2_node,
         dcdc_node,
         lora_node,
+        bladder_bridge_node,
         monitor_node,
         safety_node,
         link_node,

@@ -82,11 +82,21 @@ lora_node:
     # LoRa 节点配置: node_ids 与 node_types 一一对应
     #   type: "temperature" -> 读温度寄存器
     #         "pressure"    -> 读温度 + 压力寄存器
-    # 共 6 个节点: 1/2/3/4/5 温度探头, 6 压力+温度 (0x76C1 起逐节点 +1)
-    node_ids: [1, 2, 3, 4, 5, 6]
+    # 共 15 个节点 (2026-09-03 更新):
+    #   温度传感器 12 个: 1/2/3/4/5/6/7/8/9/10/11/12
+    #   压力传感器 4 个: 6/13/14/15 (自带温度读数), 安装位置:
+    #     6=左副囊, 13=左主囊, 14=右主囊, 15=右副囊
+    #     (截至 2026-09-03 尚未实机安装, 当前为台架测试数据)
+    #   注: 6 号同时存在温度传感器与压力传感器 (ID 重复但寄存器段不同:
+    #       温度走 0x76C1 段, 压力走 0x8EF9 段, 数据不冲突)
+    #   压力值为相对大气压的压差, 0 Pa 表示与大气压持平 (正常)
+    node_ids: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     node_types: [
       "temperature", "temperature", "temperature",
-      "temperature", "temperature", "pressure"]
+      "temperature", "temperature", "pressure",
+      "temperature", "temperature", "temperature",
+      "temperature", "temperature", "temperature",
+      "pressure", "pressure", "pressure"]
     # 采集周期 (ms)
     sample_period_ms: 2000
     # 温度/压力寄存器起始地址
@@ -101,6 +111,18 @@ lora_node:
     resp_timeout_ms: 200
     # 串口自动重连周期 (ms): 检测到串口掉线后按此周期尝试重连
     reconnect_ms: 2000
+
+bladder_bridge_node:
+  ros__parameters:
+    # 气囊压差 LoRa node_id -> 固定槽位映射 (顺序即槽位, 不可重排):
+    #   [左副囊, 左主囊, 右主囊, 右副囊] = [6, 13, 14, 15]
+    bladder_node_ids: [6, 13, 14, 15]
+    # 输入: LoRa 一轮采集 (lora_node 2s 周期发布)
+    sub_topic: "/lora/samples"
+    # 输出: PX4 uXRCE-DDS TOFC 话题
+    # (PX4 侧须在 uxrce_dds_client/dds_topics.yaml 的 subscriptions 段
+    #  登记同名条目, 见 docs/lingyun01/PX4飞控对接文档/08_气囊压差uXRCE-DDS同步协议.md)
+    pub_topic: "/fmu/in/airship_bladder_pressure"
 
 monitor_node:
   ros__parameters:

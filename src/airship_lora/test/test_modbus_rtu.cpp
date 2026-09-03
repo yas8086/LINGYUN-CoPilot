@@ -80,6 +80,15 @@ TEST(ModbusRtuTest, ParsePressure)
   EXPECT_DOUBLE_EQ(pa, 1000000.0);
 }
 
+TEST(ModbusRtuTest, ParsePressureNegative)
+{
+  // 压差为有符号 32 位: 0xFFFFFFEF = -17 Pa (实测 15 号节点)
+  const auto resp = with_crc({0x01, 0x04, 0x04, 0xFF, 0xFF, 0xFF, 0xEF});
+  double pa = 0.0;
+  ASSERT_TRUE(parse_pressure_response(resp, 1, pa));
+  EXPECT_DOUBLE_EQ(pa, -17.0);
+}
+
 TEST(ModbusRtuTest, ParseRejectWrongSlaveAddr)
 {
   // 从机地址不匹配(期望 1, 实际 2) -> 拒绝, 防 485 串扰

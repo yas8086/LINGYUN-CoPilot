@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>px4_msgs</name>
+  <version>0.1.0</version>
+  <description>灵云01号 PX4 uXRCE-DDS 桥接定制消息 (仅含灵云定制消息, 非官方 px4_msgs 全集。
+    注意: 包名 px4_msgs 是 DDS 类型名匹配(px4_msgs::msg::dds_::XXX_)的硬约束, 不可改名;
+    将来若需官方 PX4 消息, 必须把官方 msg 合入本包, 禁止再引入 PX4/px4_msgs 官方仓库(同名冲突))</description>
+  <maintainer email="dev@lingyun.local">Lingyun Airship Team</maintainer>
+  <license>Proprietary</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <build_depend>rosidl_default_generators</build_depend>
+  <exec_depend>rosidl_default_runtime</exec_depend>
+  <member_of_group>rosidl_interface_packages</member_of_group>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

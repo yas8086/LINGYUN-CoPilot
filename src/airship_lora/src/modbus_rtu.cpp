@@ -86,7 +86,10 @@ bool parse_pressure_response(
   }
   const uint32_t high = static_cast<uint32_t>((resp[3] << 8) | resp[4]);
   const uint32_t low = static_cast<uint32_t>((resp[5] << 8) | resp[6]);
-  pressure_pa = static_cast<double>((high << 16) | low);
+  // 压力为相对大气压的压差, 是有符号 32 位 (实测 15 号节点 0xFFFFFFEF = -17 Pa,
+  // 按无符号解析会得到 4294967279, 误判为正大值)
+  const int32_t signed_pa = static_cast<int32_t>((high << 16) | low);
+  pressure_pa = static_cast<double>(signed_pa);
   return true;
 }
 
