@@ -4,6 +4,9 @@ Description=Lingyun Airship disk guard (time cleanup + watermark protect)
 [Service]
 Type=oneshot
 User=root
+# BAG_DIR 由 install_production.sh 安装时注入(与 airship-bag-record.service 同源,
+# 防自定义目录时录制/清理不同盘) — 此默认值仅直接手用时生效
+Environment=BAG_DIR=/home/lingyun01/bags
 ExecStart=/usr/local/bin/airship-disk-guard.sh
 StandardOutput=journal
 StandardError=journal

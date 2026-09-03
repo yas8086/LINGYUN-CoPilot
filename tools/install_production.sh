@@ -92,7 +92,9 @@ install_logrotate() {
 install_ntp() {
   echo "[5/7] 配置 NTP 时间同步..."
   if command -v timedatectl >/dev/null 2>&1; then
-    timedatectl set-ntp true && echo "      已开启 NTP 自动同步 (timedatectl)"
+    # set -e 下失败不应中断部署(仅时间同步退化为手动), 显式兜底 (2026-09-03)
+    timedatectl set-ntp true && echo "      已开启 NTP 自动同步 (timedatectl)" \
+      || echo "      set-ntp 失败(timedated 异常?), 请手动检查时间同步"
   else
     echo "      未找到 timedatectl, 跳过(可手动安装 chrony/systemd-timesyncd)"
   fi
@@ -136,7 +138,11 @@ install_bag_record() {
   local bag_dir
   bag_dir="${BAG_DIR:-/home/lingyun01/bags}"
   echo "[6c] 配置 rosbag 后台记录(目录: $bag_dir)..."
-  install -m 644 "$SCRIPT_DIR/airship-bag-record.service" /etc/systemd/system/airship-bag-record.service
+  # BAG_DIR 注入 service(2026-09-03): 原硬编码 /home/lingyun01/bags, 脚本参数与
+  # 实际录制目录不一致时误导(disk-guard 默认清理 /home/lingyun01/bags 也不同源)
+  sed "s|^Environment=BAG_DIR=.*|Environment=BAG_DIR=${bag_dir}|" \
+    "$SCRIPT_DIR/airship-bag-record.service" \
+    > /etc/systemd/system/airship-bag-record.service
   systemctl daemon-reload
   # 旧版 bag-clean.service/timer 已被 airship-disk-guard 取代(见 [6d]), 统一退役
   systemctl disable --now airship-bag-clean.timer >/dev/null 2>&1 || true
@@ -146,9 +152,14 @@ install_bag_record() {
 
 # ============ 6d. 磁盘守护(时间清理+水位删除+红线停录) ============
 install_disk_guard() {
+  local bag_dir
+  bag_dir="${BAG_DIR:-/home/lingyun01/bags}"
   echo "[6d] 配置磁盘守护 airship-disk-guard..."
   install -m 755 "$SCRIPT_DIR/airship-disk-guard.sh" /usr/local/bin/airship-disk-guard.sh
-  install -m 644 "$SCRIPT_DIR/systemd/airship-disk-guard.service" /etc/systemd/system/airship-disk-guard.service
+  # BAG_DIR 与 [6c] 同源注入, 保证录制目录与清理目录一致
+  sed "s|^Environment=BAG_DIR=.*|Environment=BAG_DIR=${bag_dir}|" \
+    "$SCRIPT_DIR/systemd/airship-disk-guard.service" \
+    > /etc/systemd/system/airship-disk-guard.service
   install -m 644 "$SCRIPT_DIR/systemd/airship-disk-guard.timer" /etc/systemd/system/airship-disk-guard.timer
   systemctl daemon-reload
   systemctl enable --now airship-disk-guard.timer
@@ -164,6 +175,16 @@ install_trim() {
   else
     echo "      本机无 fstrim.timer(Utility 不存在), 跳过"
   fi
+}
+
+# ============ 6f. apt 缓存与内核自动清理 ============
+install_apt_maintenance() {
+  echo "[6f] 配置 apt 自动清理(缓存 autoclean + 孤儿依赖/旧内核 autoremove)..."
+  mkdir -p /etc/apt/apt.conf.d
+  install -m 644 "$SCRIPT_DIR/apt/99-airship-apt-maintenance" \
+    /etc/apt/apt.conf.d/99-airship-apt-maintenance
+  echo "      已启用: AutocleanInterval=7天 + 升级后自动清孤儿依赖"
+  echo "      (每日 apt autoremove 由 airship-disk-guard 执行, 见 [6d])"
 }
 
 # ============ 执行 ============
@@ -182,6 +203,7 @@ if [ "$#" -gt 0 ]; then
       --bag-record) install_bag_record; shift ;;
       --disk-guard) install_disk_guard; shift ;;
       --trim) install_trim; shift ;;
+      --apt-maintenance) install_apt_maintenance; shift ;;
       --can|--can0)
         # 消费可选波特率参数(紧跟的数字), 否则使用环境变量/默认值
         case "${2:-}" in
@@ -225,6 +247,7 @@ else
   install_bag_record
   install_disk_guard
   install_trim
+  install_apt_maintenance
 fi
 
 echo ""

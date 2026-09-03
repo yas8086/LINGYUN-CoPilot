@@ -62,6 +62,18 @@ if [ -d "$ROS_LOG_DIR" ]; then
   find "$ROS_LOG_DIR" -mindepth 1 -maxdepth 1 -type d -empty -delete 2>/dev/null || true
 fi
 
+# ===== [每日一次维护] 系统包自动清理 (2026-09-03) =====
+# apt-get autoremove: 清除旧内核与孤儿依赖(Ubuntu 保留 1 个旧内核, unattended-upgrades
+# 的 Remove-Unused 只在升级动作时触发, 时机不可控, 此处每日补刀)。
+# 当日标记防重复(每次 timer 触发 10min 一轮); --purge 连配置一起清; 秒级超时保护。
+APT_MAINT_FLAG="/tmp/.airship-apt-maint-$(date +%Y%m%d)"
+if [ ! -f "$APT_MAINT_FLAG" ] && command -v apt-get >/dev/null 2>&1; then
+  if timeout 120 apt-get autoremove --purge -y >/dev/null 2>&1; then
+    touch "$APT_MAINT_FLAG"
+    log "INFO 每日维护: apt autoremove --purge 已执行"
+  fi
+fi
+
 # ===== [水位控制] =====
 P=$(usage_pct)
 

@@ -1,0 +1,18 @@
+// 灵云01号伴飞电脑 — apt 自动清理策略 (2026-09-03)
+//
+// 背景: 默认 10periodic/20auto-upgrades 中 AutocleanInterval=0(禁用), 下载过的
+// .deb 永久滞留 /var/cache/apt/archives(实测 72M, 大版本升级后可达数百 MB);
+// 无人升级也不清理孤儿依赖。本文件启用周期清理, 与 disk-guard 水位机制互补。
+//
+// 生效: apt-daily-upgrade.timer 每日触发时读取(无需重启服务)。
+// 仓库同步: tools/apt/99-airship-apt-maintenance (由 install_production.sh 安装)
+
+// 每 7 天自动清除过时(已可被新版取代/不再可下载)的 .deb 缓存
+APT::Periodic::AutocleanInterval "7";
+
+// 无人值守升级后清除新产生的孤儿依赖包
+// (本机为纯设备监控用途、包集合稳定, 该策略安全)
+Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
+
+// 顺带启用无人升级自身的 autoremove(清旧内核依赖, Ubuntu 默认未开)
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
