@@ -157,46 +157,35 @@ public:
   }
 
 private:
-  // 初始化异常检测规则 (阈值取自文档 07 安全阈值表)
+  // 初始化异常检测规则
+  // 规则表从 fc_logic::make_default_rules() 同源加载(2026-09-03 提取到纯逻辑库,
+  // 方向语义由单测 DefaultRulesBooleanDirection 锁定, 防再次写反 upper_side)
   void setup_alert_rules()
   {
-    rules_.push_back({"roll_deg", 20.0f, 30.0f, 45.0f, true});
-    rules_.push_back({"pitch_deg", 10.0f, 15.0f, 20.0f, true});
-    rules_.push_back({"yaw_rate", 10.0f, 20.0f, 30.0f, true});
-    rules_.push_back({"climb_rate", 3.0f, 5.0f, 8.0f, true});
-    rules_.push_back({"altitude_agl_high", 140.0f, 148.0f, 150.0f, true});
-    rules_.push_back({"altitude_agl_low", 3.0f, 2.0f, 1.0f, false});
-    rules_.push_back({"battery_voltage", 48.0f, 46.0f, 44.0f, false});
-    rules_.push_back({"battery_remaining", 30.0f, 20.0f, 10.0f, false});
-    // GPS 定位质量: fix_type < 3 (无 3D fix) 视为定位失效 (0=无GPS,1=NO_FIX,2=2D)
-    rules_.push_back({"gps_fix_loss", 3.0f, 3.0f, 3.0f, false});
-    // EKF 退化到位置锁定模式 (GPS 不可用) -> 定位精度骤降, 危急
-    rules_.push_back({"ekf_const_pos_mode", 1.0f, 1.0f, 1.0f, false});
-    // 卫星数过少 (低于 6 颗警告)-> 影响定位可靠性
-    rules_.push_back({"gps_satellites_low", 6.0f, 5.0f, 4.0f, false});
-    // 电机堵转: 任一电机输出>0.5 但转速≈0 (需 ESC 遥测数据, 否则跳过)
-    rules_.push_back({"motor_stuck", 0.5f, 0.5f, 0.5f, false});
+    for (const auto & r : fc_logic::make_default_rules()) {
+      AlertRule ar;
+      ar.name = r.name;
+      ar.warning = r.t.warning;
+      ar.critical = r.t.critical;
+      ar.emergency = r.t.emergency;
+      ar.upper_side = r.t.upper_side;
+      rules_.push_back(ar);
+    }
     // 去抖/告警状态与规则一一对应(状态与阈值参数分离存储)
     alert_states_.assign(rules_.size(), fc_logic::AlertState{});
   }
 
   // 初始化 CSV 日志
-  // 按天切分的 CSV 文件名 (tm 可注入, 便于单元测试跨天切分逻辑)
+  // 按天切分的 CSV 文件名(逻辑提取到 fc_logic, 便于单测; tm 可注入)
   static std::string make_csv_path(const std::string & dir, const std::tm & lt)
   {
-    char buf[16];
-    std::snprintf(buf, sizeof(buf), "%04d%02d%02d",
-      lt.tm_year + 1900, lt.tm_mon + 1, lt.tm_mday);
-    return dir + "/fc_status_" + buf + ".csv";
+    return fc_logic::csv_path_for_date(dir, lt);
   }
 
   // 同上: 生成 YYYYMMDD 日期串
   static std::string date_key(const std::tm & lt)
   {
-    char buf[9];
-    std::snprintf(buf, sizeof(buf), "%04d%02d%02d",
-      lt.tm_year + 1900, lt.tm_mon + 1, lt.tm_mday);
-    return buf;
+    return fc_logic::csv_date_key(lt);
   }
 
   static std::tm local_now()
@@ -219,17 +208,24 @@ private:
       RCLCPP_WARN(this->get_logger(), "创建日志目录失败: %s, 禁用 CSV", ec.message().c_str());
       return;
     }
-    open_daily_csv(local_now());
+    if (open_daily_csv(local_now())) {
+      RCLCPP_INFO(this->get_logger(), "CSV 数据日志已开启: %s", csv_path_.c_str());
+    } else {
+      RCLCPP_WARN(
+        this->get_logger(), "打开 CSV 失败(%s), 将在写帧路径周期重试",
+        make_csv_path(log_dir_, local_now()).c_str());
+    }
   }
 
-  // 打开当日 CSV 文件(追加模式), 空文件写表头
-  void open_daily_csv(const std::tm & lt)
+  // 打开当日 CSV 文件(追加模式), 空文件写表头; 成功返回 true。
+  // 静默设计(2026-09-03): 不打日志——write_csv 的 failbit 恢复路径每帧重试调用,
+  // 日志由调用方节流负责, 防重试期间告警风暴。
+  bool open_daily_csv(const std::tm & lt)
   {
-    const std::string path = make_csv_path(log_dir_, lt);
-    csv_ofs_.open(path, std::ios::app);
+    csv_path_ = make_csv_path(log_dir_, lt);
+    csv_ofs_.open(csv_path_, std::ios::app);
     if (!csv_ofs_.is_open()) {
-      RCLCPP_WARN(this->get_logger(), "打开 CSV 失败: %s", path.c_str());
-      return;
+      return false;
     }
     csv_open_date_ = date_key(lt);
     // 空文件时写表头
@@ -241,7 +237,7 @@ private:
         << "m0,m1,m2,m3,m4,m5,m6,m7\n";
       csv_ofs_.flush();
     }
-    RCLCPP_INFO(this->get_logger(), "CSV 数据日志已开启: %s", path.c_str());
+    return true;
   }
 
   void on_state(const mavros_msgs::msg::State::SharedPtr msg)
@@ -491,8 +487,9 @@ private:
     const char * level_str = (level == kLevelEmergency) ? "EMERGENCY" :
       (level == kLevelCritical) ? "CRITICAL" :
       (level == kLevelWarning) ? "WARNING" : "INFO";
+    // 日志阈值与消息字段一致(2026-09-03): 打 thresh 而非恒为 r.warning
     RCLCPP_WARN(this->get_logger(), "[FC][%s] %s = %.2f (threshold %.2f)",
-      level_str, r.name.c_str(), value, r.warning);
+      level_str, r.name.c_str(), value, thresh);
   }
 
   void publish_status()
@@ -562,27 +559,36 @@ private:
   // 写 CSV 日志
   void write_csv(const airship_msgs::msg::FlightStatus & msg)
   {
-    if (!csv_ofs_.is_open()) {
-      return;
-    }
-    // 跨天切分: 本地日期变化时关闭旧文件并打开新一天的文件
-    // (否则单文件追加无限增长; 按天分片后由 airship-disk-guard 按 mtime 清理)
+    // (重)打开条件前置(2026-09-03 修复高危项):
+    //   原实现 failbit 停写后 is_open()==false 直接 return, 跨天切分分支从此不可达,
+    //   一次磁盘满即永久静默停写(且与 disk-guard "水位回落自动恢复录制"的设计矛盾)。
+    //   现未打开或跨天都尝试(重)开, 打开失败(csv_open_date_ 不更新)下一帧继续重试,
+    //   磁盘恢复后自动续写当天的文件。
     const std::tm now_lt = local_now();
-    if (date_key(now_lt) != csv_open_date_) {
-      RCLCPP_INFO(this->get_logger(), "CSV 跨天切分: %s -> %s",
-        csv_open_date_.c_str(), date_key(now_lt).c_str());
+    if (!csv_ofs_.is_open() || date_key(now_lt) != csv_open_date_) {
+      const std::string old_date = csv_open_date_;
       csv_ofs_.close();
-      open_daily_csv(now_lt);
-      if (!csv_ofs_.is_open()) {
+      if (!open_daily_csv(now_lt)) {
+        RCLCPP_WARN_THROTTLE(
+          this->get_logger(), *this->get_clock(), 60000,
+          "CSV 文件打开失败(磁盘满/只读? log_dir=%s), 停止本帧写入, 每分钟重试",
+          log_dir_.c_str());
         return;
+      }
+      if (!old_date.empty() && old_date != csv_open_date_) {
+        RCLCPP_INFO(
+          this->get_logger(), "CSV 跨天切分: %s -> %s",
+          old_date.c_str(), csv_open_date_.c_str());
+      } else if (old_date.empty()) {
+        RCLCPP_INFO(this->get_logger(), "CSV 写入已恢复: %s", csv_path_.c_str());
       }
     }
     // 磁盘满/只读导致的写入失败检测: ofstream 写入失败会置 failbit 但 is_open() 仍为 true,
-    // 若不检测会每帧静默失败。检测到后关闭并告警一次(节流), 避免高频重复失败消耗资源。
+    // 若不检测会每帧静默失败。检测到后关闭(下一帧进入上方重开路径自动重试)并节流告警。
     if (!csv_ofs_.good()) {
       RCLCPP_WARN_THROTTLE(
         this->get_logger(), *this->get_clock(), 10000,
-        "CSV 日志写入失败(磁盘满或只读?), 已停止 CSV 记录(%s)", log_dir_.c_str());
+        "CSV 日志写入失败(磁盘满或只读?), 已停写并周期重试(log_dir=%s)", log_dir_.c_str());
       csv_ofs_.close();
       return;
     }
@@ -617,6 +623,7 @@ private:
   std::string log_dir_;
   int csv_write_count_ = 0;
   std::string csv_open_date_;   // 当前 CSV 文件对应的 YYYYMMDD (跨天切分判定)
+  std::string csv_path_;        // 当前 CSV 文件完整路径(日志用)
 
   std::mutex mutex_;
   std::ofstream csv_ofs_;

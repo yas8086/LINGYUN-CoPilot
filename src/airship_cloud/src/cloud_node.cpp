@@ -91,8 +91,9 @@ public:
       RCLCPP_INFO(this->get_logger(), "MQTT 连接已启动: %s:%d, tls=%s, topic=%s",
         host_.c_str(), port_, tls_enable_ ? "on" : "off", topic_.c_str());
     } else {
-      RCLCPP_WARN(this->get_logger(), "MQTT 连接启动失败");
+      RCLCPP_WARN(this->get_logger(), "MQTT 连接启动失败(4G/DNS 未就绪?), 将周期重试");
     }
+    last_connect_attempt_ = this->now();
 
     // 发送定时器
     tx_timer_ = this->create_wall_timer(
@@ -148,6 +149,17 @@ private:
     // 先检查连接再打包(与 link_node 的"先检查通道再打包"策略一致):
     // 4G 弱网断连是常态, 断连期间若仍先做 JSON 序列化+多段内存分配纯属浪费。
     if (!mqtt_->is_connected()) {
+      // 连接自愈(2026-09-03 修复高危项): 首次 connect 失败(开机时 4G 模块未就绪/
+      // DNS 解析失败是常态)后原先永不重试, 整个运行周期不上云只能重启进程恢复。
+      // 每 30s 节流重试 connect()(MqttClient::connect 幂等, 内部自带销毁重建)。
+      const auto now = this->now();
+      if ((now - last_connect_attempt_).seconds() >= 30.0) {
+        last_connect_attempt_ = now;
+        if (mqtt_->connect()) {
+          RCLCPP_INFO(this->get_logger(), "MQTT 重连已启动: %s:%d",
+            host_.c_str(), port_);
+        }
+      }
       RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 5000,
         "MQTT 未连接, 丢弃数据");
       return;
@@ -187,6 +199,8 @@ private:
   airship_msgs::msg::BackupBmsStatus backup_;
 
   std::unique_ptr<airship_cloud::MqttClient> mqtt_;
+  // 最近一次 MQTT connect 尝试时刻(30s 节流重试, 见 tx_callback)
+  rclcpp::Time last_connect_attempt_;
 
   rclcpp::Subscription<airship_msgs::msg::BmsStatus>::SharedPtr bms_sub_;
   rclcpp::Subscription<airship_msgs::msg::MpptStatus>::SharedPtr mppt_sub_;

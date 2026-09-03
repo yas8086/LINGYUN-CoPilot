@@ -67,6 +67,13 @@ public:
       RCLCPP_WARN(this->get_logger(), "sample_period_ms 过小(%d), 重置为 100", sample_period_ms_);
       sample_period_ms_ = 100;
     }
+    // 重试次数校验: 负值会令 attempt<=resp_retries_ 恒假, 节点静默永久离线(且无日志);
+    // 过大将令单轮最坏耗时 3×(retries+1)×resp_timeout 超过轮询周期。钳到安全域。
+    if (resp_retries_ < 0 || resp_retries_ > 10) {
+      RCLCPP_WARN(
+        this->get_logger(), "resp_retries 非法值 %d(允许 0~10), 重置为 3", resp_retries_);
+      resp_retries_ = 3;
+    }
 
     // ===== 发布器 =====
     status_pub_ = this->create_publisher<airship_msgs::msg::BackupBmsStatus>(
@@ -178,31 +185,40 @@ private:
           std::chrono::duration_cast<std::chrono::milliseconds>(deadline -
           std::chrono::steady_clock::now()).count());
         const int n = serial_.read(buf, sizeof(buf), remaining);
-        if (n < 0) {
+        // n<=0 一律结束本轮: n<0 读错误; n==0 为 EOF/POLLHUP(USB 串口拔出的典型
+        // 行为, poll 会立即返回), 不退出将忙等空转到 deadline 白耗 CPU (2026-09-03)
+        if (n <= 0) {
           break;
         }
-        if (n > 0) {
-          acc.insert(acc.end(), buf, buf + n);
-          std::vector<uint8_t> frame;
-          if (extract_valid_frame(acc, cmd, frame)) {
-            const uint8_t * data = nullptr;
-            uint32_t dlen = 0;
-            if (!parse_response_frame(
-                frame.data(), static_cast<uint32_t>(frame.size()), addr_,
-                host_, cmd, &data, &dlen))
-            {
-              break;  // 理论不可达: extract 已通过同一校验
-            }
-            switch (kind) {
-              case PollKind::kBasic:
-                return parse_basic_info(data, dlen, out);
-              case PollKind::kVoltages:
-                return parse_cell_voltages(data, dlen, out);
-              case PollKind::kTemps:
-                return parse_cell_temps(data, dlen, out);
-            }
-            return false;
+        acc.insert(acc.end(), buf, buf + n);
+        std::vector<uint8_t> frame;
+        if (extract_valid_frame(acc, cmd, frame)) {
+          const uint8_t * data = nullptr;
+          uint32_t dlen = 0;
+          if (!parse_response_frame(
+              frame.data(), static_cast<uint32_t>(frame.size()), addr_,
+              host_, cmd, &data, &dlen))
+          {
+            break;  // 理论不可达: extract 已通过同一校验
           }
+          bool parsed = false;
+          switch (kind) {
+            case PollKind::kBasic:
+              parsed = parse_basic_info(data, dlen, out);
+              break;
+            case PollKind::kVoltages:
+              parsed = parse_cell_voltages(data, dlen, out);
+              break;
+            case PollKind::kTemps:
+              parsed = parse_cell_temps(data, dlen, out);
+              break;
+          }
+          // 帧级校验通过但载荷解析失败(如 CRC 幸存但长度不足): 继续下一 attempt
+          // 重试而非整轮失败——设备下一帧通常是完好的 (2026-09-03)
+          if (parsed) {
+            return true;
+          }
+          break;
         }
       }
     }

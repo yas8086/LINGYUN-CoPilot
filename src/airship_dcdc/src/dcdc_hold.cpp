@@ -133,6 +133,16 @@ int main(int argc, char ** argv)
   const auto tx_check_every = std::chrono::seconds(1);
   auto last_tx_check = std::chrono::steady_clock::now();
 
+  // 发送自愈(2026-09-03): 开机竞态(socket 早于 CAN 接口就绪创建)或接口持续异常
+  // (ERROR-PASSIVE)时, 旧实现仅告警不自愈——实测(2026-08-27)须重启服务才能恢复。
+  // 两级自愈: ① 连续 send 失败 25 次(~5s) ② TX 计数停滞 >10s; 均重建 socket
+  // (close 后 fd 失效, 下轮 ensure_open() 重开; DCDC 掉帧容忍秒级, 安全无虞)。
+  int send_fail_streak = 0;
+  constexpr int kSendFailRebuild = 25;
+  constexpr auto kTxStallRebuild = std::chrono::seconds(10);
+  // 最近一次增长时刻(停滞重建依据)
+  auto last_tx_progress = std::chrono::steady_clock::now();
+
   while (true) {
     if (!can.ensure_open()) {
       const auto now = std::chrono::steady_clock::now();
@@ -151,12 +161,25 @@ int main(int argc, char ** argv)
     const bool analog_ok = can.send(airship_dcdc::build_analog_query_frame());
     const auto now = std::chrono::steady_clock::now();
     if (!ctrl_ok || !analog_ok) {
+      ++send_fail_streak;
       if (now - last_log_send >= log_every) {
         last_log_send = now;
         fprintf(
           stderr, "[dcdc_hold] CAN 发送失败(control=%d analog=%d), 链路可能异常\n",
           ctrl_ok ? 1 : 0, analog_ok ? 1 : 0);
       }
+      if (send_fail_streak >= kSendFailRebuild) {
+        fprintf(
+          stderr,
+          "[dcdc_hold] 连续 %d 次发送失败, 重建 CAN socket 自愈(开机竞态/接口异常)\n",
+          send_fail_streak);
+        can.close();
+        send_fail_streak = 0;
+        std::this_thread::sleep_for(period);
+        continue;
+      }
+    } else {
+      send_fail_streak = 0;
     }
 
     // TX 计数检查(1s 节流): send 返回成功但计数未增长 -> 帧仅在本地入队, 未真正上总线
@@ -165,16 +188,28 @@ int main(int argc, char ** argv)
       last_tx_check = now;
       const uint64_t tx_now = read_tx_packets(can_if);
       if (tx_now != UINT64_MAX) {
-        if ((ctrl_ok || analog_ok) && tx_now == last_tx && now - last_log_tx >= log_every) {
-          last_log_tx = now;
-          fprintf(
-            stderr,
-            "[dcdc_hold] 警告: 控制帧未真正发出(can0 TX 计数未增长=%" PRIu64 "), "
-            "接口可能异常(ERROR-PASSIVE/断线), 帧仅在本地入队\n",
-            tx_now);
+        if ((ctrl_ok || analog_ok) && tx_now == last_tx) {
+          if (now - last_tx_progress >= kTxStallRebuild) {
+            fprintf(
+              stderr,
+              "[dcdc_hold] TX 计数停滞超过 %" PRId64 "s, 重建 CAN socket 自愈\n",
+              static_cast<int64_t>(
+                std::chrono::duration_cast<std::chrono::seconds>(
+                  kTxStallRebuild).count()));
+            can.close();
+            last_tx_progress = now;
+          } else if (now - last_log_tx >= log_every) {
+            last_log_tx = now;
+            fprintf(
+              stderr,
+              "[dcdc_hold] 警告: 控制帧未真正发出(can0 TX 计数未增长=%" PRIu64 "), "
+              "接口可能异常(ERROR-PASSIVE/断线), 帧仅在本地入队\n",
+              tx_now);
+          }
         }
         if (tx_now > last_tx) {
           last_tx = tx_now;  // 已有帧真正发出, 更新基准
+          last_tx_progress = now;
         }
       }
     }

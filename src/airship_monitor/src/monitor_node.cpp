@@ -8,6 +8,7 @@
 // 输出话题:
 //   /monitor/device_alert   (airship_msgs/DeviceAlert)
 #include <cmath>
+#include <cstdio>
 #include <map>
 #include <memory>
 #include <string>
@@ -24,6 +25,20 @@
 #include "airship_monitor/alert_dedup.hpp"
 
 using std::placeholders::_1;
+
+namespace
+{
+// 十六进制格式化告警码(2026-09-03): 原用 "0x"+std::to_string 输出十进制误导排障
+std::string hex_str(uint32_t v)
+{
+  char buf[12];
+  std::snprintf(buf, sizeof(buf), "0x%X", v);
+  return buf;
+}
+// 离线判定去抖 tick 数: watchdog 1Hz 下连续 3 tick(额外 ~3s)确认才发离线告警,
+// 防单帧延迟/偶发超时触发"离线→恢复"告警对刷屏 (2026-09-03)
+constexpr int kOfflineDebounceTicks = 3;
+}  // namespace
 
 class MonitorNode : public rclcpp::Node
 {
@@ -134,7 +149,7 @@ private:
         fault ? airship_msgs::msg::DeviceAlert::SEVERITY_CRITICAL :
         airship_msgs::msg::DeviceAlert::SEVERITY_INFO,
         msg->fault_word,
-        fault ? ("DCDC 故障异常: 0x" + std::to_string(msg->fault_word)) :
+        fault ? ("DCDC 故障异常: " + hex_str(msg->fault_word)) :
         "DCDC 故障已解除",
         fault);
       last_dcdc_fault_active_ = fault;
@@ -164,15 +179,21 @@ private:
       return;
     }
 
-    // 串口掉线告警 (状态变化触发)
+    // 串口掉线告警 (状态变化触发; 连续 2 帧一致才确认, 防闪断告警对 2026-09-03)
     if (msg->serial_online != last_lora_serial_online_) {
-      publish_alert(airship_msgs::msg::DeviceAlert::DEVICE_LORA,
-        msg->serial_online ? airship_msgs::msg::DeviceAlert::SEVERITY_INFO :
-        airship_msgs::msg::DeviceAlert::SEVERITY_WARNING,
-        0,
-        msg->serial_online ? "LoRa 485 串口已恢复" : "LoRa 485 串口掉线",
-        !msg->serial_online);
-      last_lora_serial_online_ = msg->serial_online;
+      ++lora_serial_change_ticks_;
+      if (lora_serial_change_ticks_ >= 2) {
+        publish_alert(airship_msgs::msg::DeviceAlert::DEVICE_LORA,
+          msg->serial_online ? airship_msgs::msg::DeviceAlert::SEVERITY_INFO :
+          airship_msgs::msg::DeviceAlert::SEVERITY_WARNING,
+          0,
+          msg->serial_online ? "LoRa 485 串口已恢复" : "LoRa 485 串口掉线",
+          !msg->serial_online);
+        last_lora_serial_online_ = msg->serial_online;
+        lora_serial_change_ticks_ = 0;
+      }
+    } else {
+      lora_serial_change_ticks_ = 0;
     }
 
     if (msg->alarm_count != last_lora_alarm_ ||
@@ -239,9 +260,9 @@ private:
         abnormal ? airship_msgs::msg::DeviceAlert::SEVERITY_WARNING :
         airship_msgs::msg::DeviceAlert::SEVERITY_INFO,
         static_cast<uint16_t>(msg->fault_word & 0xFFFF),
-        abnormal ? ("备用电源异常: alarm=0x" + std::to_string(msg->alarm_word) +
-        " protect=0x" + std::to_string(msg->protect_word) +
-        " fault=0x" + std::to_string(msg->fault_word)) :
+        abnormal ? ("备用电源异常: alarm=" + hex_str(msg->alarm_word) +
+        " protect=" + hex_str(msg->protect_word) +
+        " fault=" + hex_str(msg->fault_word)) :
         "备用电源异常已解除",
         abnormal);
       last_backup_abnormal_ = abnormal;
@@ -252,26 +273,41 @@ private:
   void watchdog_callback()
   {
     check_link(airship_msgs::msg::DeviceAlert::DEVICE_BMS, bms_has_data_, last_bms_time_,
-      &bms_online_);
+      &bms_online_, &bms_offline_ticks_);
     check_link(airship_msgs::msg::DeviceAlert::DEVICE_MPPT, mppt_has_data_, last_mppt_time_,
-      &mppt_online_);
+      &mppt_online_, &mppt_offline_ticks_);
     check_link(airship_msgs::msg::DeviceAlert::DEVICE_DCDC, dcdc_has_data_, last_dcdc_time_,
-      &dcdc_online_);
+      &dcdc_online_, &dcdc_offline_ticks_);
     check_link(airship_msgs::msg::DeviceAlert::DEVICE_LORA, lora_has_data_, last_lora_time_,
-      &lora_online_);
+      &lora_online_, &lora_offline_ticks_);
     check_link(airship_msgs::msg::DeviceAlert::DEVICE_BACKUP_BMS, backup_has_data_,
-      last_backup_time_, &backup_online_);
+      last_backup_time_, &backup_online_, &backup_offline_ticks_);
   }
 
   // 链路状态检测: 状态变化时发告警 (离线发告警, 恢复发解除)
+  // 离线去抖(2026-09-03): 连续 kOfflineDebounceTicks 个 tick 超时才翻转离线,
+  // 恢复保持单 tick 快速上报。防偶发单帧超时触发"离线→恢复"告警对刷屏
+  // (典型场景: LoRa 2s 采样周期对 3s 超时仅 1s 裕量, 一轮偶发超时即告警对)。
   void check_link(
-    uint8_t device_type, bool has_data, const rclcpp::Time & last_time, bool * online_flag)
+    uint8_t device_type, bool has_data, const rclcpp::Time & last_time,
+    bool * online_flag, int * offline_ticks)
   {
     if (!has_data) {
       return;  // 从未收到数据, 不判离线(避免启动误报)
     }
     const double age = (this->now() - last_time).seconds();
-    const bool now_online = age <= timeout_s_;
+    bool now_online = age <= timeout_s_;
+
+    if (!now_online && *online_flag) {
+      // 在线→疑似离线: 累计确认, 未达阈值维持在线(不算离线)
+      ++(*offline_ticks);
+      if (*offline_ticks < kOfflineDebounceTicks) {
+        return;
+      }
+      now_online = false;  // 连续多 tick 超时, 确认离线
+    } else {
+      *offline_ticks = 0;
+    }
 
     // 去重状态机: 仅在跳变时发告警
     const auto t = airship_monitor::update_online(now_online, online_flag);
@@ -334,11 +370,19 @@ private:
   bool dcdc_online_ = false;
   bool lora_online_ = false;
   bool backup_online_ = false;
+  // 离线去抖计数(2026-09-03): 连续超时 tick 数, 见 check_link
+  int bms_offline_ticks_ = 0;
+  int mppt_offline_ticks_ = 0;
+  int dcdc_offline_ticks_ = 0;
+  int lora_offline_ticks_ = 0;
+  int backup_offline_ticks_ = 0;
   uint8_t last_bms_alarm_ = 0;
   uint16_t last_mppt_fault_ = 0;
   int32_t last_lora_alarm_ = 0;
   bool last_lora_serial_online_ = false;
   bool last_lora_node_offline_ = false;
+  // LoRa 串口状态变化去抖计数(连续 2 帧一致才确认)
+  int lora_serial_change_ticks_ = 0;
   // 备用电源异常告警去重
   bool last_backup_abnormal_ = false;
   // DCDC 故障告警去重: 与 safety 一致, 排除 Bit2 输出状态位
