@@ -25,6 +25,13 @@ struct LoraSampleData
   int raw = 0;
   int online = 0;
   int alarm = 0;
+  // 有效性标志(2026-09-03): 区分"读取成功"与"部分成功", 防 0 值污染 summary/JSON:
+  //   temp_valid:  温度寄存器本轮读取成功(temp_celsius 为真实测量);
+  //   press_valid: 压力寄存器本轮读取成功(仅压力节点);
+  //   stale:       本轮读取失败, 数值为离线去抖窗口内沿用的上一帧有效值。
+  bool temp_valid = false;
+  bool press_valid = false;
+  bool stale = false;
 };
 
 // CRC-16/MODBUS

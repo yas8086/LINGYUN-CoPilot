@@ -233,9 +233,15 @@ std::string fc_to_json(const airship_msgs::msg::FlightStatus & msg)
 
 std::string lora_to_json(const airship_msgs::msg::LoRaSamples & msg)
 {
-  // 恒定名单输出: 所有配置节点始终出现在 JSON 中, 用 online(=valid) 区分本轮
-  // 是否有有效数据。此前仅输出在线节点, 导致地面站节点数随偶发读失败闪烁
+  // 恒定名单输出: 所有配置节点始终出现在 JSON 中, 用有效标志区分本轮是否有
+  // 有效数据。此前仅输出在线节点, 导致地面站节点数随偶发读失败闪烁
   // (2026-08-27 实测: 2 分钟内集合切换 53 次)。
+  // 字段语义 (2026-09-03, 全为向后兼容的增量字段):
+  //   online: 去抖后的表面在线(1=本轮读成功或离线去抖沿用旧值)
+  //   valid:  本轮实测有效(=online 且非 stale, 与旧地面站的"有效"语义一致)
+  //   stale:  1=数值为离线去抖窗口内沿用的上一帧有效值(非本轮实测), 地面站可灰显
+  //   t_ok/p_ok: 温度/压力分量本轮读取成功(区分部分成功, 如温度失败但压力成功)
+  //   p:      1=压力节点; raw: 温度寄存器原始值
   std::string s = "\"lora\":{\"nodes\":[";
   bool first = true;
   for (const auto & smp : msg.samples) {
@@ -243,10 +249,16 @@ std::string lora_to_json(const airship_msgs::msg::LoRaSamples & msg)
       s += ",";
     }
     first = false;
-    const char * v = smp.online != 0 ? "1" : "0";
+    const bool online = smp.online != 0;
+    const bool valid = online && smp.stale == 0;
     s += "{\"id\":" + std::to_string(smp.node_id) + ",";
-    s += std::string("\"online\":") + v + ",";   // 有效数据标志 (语义 = 原在线判定)
-    s += std::string("\"valid\":") + v + ",";    // 显式有效性 (与 online 同值, 供新解析用)
+    s += std::string("\"online\":") + (online ? "1" : "0") + ",";
+    s += std::string("\"valid\":") + (valid ? "1" : "0") + ",";
+    s += std::string("\"stale\":") + (smp.stale != 0 ? "1" : "0") + ",";
+    s += std::string("\"p\":") + (smp.is_pressure ? "1" : "0") + ",";
+    s += "\"raw\":" + std::to_string(smp.raw) + ",";
+    s += std::string("\"t_ok\":") + (smp.temp_valid != 0 ? "1" : "0") + ",";
+    s += std::string("\"p_ok\":") + (smp.press_valid != 0 ? "1" : "0") + ",";
     s += "\"temp\":" + fmt_float(smp.temp_celsius) + ",";
     s += "\"pressure\":" + fmt_double(smp.pressure_pa) + ",";
     s += "\"alarm\":" + std::to_string(smp.alarm);

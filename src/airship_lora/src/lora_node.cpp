@@ -87,6 +87,19 @@ public:
         "node_ids(%zu) 与 node_types(%zu) 长度不一致, 多余项将被忽略",
         node_ids_.size(), node_types_.size());
     }
+    // 采集周期预算校验: 周期小于全节点最坏耗时(含重试/超时)时轮次将超期,
+    // 提前告警(不阻断启动, 调度有 next_wake=now 兜底) (2026-09-03)
+    {
+      const size_t n = std::min(node_ids_.size(), node_types_.size());
+      const double worst_ms = static_cast<double>(n) *
+        (read_retries_ + 1.0) * resp_timeout_ms_ * 2.0;
+      if (static_cast<double>(sample_period_ms_.load()) < worst_ms) {
+        RCLCPP_WARN(
+          this->get_logger(),
+          "sample_period_ms=%d 小于全节点最坏耗时预算 %.0fms(节点%zu, 含重试/超时),"
+          " 采集轮次可能超期", sample_period_ms_.load(), worst_ms, n);
+      }
+    }
 
     // ===== 发布器 =====
     samples_pub_ = this->create_publisher<airship_msgs::msg::LoRaSamples>(
@@ -260,6 +273,7 @@ private:
       }
       if (temp_ok) {
         s.online = 1;
+        s.temp_valid = true;
         s.raw = raw;
         s.temp_celsius = temp;
         s.alarm = check_temp_alarm(temp, alarm_low_, alarm_high_);
@@ -279,6 +293,7 @@ private:
         }
         if (press_ok) {
           s.online = 1;
+          s.press_valid = true;
           s.pressure_pa = pa;
         }
       }
@@ -291,8 +306,12 @@ private:
   // 离线去抖: 连续失败 < offline_debounce_rounds_ 轮时沿用上一帧有效值并视为在线,
   // 只有持续失败才放行 online=0。避免单个寄存器读瞬态失败使地面站节点名单闪烁
   // (2026-08-27 实测: 2 分钟内节点集合切换 53 次, 根因即单轮偶发失败)。
+  // 沿用值置 stale=1(非本轮实测, 地面站可灰显); 硬 I/O 错误轮(io_write_error_)跳过
+  // 沿用——串口写失败是断链强信号, 需让本轮 online_count=0 以触发快速重连通道
+  // (2026-09-03 修复: 去抖曾掩盖该信号, 令 consecutive_fail_ 复位、重连被推迟)。
   void apply_debounce(std::vector<LoraSampleData> & samples)
   {
+    const bool hard_fail = io_write_error_;
     for (auto & s : samples) {
       auto & d = deb_[s.node_id];
       if (s.online != 0) {
@@ -302,10 +321,14 @@ private:
         continue;
       }
       ++d.consec_fail;
-      if (d.has && d.consec_fail < offline_debounce_rounds_) {
-        s = d.last;       // 沿用上一帧有效值, 本轮仍按有效上报
-        s.online = 1;
+      if (!d.has) {
+        continue;  // 从未收到过有效数据(启动初期), 保持零值
       }
+      // 失败轮次: 数值沿用最后已知有效值(而非归 0, 防 0 值污染下传/统计),
+      // stale=1 标记非本轮实测; 去抖窗口内仍报在线, 持续失败或硬 I/O 错误才离线。
+      s = d.last;
+      s.stale = true;
+      s.online = (!hard_fail && d.consec_fail < offline_debounce_rounds_) ? 1 : 0;
     }
   }
 
@@ -389,6 +412,8 @@ private:
   }
 
   // 动态参数回调: 更新采集周期
+  // 其余参数(节点列表/寄存器地址/重试等)为构造期只读——静默接受会令
+  // "设置成功"但永不生效误导运维, 故显式拒绝 (2026-09-03)
   rcl_interfaces::msg::SetParametersResult on_set_parameters(
     const std::vector<rclcpp::Parameter> & params)
   {
@@ -402,9 +427,24 @@ private:
           result.reason = "sample_period_ms 过小(需 >= 100)";
           return result;
         }
+        // 预算校验: 全节点最坏耗时 ≈ N节点 × (每次读×(retries+1)次) × resp_timeout × 2(温/压),
+        // 周期小于该值时轮次会超期(仅告警不拒绝, 调度兜底 next_wake=now)
+        const size_t n = std::min(node_ids_.size(), node_types_.size());
+        const double worst_ms = static_cast<double>(n) *
+          (read_retries_ + 1.0) * resp_timeout_ms_ * 2.0;
+        if (static_cast<double>(v) < worst_ms) {
+          RCLCPP_WARN(
+            this->get_logger(),
+            "sample_period_ms=%d 小于全节点最坏耗时预算 %.0fms(节点%zu, "
+            "含重试/超时), 采集轮次可能超期", v, worst_ms, n);
+        }
         sample_period_ms_.store(v);
         RCLCPP_INFO(
           this->get_logger(), "采集周期已更新为 %d ms", sample_period_ms_.load());
+      } else {
+        result.successful = false;
+        result.reason = "参数 '" + p.get_name() + "' 为构造期只读, 需重启节点生效";
+        return result;
       }
     }
     return result;
@@ -422,6 +462,9 @@ private:
     m.raw = s.raw;
     m.online = s.online;
     m.alarm = s.alarm;
+    m.stale = s.stale ? 1 : 0;
+    m.temp_valid = s.temp_valid ? 1 : 0;
+    m.press_valid = s.press_valid ? 1 : 0;
     return m;
   }
 
@@ -456,12 +499,18 @@ private:
       const bool online = msg.serial_online && (s.online != 0);
       if (online) {
         ++online_count;
+      }
+      // 温度统计只计入"值本身有效"的样本: 温度寄存器读成功(含去抖沿用窗口, 沿用值
+      // 的 temp_valid 来自其测量时刻)。防部分成功轮(温度失败+压力成功)的 0 值把
+      // min_temp 拉到 0 / avg 失真 (2026-09-03)
+      if (online && s.temp_valid) {
         sum += s.temp_celsius;
         ++valid_temp;
         if (s.temp_celsius > max_temp) {max_temp = s.temp_celsius;}
         if (s.temp_celsius < min_temp) {min_temp = s.temp_celsius;}
       }
-      if (s.alarm != 0) {
+      // 报警统计与 online 判定一致化: 串口掉线期间冻结的旧报警不应继续计数
+      if (online && s.alarm != 0) {
         ++alarm_count;
         msg.alarm_node_ids.push_back(s.node_id);
       }
