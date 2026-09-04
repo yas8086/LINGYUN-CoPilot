@@ -1,0 +1,18 @@
+[Unit]
+Description=Lingyun01 Micro XRCE-DDS Agent (PX4 uXRCE-DDS bridge, UDP 8888)
+# PX4 飞控 uxrce_dds_client 连接本 Agent (10.41.10.100:8888),
+# 桥接 /fmu/in/* ROS2 话题 -> PX4 uORB (见 docs/lingyun01/PX4飞控对接文档/08)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=3
+# 本机 Agent(v2.4.3)链接 ROS Jazzy 自带 FastDDS(libfastrtps.so.2.14), 须 source ROS 提供库路径;
+# 无需 ROS_DOMAIN_ID (domain 由 PX4 client 请求在 agent 侧创建)
+Environment=LD_LIBRARY_PATH=/opt/ros/jazzy/lib
+ExecStart=/usr/local/bin/MicroXRCEAgent udp4 -p 8888 -v 4
+
+[Install]
+WantedBy=multi-user.target
