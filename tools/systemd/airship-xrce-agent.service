@@ -9,9 +9,14 @@ Wants=network-online.target
 Type=simple
 Restart=always
 RestartSec=3
-# 本机 Agent(v2.4.3)链接 ROS Jazzy 自带 FastDDS(libfastrtps.so.2.14), 须 source ROS 提供库路径;
+# 与 device-monitor (User=lingyun01) 同用户运行: Fast DDS SHM 传输跨用户有写权限墙
+# (bridge 写不进 root 创建的 SHM 接收段 → 数据静默丢弃, 2026-09-06 诊断实锤)
+User=lingyun01
+# Agent v2.4.3 (2026-09-07 重编完整版, 带日志) 链接自带 FastDDS 2.14.7, 库路径指向 temp_install;
 # 无需 ROS_DOMAIN_ID (domain 由 PX4 client 请求在 agent 侧创建)
-Environment=LD_LIBRARY_PATH=/opt/ros/jazzy/lib
+Environment=LD_LIBRARY_PATH=/home/lingyun01/Micro-XRCE-DDS-Agent/build/temp_install/fastrtps-2.14/lib:/home/lingyun01/Micro-XRCE-DDS-Agent/build/temp_install/fastcdr-2.2.0/lib:/home/lingyun01/Micro-XRCE-DDS-Agent/build/temp_install/spdlog-1.9.2/lib
+# 禁用 SHM/datasharing 内置传输, 强制 UDPv4 loopback (彻底绕开跨用户 SHM 权限坑)
+Environment=FASTDDS_BUILTIN_TRANSPORTS=UDPv4
 ExecStart=/usr/local/bin/MicroXRCEAgent udp4 -p 8888 -v 4
 
 [Install]

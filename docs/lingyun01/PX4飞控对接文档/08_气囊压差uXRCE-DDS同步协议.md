@@ -244,7 +244,7 @@ sudo systemctl enable --now airship-xrce-agent
 | 层 | 命令/操作 | 预期 |
 |----|-----------|------|
 | ① 桥节点输出（无飞控可验） | 树莓派：`unset RMW_IMPLEMENTATION CYCLONEDDS_URI; export ROS_DOMAIN_ID=5; source install/setup.bash; ros2 topic echo /fmu/in/airship_bladder_pressure` | 0.5Hz 输出 4 槽位数据（2026-09-03 台架实测：0/+58/+37/-41 Pa，全 valid=1） |
-| ② Agent 连接 | 飞控启动 client 后：`journalctl -u airship-xrce-agent -f` | 出现 `create_participant` / session established（client_key）；有 `create_topic ... rt/fmu/in/airship_bladder_pressure` 即条目生效 |
+| ② Agent 连接 | 树莓派：`journalctl -u airship-xrce-agent --since '2 min ago'` | 应见 `create_client` / `session established (10.41.10.2)` / `create_topic` / `create_datareader`（2026-09-07 重编完整版 Agent 后日志功能恢复） |
 | ③ PX4 uORB | 飞控 nsh/QGC Console：`listener airship_bladder_pressure 5` | 每 2s 一条，槽位值与 ① 一致，valid/stale 字段正确 |
 | ④ 负压差 | 台架对传感器吹气/吸气 | 负值正确传递（历史教训：曾按无符号解析，-17Pa 被显示为 4294967279，已修复并有单测锁定） |
 
