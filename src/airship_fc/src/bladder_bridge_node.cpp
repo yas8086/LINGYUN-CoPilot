@@ -54,6 +54,18 @@ public:
     for (std::size_t i = 0; i < ids.size(); ++i) {
       node_ids[i] = static_cast<int32_t>(ids[i]);
     }
+    // 重复 id 检测: 同一样本会静默填进多个槽位, 另一槽位永远缺失——必须配置期拦住
+    for (std::size_t i = 0; i < ids.size(); ++i) {
+      for (std::size_t j = i + 1; j < ids.size(); ++j) {
+        if (node_ids[i] == node_ids[j]) {
+          RCLCPP_FATAL(
+            this->get_logger(),
+            "bladder_node_ids 存在重复 id=%d (槽位 %zu 与 %zu), 每个槽位必须对应唯一节点",
+            node_ids[i], i, j);
+          throw std::invalid_argument("bladder_node_ids duplicate");
+        }
+      }
+    }
     state_ = std::make_unique<bladder_bridge::BladderBridgeState>(node_ids);
 
     const std::string sub_topic = this->declare_parameter("sub_topic", "/lora/samples");
